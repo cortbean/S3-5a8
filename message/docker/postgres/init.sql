@@ -25,7 +25,6 @@ SET row_security = off;
 
 CREATE SCHEMA app;
 
-
 ALTER SCHEMA app OWNER TO postgres;
 
 SET default_tablespace = '';
@@ -408,4 +407,70 @@ COPY app.message (id, trimester_id, profile_id, unit, description, inscription, 
 --
 -- PostgreSQL database dump complete
 --
+
+
+CREATE TABLE app.usager (
+                            cip VARCHAR(50),
+                            role VARCHAR(50),
+                            courriel VARCHAR(50),
+                            faculte VARCHAR(50),
+                            programme VARCHAR(50),
+                            PRIMARY KEY (cip)
+);
+
+CREATE TABLE app.produit (
+                             nom_produit VARCHAR(50),
+                             description VARCHAR(50),
+                             fonction_id VARCHAR(50),
+                             PRIMARY KEY (nom_produit)
+);
+
+CREATE TABLE app.logs (
+                          log_id SERIAL,
+                          table_name VARCHAR(50),
+                          operation VARCHAR(50),
+                          changed_data JSONB,
+                          log_time TIMESTAMP,
+                          PRIMARY KEY (log_id)
+);
+
+CREATE TABLE app.liste_commande (
+                                    produit_commander VARCHAR(50),
+                                    usager VARCHAR(50),
+                                    quantite VARCHAR(50),
+                                    moment_commande VARCHAR(50),
+                                    description VARCHAR(50),
+                                    PRIMARY KEY (produit_commander)
+);
+
+CREATE TABLE app.fonction (
+                              fonction_id VARCHAR(50),
+                              caracteristique_produit VARCHAR(50),
+                              PRIMARY KEY (fonction_id)
+);
+
+CREATE TABLE app.commande (
+                              cip VARCHAR(50),
+                              nom_produit VARCHAR(50),
+                              quantite VARCHAR(50),
+                              moment_commande VARCHAR(50),
+                              PRIMARY KEY (cip, nom_produit),
+                              FOREIGN KEY (cip) REFERENCES app.usager (cip),
+                              FOREIGN KEY (nom_produit) REFERENCES app.produit (nom_produit)
+);
+
+CREATE TABLE app.but (
+                         nom_produit VARCHAR(50),
+                         fonction_id VARCHAR(50),
+                         PRIMARY KEY (nom_produit, fonction_id),
+                         FOREIGN KEY (nom_produit) REFERENCES app.produit (nom_produit),
+                         FOREIGN KEY (fonction_id) REFERENCES app.fonction (fonction_id)
+);
+
+
+
+
+
+
+
 
