@@ -34,6 +34,8 @@ services:
       - 5444:5432
     volumes:
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./postgres/trigger.sql:/docker-entrypoint-initdb.d/trigger.sql
+      - ./postgres/function.sql:/docker-entrypoint-initdb.d/function.sql
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
