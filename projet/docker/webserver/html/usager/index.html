@@ -1,7 +1,82 @@
-<html>
+<!DOCTYPE html>
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemple Keycloak</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="http://localhost:8180/js/keycloak.js"></script>
+    <style>
+        /* (Styles CSS) */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+		
+        button {
+            margin: 20px;
+            padding: 20px 40px; /* Taille du bouton */
+            font-size: 24px; /* Taille de l'écriture */
+            border-radius: 35px; /* Coins arrondis */
+            border: none; /* Supprimer les bordures */
+            cursor: pointer; /* Changer le curseur */
+            background-color: #28a745; /* Couleur de fond verte */
+            color: white; /* Couleur du texte */
+			display: inline-block; /* Affichage en ligne */
+        }
+		
+		.category-container {
+			display: block; /* Affichage en bloc */
+			text-align: center; /* Centrage horizontal */
+			margin-top: 20px; /* Espacement par rapport aux autres éléments */
+		}
+
+		.category-button {
+			margin: 10px;
+			padding: 10px 20px;
+			font-size: 16px;
+			background-color: transparent;
+			border: 2px solid #28a745;
+			color: #28a745;
+			cursor: pointer;
+		}
+
+		.category-button:hover {
+			background-color: #e6e6e6;
+		}
+		
+        #title {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 24px; /* Taille de l'écriture pour le titre */
+        }
+        #confirmationClient, #categories, #produit_1, #produit_2, #produit_3, #produit_4 {
+            display: none; /* Masquer les sections par défaut */
+            text-align: center;
+        }
+		.category-container {
+			display: flex;
+			flex-direction: column; /* Affichage vertical */
+			align-items: center; /* Centrage horizontal */
+			gap: 20px; /* Espacement entre les boutons */
+			margin-top: 20px; /* Espacement par rapport aux autres éléments */
+		}
+        .category-container {
+            display: flex;
+            flex-direction: column; /* Affichage vertical */
+            align-items: center;
+            justify-content: center; /* Centrage vertical */
+            width: calc(20% - 50px); /* deux boutons par ligne avec un espace de 20px */
+        }
+        .category-button img {
+            width: 160px; /* ajuster la taille de l'image */
+            height: auto;
+		}
+    </style>
     <script>
         var keycloak;
         function initKeycloak() {
@@ -15,14 +90,73 @@
             });
             keycloak.init({onLoad: 'login-required'}).then(function (authenticated) {
                 alert(authenticated ? 'authenticated' : 'not authenticated');
-                requestclient();
-            }).catch(function () {
-                alert('failed to initialize'); // je sais pas pk ca passe ici
+                if (authenticated) {
+                    if (keycloak.hasRealmRole('client')) {
+                        requestclient();
+                    }
+                    if (keycloak.hasRealmRole('admin')) {
+                        requestadmin();
+                    }
+                }
+            }).catch(function (error) {
+                console.error('Failed to initialize Keycloak', error);
+                alert('failed to initialize: ' + error);
             });
+        }
+		function afficherConfirmationClient() {
+		document.getElementById('main').style.display = 'none';
+		document.getElementById('confirmationClient').style.display = 'block';
+        }
+
+        function passerCommande() {
+            document.getElementById('confirmationClient').style.display = 'none';
+            document.getElementById('categories').style.display = 'block';
+        }
+
+        function annulerCommande() {
+            alert('Commande annulée');
+            document.getElementById('confirmationClient').style.display = 'none';
+            document.getElementById('main').style.display = 'block';
+        }
+
+        function ChoisirProduit_1() {
+            document.getElementById('categories').style.display = 'none';
+            document.getElementById('produit_1').style.display = 'block';
+        }
+
+        function ChoisirProduit_2() {
+            document.getElementById('categories').style.display = 'none';
+            document.getElementById('produit_2').style.display = 'block';
+        }
+
+        function ChoisirProduit_3() {
+            document.getElementById('categories').style.display = 'none';
+            document.getElementById('produit_3').style.display = 'block';
+        }
+
+        function ChoisirProduit_4() {
+            document.getElementById('categories').style.display = 'none';
+            document.getElementById('produit_4').style.display = 'block';
+        }
+
+        function choisirProduit_1(produit_1) {
+            alert('Vous avez choisi le produit : ' + produit_1);
+        }
+
+        function choisirProduit_2(produit_2) {
+            alert('Vous avez choisi le produit : ' + produit_2);
+        }
+
+        function choisirProduit_3(produit_3) {
+            alert('Vous avez choisi le produit : ' + produit_3);
+        }
+
+        function choisirProduit_4(produit_4) {
+            alert('Vous avez choisi le produit : ' + produit_4);
         }
 
         function requestclient() {
-            alert('Dans request client');
+            alert('Vous etes dans request client');
             axios.get("http://localhost:8888/api/client", {
                 headers: {
                     'Authorization': 'Bearer ' + keycloak.token
@@ -30,7 +164,8 @@
             })
                 .then(function (response) {
                     console.log("Response: ", response.status);
-                    alert('client ajoute');
+                    alert('client ajouté');
+					afficherConfirmationClient();
                 })
                 .catch(function (error) {
                     console.log('refreshing');
@@ -40,11 +175,11 @@
                         console.log('Failed to refresh token');
                     })
                 });
-            span.innerHTML = '<br> <strong>' + "Vous n'avez pas le role d'étudiant" + '</strong> </br>'
+            span.innerHTML = '<br> <strong>' + "Vous n'avez pas le rôle d'étudiant" + '</strong> </br>'
         }
 
         function requestadmin() {
-            alert('Dans request client');
+            alert('Vous etes dans request admin');
             axios.get("http://localhost:8888/api/admin", {
                 headers: {
                     'Authorization': 'Bearer ' + keycloak.token
@@ -52,7 +187,8 @@
             })
                 .then(function (response) {
                     console.log("Response: ", response.status);
-                    alert('admin ajoute');
+                    alert('admin ajouté');
+					// Ajoutez ici le code pour ce que l'admin doit voir ou faire
                 })
                 .catch(function (error) {
                     console.log('refreshing');
@@ -62,7 +198,7 @@
                         console.log('Failed to refresh token');
                     })
                 });
-            span.innerHTML = '<br> <strong>' + "Vous n'avez pas le role d'étudiant" + '</strong> </br>'
+            span.innerHTML = '<br> <strong>' + "Vous n'avez pas le rôle d'étudiant" + '</strong> </br>'
         }
 
         function requestMessage() {
@@ -95,19 +231,147 @@
         }
 
         function logout() {
-         //   let logoutURL = "http://localhost:8080//realms/usager/protocol/openid-connect/logout"
-         //   window.location.href = logoutURL;
+            // let logoutURL = "http://localhost:8080//realms/usager/protocol/openid-connect/logout"
+            // window.location.href = logoutURL;
         }
-
-
     </script>
 </head>
 <body onload="initKeycloak()">
-<button onclick="requestclient()">Étudiant?</button>
-<button onclick="requestclient()">Enseignant?</button>
-<button onclick="requestMessage()">Message app2?</button>
-<div id="title">
-    <span></span>
-</div>
-</body>
+    <div id="main">
+        <h1>Quelle Type d'Utilisateur ?</h1>
+        <button onclick="afficherConfirmationClient()">Client</button>
+        <button onclick="requestadmin()">Admin</button>
+        <div id="title">
+            <span></span>
+        </div>
+    </div>
+
+    <div id="confirmationClient" style="display: none;">
+        <h1>Voulez-vous passer une commande ?</h1>
+        <button onclick="passerCommande()">Oui</button>
+        <button onclick="annulerCommande()">Non</button>
+    </div>
+
+    <div id="categories" style="display: none;">
+        <h1>Choisissez une catégorie de produit :</h1>
+		
+        <div class="category-container">
+            <button class="category-button" onclick="ChoisirProduit_1()">
+                <img src="images/Biere.png" alt="Bière">
+                Bière
+            </button>
+            <button class="category-button" onclick="ChoisirProduit_2()">
+                <img src="images/Shots.png" alt="Shots">
+                Shots
+            </button>
+            <button class="category-button" onclick="ChoisirProduit_3()">
+                <img src="images/pizza.png" alt="Nourriture">
+                Nourriture
+            </button>
+            <button class="category-button" onclick="ChoisirProduit_4()">
+                <img src="images/BiereSpecial.png" alt="Boisson Spéciale">
+                B.Spéciale
+            </button>
+        </div>
+    </div>
+
+	<div class="category-container">
+		<div id="produit_1" style="display: none;">
+			<h1>Choisissez un produit dans la catégorie Bière :</h1>
+			
+			<button class="category-button" onclick="choisirProduit_1('Bière 1')">
+				<img src="images/Biere.png" alt="Bière">
+				Bière 1
+			</button>
+			
+			<button class="category-button" onclick="choisirProduit_1('Bière 2')">
+				<img src="images/Biere.png" alt="Bière">
+				Bière 2
+			</button>
+			
+			<button class="category-button" onclick="choisirProduit_1('Bière 3')">
+				<img src="images/Biere.png" alt="Bière">
+				Bière 3
+			</button>
+			
+			<button class="category-button" onclick="choisirProduit_1('Bière 4')">
+				<img src="images/Biere.png" alt="Bière">
+				Bière 4
+			</button>
+		</div>
+
+		<div id="produit_2" style="display: none;">
+			<h1>Choisissez un produit dans la catégorie Shots :</h1>
+			
+			<button class="category-button" onclick="choisirProduit_2('Shots 1')">
+				<img src="images/Shots.png" alt="Shots">
+				Shots 1
+			</button>
+			
+			<button class="category-button" onclick="choisirProduit_2('Shots 2')">
+				<img src="images/Shots.png" alt="Shots">
+				Shots 2
+			</button>
+			
+			<button class="category-button" onclick="choisirProduit_2('Shots 3')">
+				<img src="images/Shots.png" alt="Shots">
+				Shots 3
+			</button>
+			
+			<button class="category-button" onclick="choisirProduit_2('Shots 4')">
+				<img src="images/Shots.png" alt="Shots">
+				Shots 4
+			</button>
+		</div>
+
+		<div id="produit_3" style="display: none;">
+			<h1>Choisissez un produit dans la catégorie Nourriture :</h1>
+			
+			<button class="category-button" onclick="choisirProduit_3('Nourriture 1')">
+				<img src="images/pizza.png" alt="Nourriture">
+				Nourriture 1
+			</button>
+			
+			<button class="category-button" onclick="choisirProduit_3('Nourriture 2')">
+				<img src="images/pizza.png" alt="Nourriture">
+				Nourriture 2
+			</button>
+			
+			<button class="category-button" onclick="choisirProduit_3('Nourriture 3')">
+				<img src="images/pizza.png" alt="Nourriture">
+				Nourriture 3
+			</button>
+				
+			<button class="category-button" onclick="choisirProduit_3('Nourriture 4')">
+				<img src="images/pizza.png" alt="Nourriture">
+				Nourriture 4
+			</button>
+		</div>
+
+		<div id="produit_4" style="display: none;">
+			<h1>Choisissez un produit dans la catégorie Boisson Spéciale :</h1>
+			
+			<button class="category-button" onclick="choisirProduit_4('Boisson Spéciale 1')">
+				<img src="images/BiereSpecial.png" alt="Boisson Spéciale">
+				Boisson Spéciale 1
+			</button>
+			
+			<button class="category-button" onclick="choisirProduit_4('Boisson Spéciale 2')">
+				<img src="images/BiereSpecial.png" alt="Boisson Spéciale">
+				Boisson Spéciale 2
+				</button>
+				
+			<button class="category-button" onclick="choisirProduit_4('Boisson Spéciale 3')">
+				<img src="images/BiereSpecial.png" alt="Boisson Spéciale">
+				Boisson Spéciale 3
+			</button>
+			
+			<button class="category-button" onclick="choisirProduit_4('Boisson Spéciale 4')">
+				<img src="images/BiereSpecial.png" alt="Boisson Spéciale">
+				Boisson Spéciale 4
+			</button>
+			
+		</div>
+	</div>
+  </body>
 </html>

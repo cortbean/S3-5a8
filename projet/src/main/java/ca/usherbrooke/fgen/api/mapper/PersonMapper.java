@@ -10,8 +10,10 @@ import java.util.List;
 @Mapper
 public interface PersonMapper {
     List<Person> select(@Param("cip") String cip,
-                        @Param("first_name") String last_name,
-                        @Param("email") String email);
+                        @Param("lastName") String lastName,
+                        @Param("firstName") String firstName,
+                        @Param("email") String email,
+                        @Param("role") String role);
 
     // Inserer un usager a la base de donne
     //void insertPerson(Person person);

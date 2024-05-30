@@ -4,11 +4,12 @@ import java.util.List;
 
 public class Person {
     public String cip;
-    public String last_name;
-    public String first_name;
+    public String lastName;
+    public String firstName;
     public String email;
+    public String role;
 
-    public String getCip() {
+    /*public String getCip() {
         return cip;
     }
     public void setCip(String cip) {
@@ -31,10 +32,10 @@ public class Person {
     }
     public void setEmail(String email) {
         this.email = email;
-    }
+    }*/
 
     @Override
     public String toString() {
-        return "Person{cip='" + cip + "', last_name='" + last_name + "', first_name='" + first_name + "', email='" + email + "}";
+        return "Person{cip='" + cip + "', last_name='" + lastName + "', first_name='" + firstName + "', email='" + email + "}";
     }
 }

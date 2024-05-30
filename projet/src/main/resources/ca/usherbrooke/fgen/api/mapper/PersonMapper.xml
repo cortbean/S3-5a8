@@ -5,11 +5,12 @@
 <mapper namespace="ca.usherbrooke.fgen.api.mapper.PersonMapper">
 
     <insert id="insertPerson">
-        insert into projet.Utilisateur(cip, Nom, Prenom, Courriel)
+        insert into projet.Utilisateur(cip, Nom, Prenom, Courriel,role)
         values (#{person.cip},
-                #{person.last_name},
-                #{person.first_name},
-                #{person.email})
+                #{person.lastName},
+                #{person.firstName},
+                #{person.email},
+                #{person.role})
             on conflict (cip) do nothing;
     </insert>
 
