@@ -15,9 +15,17 @@
             });
             keycloak.init({onLoad: 'login-required'}).then(function (authenticated) {
                 alert(authenticated ? 'authenticated' : 'not authenticated');
-                requestclient();
-            }).catch(function () {
-                alert('failed to initialize'); // je sais pas pk ca passe ici
+                if (authenticated) {
+                    if (keycloak.hasRealmRole('client')) {
+                        requestclient();
+                    }
+                    if (keycloak.hasRealmRole('admin')) {
+                        requestadmin();
+                    }
+                }
+            }).catch(function (error) {
+                console.error('Failed to initialize Keycloak', error);
+                alert('failed to initialize: ' + error);
             });
         }
 
@@ -44,7 +52,7 @@
         }
 
         function requestadmin() {
-            alert('Dans request client');
+            alert('Dans request admin');
             axios.get("http://localhost:8888/api/admin", {
                 headers: {
                     'Authorization': 'Bearer ' + keycloak.token
