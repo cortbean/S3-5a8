@@ -34,19 +34,11 @@ public class ConnectionService {
     public Person client() {
         Person p = new Person();
         p.cip = this.securityContext.getUserPrincipal().getName();
-        p.last_name = (String)this.jwt.getClaim("family_name");
-        p.first_name = (String)this.jwt.getClaim("given_name");
+        p.lastName = (String)this.jwt.getClaim("family_name");
+        p.firstName = (String)this.jwt.getClaim("given_name");
         p.email = (String)this.jwt.getClaim("email");
-        /*Map realmAccess = (Map)this.jwt.getClaim("realm_access");
-        if (realmAccess != null && realmAccess.containsKey("roles")) {
-            p.roles = (List)realmAccess.get("roles");
-        }*/
-        // Debug logging
-        System.out.println("Person object before insertion: " + p);
-
+        p.role = "client";
         personMapper.insertPerson(p);
-        System.out.println("Inserted person into database");
-
         return p;
     }
 
@@ -56,15 +48,11 @@ public class ConnectionService {
     public Person admin() {
         Person p = new Person();
         p.cip = this.securityContext.getUserPrincipal().getName();
-        p.last_name = (String)this.jwt.getClaim("family_name");
-        p.first_name = (String)this.jwt.getClaim("given_name");
+        p.lastName = (String)this.jwt.getClaim("family_name");
+        p.firstName = (String)this.jwt.getClaim("given_name");
         p.email = (String)this.jwt.getClaim("email");
-        /*Map realmAccess = (Map)this.jwt.getClaim("realm_access");
-        if (realmAccess != null && realmAccess.containsKey("roles")) {
-            p.roles = (List)realmAccess.get("roles");
-        }*/
+        p.role = "admin";
         personMapper.insertPerson(p);
-        System.out.println(p);
 
         return p;
     }
@@ -75,20 +63,10 @@ public class ConnectionService {
     public Person me() {
         Person p = new Person();
         p.cip = this.securityContext.getUserPrincipal().getName();
-        p.last_name = (String)this.jwt.getClaim("family_name");
-        p.first_name = (String)this.jwt.getClaim("given_name");
+        p.lastName = (String)this.jwt.getClaim("family_name");
+        p.firstName = (String)this.jwt.getClaim("given_name");
         p.email = (String)this.jwt.getClaim("email");
-        /*Map realmAccess = (Map)this.jwt.getClaim("realm_access");
-        if (realmAccess != null && realmAccess.containsKey("roles")) {
-            p.roles = (List)realmAccess.get("roles");
-        }*/
-
-        // Debug logging
-        System.out.println("Person object before insertion: " + p);
-
         personMapper.insertPerson(p);
-        System.out.println("Inserted person into database");
-
         return p;
     }
 
