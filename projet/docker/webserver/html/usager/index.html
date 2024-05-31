@@ -49,11 +49,10 @@
                         console.log('Failed to refresh token');
                     })
                 });
-            span.innerHTML = '<br> <strong>' + "Vous n'avez pas le role d'étudiant" + '</strong> </br>'
         }
 
         function requestadmin() {
-            alert('Dans request client');
+            alert('Dans request admin');
             axios.get("http://localhost:8888/api/admin", {
                 headers: {
                     'Authorization': 'Bearer ' + keycloak.token
@@ -71,7 +70,6 @@
                         console.log('Failed to refresh token');
                     })
                 });
-            span.innerHTML = '<br> <strong>' + "Vous n'avez pas le role d'étudiant" + '</strong> </br>'
         }
 
         function logout() {
@@ -80,6 +78,7 @@
         }
 
         function updateCategorie() {
+            alert('Dans update Categorie');
             const gridContainer = document.getElementById('gridContainer');
             axios.get("http://localhost:8888/api/categorie", {
                 headers: {
@@ -88,11 +87,13 @@
             })
                 .then(function (response) {
                     console.log("Response: ", response.status);
+                    console.log("test");
                     for (let i in response.data) {
                         const div = document.createElement('div');
                         div.className = 'grid-item';
                         div.textContent = response.data[i].name;
                         gridContainer.appendChild(div);
+                        console.log(i);
                     }
                 })
                 .catch(function (error) {

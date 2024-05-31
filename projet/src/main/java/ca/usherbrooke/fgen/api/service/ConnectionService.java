@@ -66,7 +66,6 @@ public class ConnectionService {
 
     @GET
     @Path("/categorie")
-    @PermitAll
     public List<Item> Categorie() {
         List<Item> cat = categorieMapper.allCategorie();
         return cat;
