@@ -1,6 +1,10 @@
 package ca.usherbrooke.fgen.api.service;
 
+import ca.usherbrooke.fgen.api.business.Item;
+import ca.usherbrooke.fgen.api.business.Message;
 import ca.usherbrooke.fgen.api.business.Person;
+import ca.usherbrooke.fgen.api.mapper.CategorieMapper;
+import ca.usherbrooke.fgen.api.mapper.MessageMapper;
 import ca.usherbrooke.fgen.api.mapper.PersonMapper;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
@@ -26,6 +30,9 @@ public class ConnectionService {
 
     @Inject
     PersonMapper personMapper;
+
+    @Inject
+    CategorieMapper categorieMapper;
 
 
     @GET
@@ -70,6 +77,14 @@ public class ConnectionService {
     }
 
     @GET
+    @Path("/categorie")
+    @PermitAll
+    public List<Item> Categorie() {
+        List<Item> cat = categorieMapper.allCategorie();
+        return cat;
+    }
+
+    @GET
     @Path("/any")
     @PermitAll
     public Person me() {
@@ -92,9 +107,12 @@ public class ConnectionService {
         return p;
     }
 
+
+
     @GET
     @Path("/test")
     public String test() {
         return "ok";
     }
 }
+

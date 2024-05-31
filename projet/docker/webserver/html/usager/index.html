@@ -16,6 +16,7 @@
             keycloak.init({onLoad: 'login-required'}).then(function (authenticated) {
                 alert(authenticated ? 'authenticated' : 'not authenticated');
                 requestclient();
+                updateCategorie();
             }).catch(function () {
                 alert('failed to initialize'); // je sais pas pk ca passe ici
             });
@@ -65,22 +66,25 @@
             span.innerHTML = '<br> <strong>' + "Vous n'avez pas le role d'étudiant" + '</strong> </br>'
         }
 
-        function requestMessage() {
-            const div = document.getElementById('title');
-            const span = div.firstElementChild;
-            axios.get("http://localhost:8888/api/getmessages/e24/s3i/app2", {
+        function logout() {
+         //   let logoutURL = "http://localhost:8080//realms/usager/protocol/openid-connect/logout"
+         //   window.location.href = logoutURL;
+        }
+
+        function updateCategorie() {
+            const gridContainer = document.getElementById('gridContainer');
+            axios.get("http://localhost:8888/api/categorie", {
                 headers: {
                     'Authorization': 'Bearer ' + keycloak.token
                 }
             })
                 .then(function (response) {
                     console.log("Response: ", response.status);
-                    span.innerHTML = '';
                     for (let i in response.data) {
-                        console.log(response.data[i]);
-                        span.innerHTML +=
-                            '<br> <strong>' + response.data[i].cip + '</strong>' +
-                            '<br> <strong>' + response.data[i].description + '</strong> </br>'
+                        const div = document.createElement('div');
+                        div.className = 'grid-item';
+                        div.textContent = response.data[i].name;
+                        gridContainer.appendChild(div);
                     }
                 })
                 .catch(function (error) {
@@ -91,23 +95,20 @@
                         console.log('Failed to refresh token');
                     })
                 });
-            span.innerHTML = '<br> <strong>' + "Aucun message" + '</strong> </br>'
-        }
-
-        function logout() {
-         //   let logoutURL = "http://localhost:8080//realms/usager/protocol/openid-connect/logout"
-         //   window.location.href = logoutURL;
         }
 
 
     </script>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body onload="initKeycloak()">
-<button onclick="requestclient()">Étudiant?</button>
-<button onclick="requestclient()">Enseignant?</button>
-<button onclick="requestMessage()">Message app2?</button>
-<div id="title">
-    <span></span>
-</div>
+    <p>test</p>
+    <div class="grid-container" id="gridContainer">
+        <p class="grid-item">test</p>
+        <p class="grid-item">test</p>
+        <p class="grid-item">test</p>
+        <p class="grid-item">test</p>
+        <!-- JavaScript will populate this div with items -->
+    </div>
 </body>
 </html>
