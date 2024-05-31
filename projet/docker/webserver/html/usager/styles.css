@@ -1,15 +1,29 @@
+.title {
+    text-align: center;
+}
+
+.container {
+    display: flex;
+}
+
 .grid-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 10px;
     padding: 10px;
+    flex: 2;
 }
 
 .grid-item {
-    background-color: #4CAF50;
+    background-color: grey;
     color: white;
     border: 1px solid #ccc;
     padding: 20px;
     text-align: center;
     font-size: 18px;
+}
+
+.panier {
+    flex: 1;
+    background-color: lightblue;
 }
