@@ -8,7 +8,7 @@
       "lastName": "Mongelos Toledo",
       "email": "mona3503@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -26,7 +26,7 @@
       "lastName": "Bakayoko",
       "email": "bakk1001@usherbrooke.ca",
       "realmRoles": [
-        "admin",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -44,7 +44,7 @@
       "lastName": "Palao Munoz",
       "email": "pald2501@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "teacher",
         "default-roles-master"
       ],
       "credentials": [
@@ -62,7 +62,7 @@
       "lastName": "Malahi",
       "email": "malm1708@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -80,7 +80,7 @@
       "lastName": "Simard",
       "email": "simw2402@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -98,7 +98,7 @@
       "lastName": "Wardani",
       "email": "wars1601@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -116,7 +116,7 @@
       "lastName": "St-Jean",
       "email": "stjm1101@usherbrooke.ca",
       "realmRoles": [
-        "admin",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -134,7 +134,7 @@
       "lastName": "Côté",
       "email": "cotg1816@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -152,7 +152,7 @@
       "lastName": "Leroux",
       "email": "lers0601@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -170,7 +170,7 @@
       "lastName": "Charette",
       "email": "chaj1737@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -188,7 +188,7 @@
       "lastName": "Beaulieu",
       "email": "beab1802@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "teacher",
         "default-roles-master"
       ],
       "credentials": [
@@ -206,7 +206,7 @@
       "lastName": "Turcotte",
       "email": "turs1507@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -224,7 +224,7 @@
       "lastName": "Lefebvre",
       "email": "lefj1811@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -242,7 +242,7 @@
       "lastName": "Mailhot",
       "email": "maif1401@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "teacher",
         "default-roles-master"
       ],
       "credentials": [
@@ -260,7 +260,7 @@
       "lastName": "Dia",
       "email": "diaa2222@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -278,7 +278,7 @@
       "lastName": "Lamy",
       "email": "lamv1904@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -296,7 +296,7 @@
       "lastName": "Bégin",
       "email": "begf1702@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -314,7 +314,7 @@
       "lastName": "Simard",
       "email": "sims3007@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -332,7 +332,7 @@
       "lastName": "Hassoun",
       "email": "hasa3302@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -350,7 +350,7 @@
       "lastName": "Gagné",
       "email": "gagm1108@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -368,7 +368,7 @@
       "lastName": "Aubin",
       "email": "aubm1811@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -386,7 +386,7 @@
       "lastName": "Brochu",
       "email": "brol1606@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -404,7 +404,7 @@
       "lastName": "Rodrigue-Senécal",
       "email": "rodv1001@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -422,7 +422,7 @@
       "lastName": "Egolf",
       "email": "egom1401@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -440,7 +440,7 @@
       "lastName": "Pelchat",
       "email": "pelc1105@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -458,7 +458,7 @@
       "lastName": "Hofheinz",
       "email": "hofm2702@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "teacher",
         "default-roles-master"
       ],
       "credentials": [
@@ -476,7 +476,7 @@
       "lastName": "Lépine",
       "email": "lepl1501@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -494,7 +494,7 @@
       "lastName": "Martin",
       "email": "mara2040@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -512,7 +512,7 @@
       "lastName": "Ouellette",
       "email": "ouej2018@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -530,7 +530,7 @@
       "lastName": "Mercier",
       "email": "merm1504@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -548,7 +548,7 @@
       "lastName": "Fortier",
       "email": "forv1401@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -566,7 +566,7 @@
       "lastName": "Belval",
       "email": "belj1922@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -584,7 +584,7 @@
       "lastName": "Lavallée",
       "email": "lavv1901@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -602,7 +602,7 @@
       "lastName": "Cusson",
       "email": "cusj3102@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -620,7 +620,7 @@
       "lastName": "Meddeb",
       "email": "meda4684@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "teacher",
         "default-roles-master"
       ],
       "credentials": [
@@ -638,7 +638,7 @@
       "lastName": "Maheux",
       "email": "mahf0901@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -656,7 +656,7 @@
       "lastName": "Gravel-Tremblay",
       "email": "graw0801@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -674,7 +674,7 @@
       "lastName": "Gosselin",
       "email": "gosj2008@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -692,7 +692,7 @@
       "lastName": "Paradis",
       "email": "pary1101@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -710,7 +710,7 @@
       "lastName": "Simard-Schmidt",
       "email": "simv2104@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -728,7 +728,7 @@
       "lastName": "Fortin",
       "email": "fora1819@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -746,7 +746,7 @@
       "lastName": "Blais",
       "email": "blam1614@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [
@@ -764,7 +764,7 @@
       "lastName": "Nicol",
       "email": "nicm1501@usherbrooke.ca",
       "realmRoles": [
-        "client",
+        "student",
         "default-roles-master"
       ],
       "credentials": [

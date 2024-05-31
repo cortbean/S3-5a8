@@ -13,15 +13,15 @@
             on conflict (cip) do nothing;
     </insert>
 
-    <select id="selectPerson" resultType="ca.usherbrooke.fgen.api.business.Person">
-        select cip,
-               last_name,
-               first_name,
-               email,
-               programme,
-               promotion
-        from projet.Utilisateur
-        where (cip) = (coalesce(#{cip}, cip))
-    </select>
+<select id="selectPerson" resultType="ca.usherbrooke.fgen.api.business.Person">
+select cip,
+       Nom,
+       Prenom,
+       Courriel,
+       Programme,
+       promotion
+from projet.Utilisateur
+where (cip) = (coalesce(#{cip}, cip))
+</select>
 
-</mapper>
+        </mapper>
