@@ -111,6 +111,24 @@ INSERT INTO projet.Programme (Programme, faculte) VALUES
                                                       ('Sciences de lactivité physique', 'Faculté des sciences de lactivité physique');
 
 
+INSERT INTO projet.Categorie(id_categorie, description) VALUES
+                                                            ('Nourriture','Nourriture'),
+                                                            ('Shooter','Shooter'),
+                                                            ('Cocktails','Cocktails'),
+                                                            ('Bieres','Bieres'),
+                                                            ('Alcool fort', 'Alcool fort');
+
+
+
+INSERT INTO projet.Produit(id_Produit, Nom, Prix, id_categorie) VALUES
+                                                                    (1,'Pizza vegetalien', 3.5, 'Nourriture'),
+                                                                    (2,'Pizza au poulet', 3.5, 'Nourriture'),
+                                                                    (3, 'Sandwich au poulet', 3.5, 'Nourriture'),
+                                                                    (4, 'wrap au poulet', 2.5, 'Nourriture'),
+                                                                    (5,'Hot-Dog', 2.5, 'Nourriture'),
+                                                                    (6,'Pogo', 3.00,'Nourriture');
+
+
 
 
 
