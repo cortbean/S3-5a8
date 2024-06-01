@@ -16,10 +16,10 @@
 
     <select id="selectPerson" resultType="ca.usherbrooke.fgen.api.business.Person">
         select cip,
-               last_name,
-               first_name,
-               email,
-               programme,
+               Nom,
+               Prenom,
+               Courriel,
+               Programme,
                promotion
         from projet.Utilisateur
         where (cip) = (coalesce(#{cip}, cip))

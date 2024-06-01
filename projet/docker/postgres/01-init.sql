@@ -33,66 +33,83 @@ SET default_table_access_method = heap;
 
 -- Additional tables in schema projet
 
-CREATE TABLE projet.Programme (
-                                  Programme VARCHAR(50),
-                                  faculte VARCHAR(50) NOT NULL,
-                                  PRIMARY KEY(Programme)
+-- Create schema
+CREATE SCHEMA IF NOT EXISTS projet;
+
+-- Create tables within the schema
+CREATE TABLE projet.Programme(
+                                 Programme VARCHAR(50),
+                                 faculte VARCHAR(50) NOT NULL,
+                                 PRIMARY KEY(Programme)
 );
 
-CREATE TABLE projet.logs (
-                             log_id INTEGER,
-                             table_name TEXT,
-                             operation TEXT,
-                             changed_data JSONB,
-                             log_time TIMESTAMP,
-                             PRIMARY KEY(log_id)
+CREATE TABLE projet.logs(
+                            log_id SERIAL PRIMARY KEY,
+                            table_name TEXT,
+                            operation TEXT,
+                            changed_data JSONB,
+                            log_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE projet.commande (
+CREATE TABLE projet.Categorie(
+                                 id_categorie VARCHAR(50),
+                                 description VARCHAR(50),
+                                 PRIMARY KEY(id_categorie)
+);
+
+CREATE TABLE projet.Utilisateur(
+                                   cip VARCHAR(8),
+                                   Nom TEXT,
+                                   Prenom TEXT,
+                                   Courriel VARCHAR(255) NOT NULL,
+                                   role VARCHAR(50),
+                                   promotion VARCHAR(50),
+                                   Programme VARCHAR(50) NOT NULL,
+                                   PRIMARY KEY(cip),
+                                   FOREIGN KEY(Programme) REFERENCES projet.Programme(Programme)
+);
+
+CREATE TABLE projet.Produit(
+                               id_Produit INTEGER,
+                               Nom VARCHAR(255) NOT NULL,
+                               Prix NUMERIC(10,2) NOT NULL,
+                               id_categorie VARCHAR(50),
+                               PRIMARY KEY(id_Produit),
+                               FOREIGN KEY(id_categorie) REFERENCES projet.Categorie(id_categorie)
+);
+
+CREATE TABLE projet.commande(
+                                id_commande VARCHAR(50),
+                                date_commande TIMESTAMP,
+                                cip VARCHAR(8),
+                                PRIMARY KEY(id_commande),
+                                FOREIGN KEY(cip) REFERENCES projet.Utilisateur(cip)
+);
+
+CREATE TABLE projet.plusieurs(
+                                 id_Produit INTEGER,
                                  id_commande VARCHAR(50),
-                                 date_commande TIMESTAMP,
-                                 PRIMARY KEY(id_commande)
+                                 quantite VARCHAR(50),
+                                 PRIMARY KEY(id_Produit, id_commande),
+                                 FOREIGN KEY(id_Produit) REFERENCES projet.Produit(id_Produit),
+                                 FOREIGN KEY(id_commande) REFERENCES projet.commande(id_commande)
 );
 
-CREATE TABLE projet.Categorie (
-                                  id_categorie VARCHAR(50),
-                                  description VARCHAR(50),
-                                  PRIMARY KEY(id_categorie)
-);
-
-CREATE TABLE projet.Utilisateur (
-                                    cip VARCHAR(8),
-                                    Nom TEXT,
-                                    Prenom TEXT,
-                                    Courriel VARCHAR(255) NOT NULL,
-                                    role VARCHAR(50),
-                                    promotion VARCHAR(50),
-                                    id_commande VARCHAR(50),
-                                    Programme VARCHAR(50) NULL,
-                                    PRIMARY KEY(cip),
-                                    FOREIGN KEY(id_commande) REFERENCES projet.commande(id_commande),
-                                    FOREIGN KEY(Programme) REFERENCES projet.Programme(Programme)
-);
-
-CREATE TABLE projet.Produit (
-                                id_Produit INTEGER,
-                                Nom VARCHAR(255) NOT NULL,
-                                Prix NUMERIC(10,2) NOT NULL,
-                                id_categorie VARCHAR(50),
-                                PRIMARY KEY(id_Produit),
-                                FOREIGN KEY(id_categorie) REFERENCES projet.Categorie(id_categorie)
-);
-
-CREATE TABLE projet.plusieurs (
-                                  id_Produit INTEGER,
-                                  id_commande VARCHAR(50),
-                                  quantite VARCHAR(50),
-                                  PRIMARY KEY(id_Produit, id_commande),
-                                  FOREIGN KEY(id_Produit) REFERENCES projet.Produit(id_Produit),
-                                  FOREIGN KEY(id_commande) REFERENCES projet.commande(id_commande)
-);
 
 ALTER TABLE projet.Utilisateur OWNER TO postgres;
+
+CREATE VIEW projet.commande_produits AS
+SELECT
+    c.id_commande,
+    p.Nom AS produit_nom,
+    p.Prix AS produit_prix,
+    pl.quantite
+FROM
+    projet.plusieurs pl
+        JOIN
+    projet.commande c ON pl.id_commande = c.id_commande
+        JOIN
+    projet.Produit p ON pl.id_Produit = p.id_Produit;
 
 
 INSERT INTO projet.Programme (Programme, faculte) VALUES
@@ -126,7 +143,10 @@ INSERT INTO projet.Produit(id_Produit, Nom, Prix, id_categorie) VALUES
                                                                     (3, 'Sandwich au poulet', 3.5, 'Nourriture'),
                                                                     (4, 'wrap au poulet', 2.5, 'Nourriture'),
                                                                     (5,'Hot-Dog', 2.5, 'Nourriture'),
-                                                                    (6,'Pogo', 3.00,'Nourriture');
+                                                                    (6,'Pogo', 3.00,'Nourriture'),
+                                                                    (7, 'Biere', 3, 'Bieres'),
+                                                                    (8, 'Cocktails', 3, 'Cocktails'),
+                                                                    (9, 'Shooter', 3, 'Shooter');
 
 
 
