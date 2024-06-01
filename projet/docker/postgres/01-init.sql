@@ -117,6 +117,7 @@ INSERT INTO projet.Programme (Programme, faculte) VALUES
                                                       ('Administration des affaires', 'École de gestion'),
                                                       ('Éducation', 'Faculté déducation'),
                                                       ('Génie civil', 'Faculté de génie'),
+                                                      ('Génie informatique', 'Faculté de génie'),
                                                       ('Génie mécanique', 'Faculté de génie'),
                                                       ('Génie électrique', 'Faculté de génie'),
                                                       ('Lettres et sciences humaines', 'Faculté de lettres et sciences humaines'),
