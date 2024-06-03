@@ -65,10 +65,11 @@ public class ConnectionService {
     }
 
     @GET
-    @Path("/categorie")
-    public List<Item> Categorie() {
-        List<Item> cat = categorieMapper.allCategorie();
-        return cat;
+    @Path("/getcategorie")
+    @PermitAll
+    public List<Item> getCategorie() {
+        List<Item> item = categorieMapper.allCategorie();
+        return item;
     }
 
     @GET

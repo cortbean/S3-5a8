@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 public interface CategorieMapper {
 
-    List<Item> select(@Param("nom") String nom);
+    List<Item> select(@Param("description") String description);
 
     // Inserer un usager a la base de donne
     //void insertPerson(Person person);
