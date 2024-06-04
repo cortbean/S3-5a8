@@ -1,4 +1,11 @@
--- Début du dump de la base de données PostgreSQL
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 13.6 (Debian 13.6-1.pgdg110+1)
+-- Dumped by pg_dump version 14.1
+
+-- Started on 2022-05-25 18:13:12 EDT
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -11,170 +18,119 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
--- Création du schéma projet
+--
+-- TOC entry 6 (class 2615 OID 16385)
+-- Name: app; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+
+-- Create schema projet
 CREATE SCHEMA projet;
-
 ALTER SCHEMA projet OWNER TO postgres;
-
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
--- Création des séquences pour la génération des identifiants
-CREATE SEQUENCE projet.role_id_seq;
-CREATE SEQUENCE projet.faculte_id_seq;
-CREATE SEQUENCE projet.permission_id_seq;
-CREATE SEQUENCE projet.produit_id_seq;
-CREATE SEQUENCE projet.programme_id_seq;
-CREATE SEQUENCE projet.authentification_id_seq;
-CREATE SEQUENCE projet.utilisateur_id_seq;
-CREATE SEQUENCE projet.commande_id_seq;
-CREATE SEQUENCE projet.categorie_id_seq;
-
--- Création des tables
-CREATE TABLE projet.Commande (
-                                 id_Cmd INTEGER,
-                                 DateCommande TIMESTAMP WITH TIME ZONE NOT NULL,
-                                 CodeDeLaCommande INTEGER NOT NULL,
-                                 PRIMARY KEY(id_Cmd)
-);
-
-CREATE TABLE projet.Faculte (
-                                id_Fac INTEGER,
-                                Nom VARCHAR(255) NOT NULL,
-                                PRIMARY KEY(id_Fac)
-);
+-- Additional tables in schema projet
 
 CREATE TABLE projet.Programme (
-                                  id_Prog INTEGER,
-                                  Nom VARCHAR(255) NOT NULL,
-                                  id_Fac INTEGER NOT NULL,
-                                  PRIMARY KEY(id_Prog),
-                                  FOREIGN KEY(id_Fac) REFERENCES projet.Faculte(id_Fac)
+                                  Programme VARCHAR(50),
+                                  faculte VARCHAR(50) NOT NULL,
+                                  PRIMARY KEY(Programme)
+);
+
+CREATE TABLE projet.logs (
+                             log_id INTEGER,
+                             table_name TEXT,
+                             operation TEXT,
+                             changed_data JSONB,
+                             log_time TIMESTAMP,
+                             PRIMARY KEY(log_id)
+);
+
+CREATE TABLE projet.commande (
+                                 id_commande VARCHAR(50),
+                                 date_commande TIMESTAMP,
+                                 PRIMARY KEY(id_commande)
 );
 
 CREATE TABLE projet.Categorie (
-                                  id_Cat INTEGER,
-                                  Nom VARCHAR(255) NOT NULL,
-                                  PRIMARY KEY(id_Cat)
-);
-
-CREATE TABLE projet.Logs (
-                             id_logs INTEGER,
-                             TableName VARCHAR(255) NOT NULL,
-                             Operation VARCHAR(255) NOT NULL,
-                             ChangeData JSONB NOT NULL,
-                             LogTime TIMESTAMP NOT NULL,
-                             PRIMARY KEY(id_logs)
+                                  id_categorie VARCHAR(50),
+                                  description VARCHAR(50),
+                                  PRIMARY KEY(id_categorie)
 );
 
 CREATE TABLE projet.Utilisateur (
                                     cip VARCHAR(8),
-                                    Nom VARCHAR(255) NOT NULL,
-                                    Prenom VARCHAR(255) NOT NULL,
+                                    Nom TEXT,
+                                    Prenom TEXT,
                                     Courriel VARCHAR(255) NOT NULL,
-                                    id_Prog INTEGER NOT NULL,
-                                    id_Cmd INTEGER,
-                                    PRIMARY KEY(Cip),
-                                    UNIQUE(Courriel),
-                                    FOREIGN KEY(id_Prog) REFERENCES projet.Programme(id_Prog),
-                                    FOREIGN KEY(id_Cmd) REFERENCES projet.Commande(id_Cmd)
+                                    role VARCHAR(50),
+                                    promotion VARCHAR(50),
+                                    id_commande VARCHAR(50),
+                                    Programme VARCHAR(50) NULL,
+                                    PRIMARY KEY(cip),
+                                    FOREIGN KEY(id_commande) REFERENCES projet.commande(id_commande),
+                                    FOREIGN KEY(Programme) REFERENCES projet.Programme(Programme)
 );
 
 CREATE TABLE projet.Produit (
-                                id_Pro INTEGER,
+                                id_Produit INTEGER,
                                 Nom VARCHAR(255) NOT NULL,
                                 Prix NUMERIC(10,2) NOT NULL,
-                                id_Cat INTEGER NOT NULL,
-                                PRIMARY KEY(id_Pro),
-                                FOREIGN KEY(id_Cat) REFERENCES projet.Categorie(id_Cat)
+                                id_categorie VARCHAR(50),
+                                PRIMARY KEY(id_Produit),
+                                FOREIGN KEY(id_categorie) REFERENCES projet.Categorie(id_categorie)
 );
 
-CREATE TABLE projet.de (
-                           id_Cmd INTEGER,
-                           id_Pro INTEGER,
-                           Quantite INTEGER NOT NULL,
-                           PRIMARY KEY(id_Cmd, id_Pro),
-                           FOREIGN KEY(id_Cmd) REFERENCES projet.Commande(id_Cmd),
-                           FOREIGN KEY(id_Pro) REFERENCES projet.Produit(id_Pro)
+CREATE TABLE projet.plusieurs (
+                                  id_Produit INTEGER,
+                                  id_commande VARCHAR(50),
+                                  quantite VARCHAR(50),
+                                  PRIMARY KEY(id_Produit, id_commande),
+                                  FOREIGN KEY(id_Produit) REFERENCES projet.Produit(id_Produit),
+                                  FOREIGN KEY(id_commande) REFERENCES projet.commande(id_commande)
 );
 
--- Insertion des données dans la table Faculte
-INSERT INTO projet.Faculte (id_Fac, Nom) VALUES
-                                             (1, 'Faculté d''administration'),
-                                             (2, 'Faculté de droit'),
-                                             (3, 'Faculté d''éducation'),
-                                             (4, 'Faculté de génie'),
-                                             (5, 'Faculté des lettres et sciences humaines'),
-                                             (6, 'Faculté de médecine et des sciences de la santé'),
-                                             (7, 'Faculté des sciences'),
-                                             (8, 'Faculté des sciences de l''activité physique'),
-                                             (9, 'Faculté des sciences de l''éducation'),
-                                             (10, 'Faculté des sciences sociales'),
-                                             (11, 'École de gestion'),
-                                             (12, 'École de musique');
+ALTER TABLE projet.Utilisateur OWNER TO postgres;
 
--- Insertion des données dans la table Programme
-INSERT INTO projet.Programme (id_Prog, Nom, id_Fac) VALUES
-                                                        (1, 'Administration des affaires', 1),
-                                                        (2, 'Certificat en administration', 1),
-                                                        (3, 'Maîtrise en administration', 1),
-                                                        (4, 'MBA', 1),
-                                                        (5, 'Doctorat en administration', 1),
-                                                        (6, 'Droit', 2),
-                                                        (7, 'Certificat en droit', 2),
-                                                        (8, 'Maîtrise en droit', 2),
-                                                        (9, 'Doctorat en droit', 2),
-                                                        (10, 'Enseignement au préscolaire et au primaire', 3),
-                                                        (11, 'Enseignement en adaptation scolaire et sociale', 3),
-                                                        (12, 'Enseignement secondaire', 3),
-                                                        (13, 'Certificat en éducation', 3),
-                                                        (14, 'Maîtrise en sciences de l''éducation', 3),
-                                                        (15, 'Doctorat en éducation', 3),
-                                                        (16, 'Génie biotechnologique', 4),
-                                                        (17, 'Génie chimique', 4),
-                                                        (18, 'Génie civil', 4),
-                                                        (19, 'Génie électrique', 4),
-                                                        (20, 'Génie informatique', 4),
-                                                        (21, 'Génie mécanique', 4),
-                                                        (22, 'Génie robotique', 4),
-                                                        (23, 'Maîtrise en génie', 4),
-                                                        (24, 'Doctorat en génie', 4),
-                                                        (25, 'Études littéraires et culturelles', 5),
-                                                        (26, 'Histoire', 5),
-                                                        (27, 'Philosophie', 5),
-                                                        (28, 'Certificat en lettres et sciences humaines', 5),
-                                                        (29, 'Maîtrise en lettres et sciences humaines', 5),
-                                                        (30, 'Doctorat en lettres et sciences humaines', 5),
-                                                        (31, 'Médecine', 6),
-                                                        (32, 'Sciences infirmières', 6),
-                                                        (33, 'Physiothérapie', 6),
-                                                        (34, 'Maîtrise en sciences de la santé', 6),
-                                                        (35, 'Doctorat en sciences de la santé', 6),
-                                                        (36, 'Biochimie', 7),
-                                                        (37, 'Biologie', 7),
-                                                        (38, 'Chimie', 7),
-                                                        (39, 'Informatique', 7),
-                                                        (40, 'Mathématiques', 7),
-                                                        (41, 'Physique', 7),
-                                                        (42, 'Maîtrise en sciences', 7),
-                                                        (43, 'Doctorat en sciences', 7),
-                                                        (44, 'Kinésiologie', 8),
-                                                        (45, 'Enseignement de l''éducation physique et à la santé', 8),
-                                                        (46, 'Maîtrise en sciences de l''activité physique', 8),
-                                                        (47, 'Doctorat en sciences de l''activité physique', 8),
-                                                        (48, 'Psychologie', 10),
-                                                        (49, 'Travail social', 10),
-                                                        (50, 'Maîtrise en sciences sociales', 10),
-                                                        (51, 'Doctorat en sciences sociales', 10),
-                                                        (52, 'Gestion des ressources humaines', 11),
-                                                        (53, 'Gestion internationale', 11),
-                                                        (54, 'Certificat en gestion', 11),
-                                                        (55, 'Maîtrise en gestion', 11),
-                                                        (56, 'Doctorat en gestion', 11),
-                                                        (57, 'Musique', 12),
-                                                        (58, 'Certificat en musique', 12),
-                                                        (59, 'Maîtrise en musique', 12),
-                                                        (60, 'Doctorat en musique', 12);
 
--- Fin du dump de la base de données PostgreSQL
+INSERT INTO projet.Programme (Programme, faculte) VALUES
+                                                      ('Droit', 'Faculté de droit'),
+                                                      ('Administration des affaires', 'École de gestion'),
+                                                      ('Éducation', 'Faculté déducation'),
+                                                      ('Génie civil', 'Faculté de génie'),
+                                                      ('Génie mécanique', 'Faculté de génie'),
+                                                      ('Génie électrique', 'Faculté de génie'),
+                                                      ('Lettres et sciences humaines', 'Faculté de lettres et sciences humaines'),
+                                                      ('Médecine', 'Faculté de médecine et des sciences de la santé'),
+                                                      ('Biologie', 'Faculté des sciences'),
+                                                      ('Chimie', 'Faculté des sciences'),
+                                                      ('Physique', 'Faculté des sciences'),
+                                                      ('Informatique', 'Faculté des sciences'),
+                                                      ('Sciences de lactivité physique', 'Faculté des sciences de lactivité physique');
+
+
+INSERT INTO projet.Categorie(id_categorie, description) VALUES
+                                                            ('Nourriture','Nourriture'),
+                                                            ('Shooter','Shooter'),
+                                                            ('Cocktails','Cocktails'),
+                                                            ('Bieres','Bieres'),
+                                                            ('Alcool fort', 'Alcool fort');
+
+
+
+INSERT INTO projet.Produit(id_Produit, Nom, Prix, id_categorie) VALUES
+                                                                    (1,'Pizza vegetalien', 3.5, 'Nourriture'),
+                                                                    (2,'Pizza au poulet', 3.5, 'Nourriture'),
+                                                                    (3, 'Sandwich au poulet', 3.5, 'Nourriture'),
+                                                                    (4, 'wrap au poulet', 2.5, 'Nourriture'),
+                                                                    (5,'Hot-Dog', 2.5, 'Nourriture'),
+                                                                    (6,'Pogo', 3.00,'Nourriture');
+
+
+
+
+
+
+

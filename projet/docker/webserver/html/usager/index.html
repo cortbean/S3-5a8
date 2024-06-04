@@ -1,377 +1,108 @@
-<!DOCTYPE html>
+<!Doctype html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemple Keycloak</title>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="http://localhost:8180/js/keycloak.js"></script>
-    <style>
-        /* (Styles CSS) */
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            flex-direction: column;
-        }
-		
-        button {
-            margin: 20px;
-            padding: 20px 40px; /* Taille du bouton */
-            font-size: 24px; /* Taille de l'écriture */
-            border-radius: 35px; /* Coins arrondis */
-            border: none; /* Supprimer les bordures */
-            cursor: pointer; /* Changer le curseur */
-            background-color: #28a745; /* Couleur de fond verte */
-            color: white; /* Couleur du texte */
-			display: inline-block; /* Affichage en ligne */
-        }
-		
-		.category-container {
-			display: block; /* Affichage en bloc */
-			text-align: center; /* Centrage horizontal */
-			margin-top: 20px; /* Espacement par rapport aux autres éléments */
-		}
-
-		.category-button {
-			margin: 10px;
-			padding: 10px 20px;
-			font-size: 16px;
-			background-color: transparent;
-			border: 2px solid #28a745;
-			color: #28a745;
-			cursor: pointer;
-		}
-
-		.category-button:hover {
-			background-color: #e6e6e6;
-		}
-		
-        #title {
-            text-align: center;
-            margin-top: 50px;
-            font-size: 24px; /* Taille de l'écriture pour le titre */
-        }
-        #confirmationClient, #categories, #produit_1, #produit_2, #produit_3, #produit_4 {
-            display: none; /* Masquer les sections par défaut */
-            text-align: center;
-        }
-		.category-container {
-			display: flex;
-			flex-direction: column; /* Affichage vertical */
-			align-items: center; /* Centrage horizontal */
-			gap: 20px; /* Espacement entre les boutons */
-			margin-top: 20px; /* Espacement par rapport aux autres éléments */
-		}
-        .category-container {
-            display: flex;
-            flex-direction: column; /* Affichage vertical */
-            align-items: center;
-            justify-content: center; /* Centrage vertical */
-            width: calc(20% - 50px); /* deux boutons par ligne avec un espace de 20px */
-        }
-        .category-button img {
-            width: 160px; /* ajuster la taille de l'image */
-            height: auto;
-		}
-    </style>
-    <script>
-        var keycloak;
-        function initKeycloak() {
-            keycloak = new Keycloak({
-                "realm": "usager",
-                "auth-server-url": "http://localhost:8180/",
-                "ssl-required": "external",
-                "clientId": "frontend",
-                "public-client": true,
-                "confidential-port": 0
-            });
-            keycloak.init({onLoad: 'login-required'}).then(function (authenticated) {
-                alert(authenticated ? 'authenticated' : 'not authenticated');
-                if (authenticated) {
-                    if (keycloak.hasRealmRole('client')) {
-                        requestclient();
-                    }
-                    if (keycloak.hasRealmRole('admin')) {
-                        requestadmin();
-                    }
-                }
-            }).catch(function (error) {
-                console.error('Failed to initialize Keycloak', error);
-                alert('failed to initialize: ' + error);
-            });
-        }
-		function afficherConfirmationClient() {
-		document.getElementById('main').style.display = 'none';
-		document.getElementById('confirmationClient').style.display = 'block';
-        }
-
-        function passerCommande() {
-            document.getElementById('confirmationClient').style.display = 'none';
-            document.getElementById('categories').style.display = 'block';
-        }
-
-        function annulerCommande() {
-            alert('Commande annulée');
-            document.getElementById('confirmationClient').style.display = 'none';
-            document.getElementById('main').style.display = 'block';
-        }
-
-        function ChoisirProduit_1() {
-            document.getElementById('categories').style.display = 'none';
-            document.getElementById('produit_1').style.display = 'block';
-        }
-
-        function ChoisirProduit_2() {
-            document.getElementById('categories').style.display = 'none';
-            document.getElementById('produit_2').style.display = 'block';
-        }
-
-        function ChoisirProduit_3() {
-            document.getElementById('categories').style.display = 'none';
-            document.getElementById('produit_3').style.display = 'block';
-        }
-
-        function ChoisirProduit_4() {
-            document.getElementById('categories').style.display = 'none';
-            document.getElementById('produit_4').style.display = 'block';
-        }
-
-        function choisirProduit_1(produit_1) {
-            alert('Vous avez choisi le produit : ' + produit_1);
-        }
-
-        function choisirProduit_2(produit_2) {
-            alert('Vous avez choisi le produit : ' + produit_2);
-        }
-
-        function choisirProduit_3(produit_3) {
-            alert('Vous avez choisi le produit : ' + produit_3);
-        }
-
-        function choisirProduit_4(produit_4) {
-            alert('Vous avez choisi le produit : ' + produit_4);
-        }
-
-        function requestclient() {
-            alert('Vous etes dans request client');
-            axios.get("http://localhost:8888/api/client", {
-                headers: {
-                    'Authorization': 'Bearer ' + keycloak.token
-                }
-            })
-                .then(function (response) {
-                    console.log("Response: ", response.status);
-                    alert('client ajouté');
-					afficherConfirmationClient();
-                })
-                .catch(function (error) {
-                    console.log('refreshing');
-                    keycloak.updateToken(5).then(function () {
-                        console.log('Token refreshed');
-                    }).catch(function () {
-                        console.log('Failed to refresh token');
-                    })
-                });
-            span.innerHTML = '<br> <strong>' + "Vous n'avez pas le rôle d'étudiant" + '</strong> </br>'
-        }
-
-        function requestadmin() {
-            alert('Vous etes dans request admin');
-            axios.get("http://localhost:8888/api/admin", {
-                headers: {
-                    'Authorization': 'Bearer ' + keycloak.token
-                }
-            })
-                .then(function (response) {
-                    console.log("Response: ", response.status);
-                    alert('admin ajouté');
-					// Ajoutez ici le code pour ce que l'admin doit voir ou faire
-                })
-                .catch(function (error) {
-                    console.log('refreshing');
-                    keycloak.updateToken(5).then(function () {
-                        console.log('Token refreshed');
-                    }).catch(function () {
-                        console.log('Failed to refresh token');
-                    })
-                });
-            span.innerHTML = '<br> <strong>' + "Vous n'avez pas le rôle d'étudiant" + '</strong> </br>'
-        }
-
-        function requestMessage() {
-            const div = document.getElementById('title');
-            const span = div.firstElementChild;
-            axios.get("http://localhost:8888/api/getmessages/e24/s3i/app2", {
-                headers: {
-                    'Authorization': 'Bearer ' + keycloak.token
-                }
-            })
-                .then(function (response) {
-                    console.log("Response: ", response.status);
-                    span.innerHTML = '';
-                    for (let i in response.data) {
-                        console.log(response.data[i]);
-                        span.innerHTML +=
-                            '<br> <strong>' + response.data[i].cip + '</strong>' +
-                            '<br> <strong>' + response.data[i].description + '</strong> </br>'
-                    }
-                })
-                .catch(function (error) {
-                    console.log('refreshing');
-                    keycloak.updateToken(5).then(function () {
-                        console.log('Token refreshed');
-                    }).catch(function () {
-                        console.log('Failed to refresh token');
-                    })
-                });
-            span.innerHTML = '<br> <strong>' + "Aucun message" + '</strong> </br>'
-        }
-
-        function logout() {
-            // let logoutURL = "http://localhost:8080//realms/usager/protocol/openid-connect/logout"
-            // window.location.href = logoutURL;
-        }
-    </script>
-</head>
-<body onload="initKeycloak()">
-    <div id="main">
-        <h1>Quelle Type d'Utilisateur ?</h1>
-        <button onclick="afficherConfirmationClient()">Client</button>
-        <button onclick="requestadmin()">Admin</button>
-        <div id="title">
-            <span></span>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <link rel="stylesheet" href="index.css">
+        <title>Com5a8</title>
+    </head>
+    <body>
+        <div class="Annonce">
+            <p>L'alcool à partir de 3 $ |
+                <k title="Vente">ACHETER MAINTENANT</k1>
+            </p>
         </div>
-    </div>
 
-    <div id="confirmationClient" style="display: none;">
-        <h1>Voulez-vous passer une commande ?</h1>
-        <button onclick="passerCommande()">Oui</button>
-        <button onclick="annulerCommande()">Non</button>
-    </div>
-
-    <div id="categories" style="display: none;">
-        <h1>Choisissez une catégorie de produit :</h1>
-		
-        <div class="category-container">
-            <button class="category-button" onclick="ChoisirProduit_1()">
-                <img src="images/Biere.png" alt="Bière">
-                Bière
-            </button>
-            <button class="category-button" onclick="ChoisirProduit_2()">
-                <img src="images/Shots.png" alt="Shots">
-                Shots
-            </button>
-            <button class="category-button" onclick="ChoisirProduit_3()">
-                <img src="images/pizza.png" alt="Nourriture">
-                Nourriture
-            </button>
-            <button class="category-button" onclick="ChoisirProduit_4()">
-                <img src="images/BiereSpecial.png" alt="Boisson Spéciale">
-                B.Spéciale
-            </button>
+        <div id="root" data-section-header="header" data-section-type="header" class="sf-header opacite-0 transition-opacite opacite-100" data-transparent="false" data-sticky="true" style="opacity: 1;">
+            <div class="absolute inset-x-0 z-[70]" header__wrapper>
+                <header>
+                    <div class="flex">
+                        <div class="sf-header__mobile-left w-1/4 flex flex-1 items-center justify-start">
+                            <div class="sf-header__mobile-menu-item">
+                                <a href="#" class="sf-header__mobile-menu-link">
+                                    <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                        <path d="M442 114H6a6 6 0 0 1-6-6V84a6 6 0 0 1 6-6h436a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6zm0 160H6a6 6 0 0 1-6-6v-24a6 6 0 0 1 6-6h436a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6zm0 160H6a6 6 0 0 1-6-6v-24a6 6 0 0 1 6-6h436a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6z"></path>
+                                    </svg>
+                                </a>
+                            </div>    
+                        </div>
+                        <div class="sf-logo sf-logo--mobile has-logo-img px-4 block py-2.5  relative">
+                            <a href="#" class="sf-header__mobile-center w-1/2 flex flex-1 items-center justify-center">
+                            </a>
+                        </div>
+                        <div class="sf-header__mobile-right w-1/4 flex flex-1 items-center justify-end">
+                            <a href="/account" class="px-1 md:px-2 py-3.5">
+                                <span class="sf__tooltip-item block sf__tooltip-bottom sf__tooltip-style-2">
+                                    <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                        <path d="M313.6 304c-28.7 0-42.5 16-89.6 16-47.1 0-60.8-16-89.6-16C60.2 304 0 364.2 0 438.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-25.6c0-74.2-60.2-134.4-134.4-134.4zM400 464H48v-25.6c0-47.6 38.8-86.4 86.4-86.4 14.6 0 38.3 16 89.6 16 51.7 0 74.9-16 89.6-16 47.6 0 86.4 38.8 86.4 86.4V464zM224 288c79.5 0 144-64.5 144-144S303.5 0 224 0 80 64.5 80 144s64.5 144 144 144zm0-240c52.9 0 96 43.1 96 96s-43.1 96-96 96-96-43.1-96-96 43.1-96 96-96z">
+                                        </path>
+                                    </svg>
+                                    <span class="sf__tooltip-content">Compte</span>
+                                </span>
+                            </a>
+                            <a class="px-1 md:px-2 py-3.5" data-event-button="wish-count">
+                                <span class="relative block">
+                                    <span class="sf__tooltip-item sf__tooltip-bottom sf__tooltip-style-2 block !p-[4px]">
+                                        <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                            <path d="M528.1 171.5L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6zM388.6 312.3l23.7 138.4L288 385.4l-124.3 65.3 23.7-138.4-100.6-98 139-20.2 62.2-126 62.2 126 139 20.2-100.6 98z"></path>
+                                        </svg>
+                                        <span class="sf__tooltip-content">Favoris</span>
+                                    </span>
+                                    <sup class="sf-icon-count font-medium !hidden" data-wishlist-count="">0</sup>
+                                </span>
+                            </a>
+                            <a href="/cart" class="px-1 md:px-2 py-3.5 sf-cart-icon cart-icon" style>
+                                <span class="relative block">
+                                    <span class="sf__tooltip-item block sf__tooltip-bottom sf__tooltip-style-2">
+                                        <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                            <path d="M352 128C352 57.42 294.579 0 224 0 153.42 0 96 57.42 96 128H0v304c0 44.183 35.817 80 80 80h288c44.183 0 80-35.817 80-80V128h-96zM224 48c44.112 0 80 35.888 80 80H144c0-44.112 35.888-80 80-80zm176 384c0 17.645-14.355 32-32 32H80c-17.645 0-32-14.355-32-32V176h48v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h160v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h48v256z"></path>
+                                        </svg>
+                                        <span class="sf__tooltip-content">Panier</span>
+                                    </span>
+                                    <span class="sf-cart-count sf-icon-count font-medium">0</span>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </header>
+                <div class="sf-header__mobile_center sf-header__mobile_center" style="margin-left: -10px; width: 100vw; background-color: #f6f6f6;">
+                    <div style="display: flex; overflow-x: auto; overflow-y: hidden; padding: 10px 0; width: 100%;">
+                        <div class="sf-header__mobile_item">
+                            <a1 class="one" href="#">OFFRE SPECIAL</a1><!--Definie le lien vers l'offre special-->
+                        </div>
+                    
+                        <div class="sf-header__mobile_item">
+                            <a1 class="two" href="#">BIERE</a1><!--Definie le lien vers la biere-->
+                        </div>
+                    
+                        <div class="sf-header__mobile_item">
+                            <a1 class="tree" href="#">SHOTS</a1><!--Definie le lien vers les shots-->
+                        </div>
+                    
+                        <div class="sf-header__mobile_item">
+                            <a1 class="four" href="#">NOURRITURE</a1><!--Definie le lien vers la nourriture-->
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 
-	<div class="category-container">
-		<div id="produit_1" style="display: none;">
-			<h1>Choisissez un produit dans la catégorie Bière :</h1>
-			
-			<button class="category-button" onclick="choisirProduit_1('Bière 1')">
-				<img src="images/Biere.png" alt="Bière">
-				Bière 1
-			</button>
-			
-			<button class="category-button" onclick="choisirProduit_1('Bière 2')">
-				<img src="images/Biere.png" alt="Bière">
-				Bière 2
-			</button>
-			
-			<button class="category-button" onclick="choisirProduit_1('Bière 3')">
-				<img src="images/Biere.png" alt="Bière">
-				Bière 3
-			</button>
-			
-			<button class="category-button" onclick="choisirProduit_1('Bière 4')">
-				<img src="images/Biere.png" alt="Bière">
-				Bière 4
-			</button>
-		</div>
-
-		<div id="produit_2" style="display: none;">
-			<h1>Choisissez un produit dans la catégorie Shots :</h1>
-			
-			<button class="category-button" onclick="choisirProduit_2('Shots 1')">
-				<img src="images/Shots.png" alt="Shots">
-				Shots 1
-			</button>
-			
-			<button class="category-button" onclick="choisirProduit_2('Shots 2')">
-				<img src="images/Shots.png" alt="Shots">
-				Shots 2
-			</button>
-			
-			<button class="category-button" onclick="choisirProduit_2('Shots 3')">
-				<img src="images/Shots.png" alt="Shots">
-				Shots 3
-			</button>
-			
-			<button class="category-button" onclick="choisirProduit_2('Shots 4')">
-				<img src="images/Shots.png" alt="Shots">
-				Shots 4
-			</button>
-		</div>
-
-		<div id="produit_3" style="display: none;">
-			<h1>Choisissez un produit dans la catégorie Nourriture :</h1>
-			
-			<button class="category-button" onclick="choisirProduit_3('Nourriture 1')">
-				<img src="images/pizza.png" alt="Nourriture">
-				Nourriture 1
-			</button>
-			
-			<button class="category-button" onclick="choisirProduit_3('Nourriture 2')">
-				<img src="images/pizza.png" alt="Nourriture">
-				Nourriture 2
-			</button>
-			
-			<button class="category-button" onclick="choisirProduit_3('Nourriture 3')">
-				<img src="images/pizza.png" alt="Nourriture">
-				Nourriture 3
-			</button>
-				
-			<button class="category-button" onclick="choisirProduit_3('Nourriture 4')">
-				<img src="images/pizza.png" alt="Nourriture">
-				Nourriture 4
-			</button>
-		</div>
-
-		<div id="produit_4" style="display: none;">
-			<h1>Choisissez un produit dans la catégorie Boisson Spéciale :</h1>
-			
-			<button class="category-button" onclick="choisirProduit_4('Boisson Spéciale 1')">
-				<img src="images/BiereSpecial.png" alt="Boisson Spéciale">
-				Boisson Spéciale 1
-			</button>
-			
-			<button class="category-button" onclick="choisirProduit_4('Boisson Spéciale 2')">
-				<img src="images/BiereSpecial.png" alt="Boisson Spéciale">
-				Boisson Spéciale 2
-				</button>
-				
-			<button class="category-button" onclick="choisirProduit_4('Boisson Spéciale 3')">
-				<img src="images/BiereSpecial.png" alt="Boisson Spéciale">
-				Boisson Spéciale 3
-			</button>
-			
-			<button class="category-button" onclick="choisirProduit_4('Boisson Spéciale 4')">
-				<img src="images/BiereSpecial.png" alt="Boisson Spéciale">
-				Boisson Spéciale 4
-			</button>
-			
-		</div>
-	</div>
-  </body>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                // Sélectionner le bouton utilisant l'attribut data-event-button
+                const wishCountButton = document.querySelector('a[data-event-button="wish-count"]');
+                
+                // Ajouter un événement 'click' au bouton
+                if (wishCountButton) {
+                    wishCountButton.addEventListener('click', function(event) {
+                        event.preventDefault(); // Prévenir le comportement par défaut du lien
+                        
+                        // Ajouter votre logique ici, par exemple:
+                        console.log('Bouton de souhait cliqué');
+                        alert('Article ajouté à votre liste de souhaits !');
+                    });
+                }
+            });
+        </script>
+    </body>
 </html>
