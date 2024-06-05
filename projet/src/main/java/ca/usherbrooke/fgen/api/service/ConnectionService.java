@@ -1,6 +1,11 @@
 package ca.usherbrooke.fgen.api.service;
 
+import ca.usherbrooke.fgen.api.business.Item;
+import ca.usherbrooke.fgen.api.business.Message;
 import ca.usherbrooke.fgen.api.business.Person;
+import ca.usherbrooke.fgen.api.mapper.ArticleMapper;
+import ca.usherbrooke.fgen.api.mapper.CategorieMapper;
+import ca.usherbrooke.fgen.api.mapper.MessageMapper;
 import ca.usherbrooke.fgen.api.mapper.PersonMapper;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
@@ -10,6 +15,7 @@ import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import java.util.List;
@@ -27,6 +33,11 @@ public class ConnectionService {
     @Inject
     PersonMapper personMapper;
 
+    @Inject
+    CategorieMapper categorieMapper;
+
+    @Inject
+    ArticleMapper articleMapper;
 
     @GET
     @Path("/client")
@@ -58,6 +69,22 @@ public class ConnectionService {
     }
 
     @GET
+    @Path("/getcategorie")
+    @PermitAll
+    public List<Item> getCategorie() {
+        List<Item> item = categorieMapper.allCategorie();
+        return item;
+    }
+
+    @GET
+    @Path("/selectarticle")
+    @PermitAll
+    public List<Item> selectArticle(@QueryParam("id_categorie") String id_categorie) {
+        List<Item> item = articleMapper.selectArticle(id_categorie);
+        return item;
+    }
+
+    @GET
     @Path("/any")
     @PermitAll
     public Person me() {
@@ -70,9 +97,12 @@ public class ConnectionService {
         return p;
     }
 
+
+
     @GET
     @Path("/test")
     public String test() {
         return "ok";
     }
 }
+
