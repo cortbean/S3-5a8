@@ -8,16 +8,15 @@
         insert into projet.commande(id_commande, date_commande, cip)
         values (#{commande.idCommande},
                 #{commande.dateCommande},
-                #{commande.cip},
-            on conflict (idCommande) do nothing;
+                #{commande.cip})
+            on conflict (id_commande) do nothing;
     </insert>
 
     <insert id="insertProduit">
         insert into projet.plusieurs(id_produit, id_commande, quantite)
         values (#{produit.idProduit},
                 #{produit.idCommande},
-                #{produit.quantite},
-                   on conflict (idCommande) do nothing;
+                #{produit.quantite})
     </insert>
 
 
@@ -25,7 +24,7 @@
         select * from projet.commande where id_commande = #{idCommande}
     </select>
 
-    <select id="selectFromCommandeProduits" resultType="ca.usherbrooke.fgen.api.business.commandeView">
+    <select id="selectFromCommandeProduits" resultType="ca.usherbrooke.fgen.api.business.CommandeView">
         select
             c.id_commande as idCommande,
             p.Nom as produitNom,

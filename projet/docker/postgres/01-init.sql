@@ -36,6 +36,10 @@ SET default_table_access_method = heap;
 -- Create schema
 CREATE SCHEMA IF NOT EXISTS projet;
 
+CREATE SEQUENCE projet.commande_id_seq START 1;
+
+
+
 -- Create tables within the schema
 CREATE TABLE projet.Programme(
                                  Programme VARCHAR(50),
@@ -64,7 +68,7 @@ CREATE TABLE projet.Utilisateur(
                                    Courriel VARCHAR(255) NOT NULL,
                                    role VARCHAR(50),
                                    promotion VARCHAR(50),
-                                   Programme VARCHAR(50) NOT NULL,
+                                   Programme VARCHAR(50),
                                    PRIMARY KEY(cip),
                                    FOREIGN KEY(Programme) REFERENCES projet.Programme(Programme)
 );
@@ -89,7 +93,7 @@ CREATE TABLE projet.commande(
 CREATE TABLE projet.plusieurs(
                                  id_Produit INTEGER,
                                  id_commande VARCHAR(50),
-                                 quantite VARCHAR(50),
+                                 quantite INTEGER,
                                  PRIMARY KEY(id_Produit, id_commande),
                                  FOREIGN KEY(id_Produit) REFERENCES projet.Produit(id_Produit),
                                  FOREIGN KEY(id_commande) REFERENCES projet.commande(id_commande)
@@ -146,8 +150,10 @@ INSERT INTO projet.Produit(id_Produit, Nom, Prix, id_categorie) VALUES
                                                                     (5,'Hot-Dog', 2.5, 'Nourriture'),
                                                                     (6,'Pogo', 3.00,'Nourriture'),
                                                                     (7, 'Biere', 3, 'Bieres'),
-                                                                    (8, 'Cocktails', 3, 'Cocktails'),
-                                                                    (9, 'Shooter', 3, 'Shooter');
+                                                                    (8, 'Seltzer', 3, 'Bieres'),
+                                                                    (9, 'Cocktails', 3, 'Cocktails'),
+                                                                    (10, 'Shooter', 3, 'Shooter'),
+                                                                    (11, 'Fire ball', 3, 'Shooter');
 
 
 

@@ -5,6 +5,7 @@
 
     <script>
         var keycloak;
+        let idCommande = ''; // Variable to store the idCommande
         function initKeycloak() {
             keycloak = new Keycloak({
                 "realm": "usager",
@@ -104,10 +105,10 @@
                 });
         }
 
-        function showArticles(id_categorie){
+        function showArticles(id_categorie) {
             const gridContainer = document.getElementById('gridContainer');
             gridContainer.innerHTML = "";
-            axios.get("http://localhost:8888/api/selectarticle?id_categorie="+ id_categorie, {
+            axios.get("http://localhost:8888/api/selectarticle?id_categorie=" + id_categorie, {
                 headers: {
                     'Authorization': 'Bearer ' + keycloak.token
                 }
@@ -120,7 +121,7 @@
                         button.className = 'grid-item'; // Set the class name
                         button.textContent = response.data[i].nom; // Set the text content
                         console.log(response.data[i].nom)
-                        button.addEventListener('click', function() {
+                        button.addEventListener('click', function () {
                             // Call your JavaScript function here
                         });
                         gridContainer.appendChild(button); // Append the button to the container
@@ -135,6 +136,47 @@
                     })
                 });
         }
+
+        function AjoutCommande() {
+            axios.get("http://localhost:8888/api/IdCommande", {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + keycloak.token
+                }
+            })
+                .then(response => {
+                    idCommande = response.data; // Store the idCommande in the variable
+                    document.getElementById('result').innerText = 'Commande ID: ' + idCommande;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function AjoutProduit() {
+            if (!idCommande) {
+                alert('Please create a Commande first.');
+                return;
+            }
+
+            const idProduit = Math.floor(Math.random() * 10) + 1; // Example product ID
+            const quantite = Math.floor(Math.random() * 10) + 1; // Random quantity between 1 and 10
+
+            axios.get(`http://localhost:8888/api/addProduit?idProduit=${idProduit}&idCommande=${idCommande}&quantite=${quantite}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + keycloak.token
+                }
+            })
+                .then(response => {
+                    const data = response.data;
+                    document.getElementById('result').innerText += `\nProduit ajouté: ${data.idProduit}, Quantité: ${data.quantite}`;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
 
 
     </script>
@@ -151,9 +193,13 @@
                 <li>Coffee</li>
                 <li>Tea</li>
                 <li>Milk</li>
+
+                <button onclick = AjoutCommande()>Ajouter Commande</button>
+                <button onclick = AjoutProduit()>Ajouter Produit</button>
             </ul>
         </div>
     </div>
+
 
 </body>
 </html>

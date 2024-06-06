@@ -2,12 +2,11 @@ package ca.usherbrooke.fgen.api.service;
 
 
 import ca.usherbrooke.fgen.api.business.Commande;
-import ca.usherbrooke.fgen.api.business.commandeView;
+import ca.usherbrooke.fgen.api.business.CommandeView;
 import ca.usherbrooke.fgen.api.business.Produit;
 import ca.usherbrooke.fgen.api.mapper.CommandeMapper;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
-import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -19,9 +18,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 import java.util.List;
-import java.util.Map;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Path("/api")
@@ -39,24 +36,24 @@ public class CommandeService {
     CommandeMapper commandeMapper;
 
     @GET
-    @Path("/IdCommande")
+    @Path("/IdCommande") //retourne le numero de la commande qu'on ouvre pour ajouter des produits dedans
     @RolesAllowed({"client"})
-    public Commande Ajoutcommande() {
+    public String Ajoutcommande() {
         Commande c = new Commande();
         c.cip = this.securityContext.getUserPrincipal().getName();
-        c.idCommande = UUID.randomUUID().toString();
+        c.idCommande = commandeMapper.getNextCommandeId();
         c.dateCommande = LocalDateTime.now();
         commandeMapper.insertCommande(c);
-        return c;
+        return c.idCommande;
     }
 
     @GET
-    @Path("/addProduit")
+    @Path("/addProduit") //Ajoute un produit dans dans le id commande
     @RolesAllowed({"client"})
     public Produit Ajoutproduit(
             @QueryParam("idProduit") int idProduit,
             @QueryParam("idCommande") String idCommande,
-            @QueryParam("quantite") String quantite) {
+            @QueryParam("quantite") int quantite) {
         Produit p = new Produit();
         p.idProduit = idProduit;
         p.idCommande = idCommande;
@@ -66,9 +63,9 @@ public class CommandeService {
     }
 
     @GET
-    @Path("/getCommandeProduits")
+    @Path("/getCommandeProduits") //va chercher la commande du Id_commande
     @RolesAllowed({"client"})
-    public List<commandeView> getCommandeProduits(@QueryParam("idCommande") String idCommande) {
+    public List<CommandeView> getCommandeProduits(@QueryParam("idCommande") String idCommande) {
         return commandeMapper.selectFromCommandeProduits(idCommande);
     }
 

@@ -1,3 +1,5 @@
+CREATE SCHEMA projet;
+
 insert into projet.utilisateur(cip, nom, prenom, courriel, role, promotion, programme) VALUES
 ('mahf0901', 'Maheux', 'Francois', 'mahf0901@usherbrooke.ca', 'client', '69', 'Génie électrique');
 
