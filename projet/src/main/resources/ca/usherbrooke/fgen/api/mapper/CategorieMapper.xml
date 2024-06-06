@@ -5,7 +5,8 @@
 <mapper namespace="ca.usherbrooke.fgen.api.mapper.CategorieMapper">
 
     <select id="allCategorie" resultType="ca.usherbrooke.fgen.api.business.Item">
-        select description
+        select id_categorie as id,
+            description as nom
         from projet.Categorie
     </select>
 

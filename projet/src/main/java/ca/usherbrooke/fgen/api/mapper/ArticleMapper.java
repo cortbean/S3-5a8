@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 @Mapper
-public interface CategorieMapper {
+public interface ArticleMapper {
 
-    List<Item> allCategorie();
+    List<Item> selectArticle(@Param("id_categorie") String id_categorie);
 }

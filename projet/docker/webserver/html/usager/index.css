@@ -1,5 +1,5 @@
 /* Styles de base */
-html, body {
+body {
   height: 100%; /* Ajuste la hauteur de la page à 100% de la hauteur de l'écran */
   margin: 0; /* Supprime les marges par défaut */
   padding: 0; /* Supprime les marges intérieures par défaut */
@@ -2675,50 +2675,28 @@ section.sf-header.cart-has-items .sf-cart-count {
   }
 }
 
-.one {
-  flex: 1 1 auto;
-}
-
-.two {
-  flex: 1 1 auto;
-}
-
-.three {
-  flex: 1 1 auto;
-}
-
-.four {
-  flex: 1 1 auto;
-}
-
 .sf-header__mobile_center {
-  margin-left: -10px;
-  width: 100vw;
-  background-color: #f6f6f6;
-}
-
-.sf-header__mobile_center > div {
   display: flex;
+    justify-content: center;
   overflow-x: auto;
   overflow-y: hidden;
   padding: 10px 0;
-  width: 100%;
+  width: auto; /* Ajustement de la largeur automatique */
 }
 
 .sf-header__mobile_item {
-  flex: 1 1 auto;
   text-align: center;
-}
-
-.sf-header__mobile_item a1 {
   font-size: 12px;
   font-weight: 500;
   text-transform: uppercase;
   text-decoration: none;
   color: #231f20;
   padding: 1px 10px;
-  display: block;
+  white-space: nowrap; /* Empêche le texte de se retourner à la ligne */
+  margin-right: 10px; /* Espacement entre les éléments */
+  cursor: pointer;
 }
+
 
 #scroll-to-top-button {
   display: inline-flex;
