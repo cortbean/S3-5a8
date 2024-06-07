@@ -112,22 +112,53 @@ INSERT INTO projet.Programme (Programme, faculte) VALUES
 
 
 INSERT INTO projet.Categorie(id_categorie, description) VALUES
-                                                            ('Nourriture','Nourriture'),
-                                                            ('Shooter','Shooter'),
-                                                            ('Cocktails','Cocktails'),
-                                                            ('Bieres','Bieres'),
+                                                            ('Nourriture', 'Nourriture'),
+                                                            ('Shooter', 'Shooter'),
+                                                            ('Cocktails', 'Cocktails'),
+                                                            ('Bieres', 'Bieres'),
                                                             ('Alcool fort', 'Alcool fort');
 
-
-
 INSERT INTO projet.Produit(id_Produit, Nom, Prix, id_categorie) VALUES
-                                                                    (1,'Pizza vegetalien', 3.5, 'Nourriture'),
-                                                                    (2,'Pizza au poulet', 3.5, 'Nourriture'),
-                                                                    (3, 'Sandwich au poulet', 3.5, 'Nourriture'),
-                                                                    (4, 'wrap au poulet', 2.5, 'Nourriture'),
-                                                                    (5,'Hot-Dog', 2.5, 'Nourriture'),
-                                                                    (6,'Pogo', 3.00,'Nourriture');
-
+                                                                    (1, 'Pizza vegetariana', 3.00, 'Nourriture'),
+                                                                    (2, 'Pizza Chicken', 3.00, 'Nourriture'),
+                                                                    (3, 'Pizza Pepperoni', 3.00, 'Nourriture'),
+                                                                    (4, 'Pizza Margherita', 3.00, 'Nourriture'),
+                                                                    (5, 'Sandwich au poulet', 3.00, 'Nourriture'),
+                                                                    (6, 'wrap au poulet', 3.00, 'Nourriture'),
+                                                                    (7, 'Hot-Dog', 3.00, 'Nourriture'),
+                                                                    (8, 'Pogo', 3.00, 'Nourriture'),
+                                                                    (9, 'Tequila', 3.00, 'Shooter'),
+                                                                    (10, 'Jagerbomb', 3.00, 'Shooter'),
+                                                                    (11, 'B-52', 3.00, 'Shooter'),
+                                                                    (12, 'Kamikaze', 3.00, 'Shooter'),
+                                                                    (13, 'Lemon Drop', 3.00, 'Shooter'),
+                                                                    (14, 'Irish Car Bomb', 3.00, 'Shooter'),
+                                                                    (15, 'Sambuca', 3.00, 'Shooter'),
+                                                                    (16, 'Buttery Nipple', 3.00, 'Shooter'),
+                                                                    (17, 'Margarita', 3.00, 'Cocktails'),
+                                                                    (18, 'Mojito', 3.00, 'Cocktails'),
+                                                                    (19, 'Martini', 3.00, 'Cocktails'),
+                                                                    (20, 'Old Fashioned', 3.00, 'Cocktails'),
+                                                                    (21, 'Cosmopolitan', 3.00, 'Cocktails'),
+                                                                    (22, 'Pina Colada', 3.00, 'Cocktails'),
+                                                                    (23, 'Bloody Mary', 3.00, 'Cocktails'),
+                                                                    (24, 'Negroni', 3.00, 'Cocktails'),
+                                                                    (25, 'Pale Lager', 3.00, 'Bieres'),
+                                                                    (26, 'Pilsner', 3.00, 'Bieres'),
+                                                                    (27, 'Amber Lager', 3.00, 'Bieres'),
+                                                                    (28, 'Dark Lager', 3.00, 'Bieres'),
+                                                                    (29, 'Pale Ale', 3.00, 'Bieres'),
+                                                                    (30, 'Brown Ale', 3.00, 'Bieres'),
+                                                                    (31, 'Hefeweizen', 3.00, 'Bieres'),
+                                                                    (32, 'Witbier', 3.00, 'Bieres'),
+                                                                    (33, 'Vodka', 3.00, 'Alcool fort'),
+                                                                    (34, 'Rhum', 3.00, 'Alcool fort'),
+                                                                    (35, 'Whisky', 3.00, 'Alcool fort'),
+                                                                    (36, 'Gin', 3.00, 'Alcool fort'),
+                                                                    (37, 'Tequila', 3.00, 'Alcool fort'),
+                                                                    (38, 'Brandy', 3.00, 'Alcool fort'),
+                                                                    (39, 'Absinthe', 3.00, 'Alcool fort'),
+                                                                    (40, 'Rhum épicé', 3.00, 'Alcool fort');
 
 
 
