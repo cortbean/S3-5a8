@@ -159,9 +159,3 @@ INSERT INTO projet.Produit(id_Produit, Nom, Prix, id_categorie) VALUES
                                                                     (38, 'Brandy', 3.00, 'Alcool fort'),
                                                                     (39, 'Absinthe', 3.00, 'Alcool fort'),
                                                                     (40, 'Rhum épicé', 3.00, 'Alcool fort');
-
-
-
-
-
-
