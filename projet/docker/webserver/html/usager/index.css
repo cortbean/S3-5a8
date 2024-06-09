@@ -17,6 +17,11 @@ body {
     color: #000000;
     opacity: var(--sf-page-opacity, 0) !important;
     transition: opacity 0.15s ease-in-out;
+    overflow-x: hidden;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 [role='button'],
@@ -1063,6 +1068,11 @@ a.account {
     top: 5px;
 }
 
+.shopify-section {
+    width: 100%;
+    overflow: hidden;
+}
+
 .shopify-section .section__heading,
 .cbb-frequently-bought-title {
     font-weight: 500 !important;
@@ -1134,6 +1144,7 @@ section.sf-header.cart-has-items .sf-cart-count {
     justify-content: center;
     overflow-x: auto;
     overflow-y: hidden;
+    max-width: 100%;
     padding: 10px 0;
     width: auto; /* Ajustement de la largeur automatique */
 }
