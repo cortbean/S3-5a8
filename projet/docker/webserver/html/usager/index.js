@@ -850,6 +850,29 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+    // Ouvrir le modal
+    function openModal() {
+        document.getElementById('ical').style.display = 'block';
+        document.body.classList.add('modal-open');
+    }
+
+// Fermer le modal
+    function closeModal() {
+        document.getElementById('ical').style.display = 'none';
+        document.body.classList.remove('modal-open');
+    }
+
+// Ajout d'un événement pour fermer le modal lorsqu'on clique en dehors
+    window.onclick = function(event) {
+        if (event.target === document.getElementById('ical')) {
+            closeModal();
+        }
+    }
+
+    openModal();
+});
+
 
 
 
