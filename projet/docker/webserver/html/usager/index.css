@@ -526,7 +526,7 @@ header k.logo {
     transition-duration: 0.3s;
     transition-property: all;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    visibility: hidden;
+    /*visibility: hidden;*/
     z-index: 20;
 }
 
@@ -1136,18 +1136,56 @@ section.sf-header.cart-has-items .sf-cart-count {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-
-
-
 .sf-header__mobile_center {
     display: flex;
     justify-content: center;
     overflow-x: auto;
     overflow-y: hidden;
-    max-width: 100%;
+    width: 100vw; /* Ensures the bar takes the full viewport width */
     padding: 10px 0;
-    width: auto; /* Ajustement de la largeur automatique */
+    background-color: #f6f6f6d6; /* Add background color directly in CSS */
 }
+
+/* Styles pour le bouton panier */
+#cart-icon {
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* Styles pour le modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+/* Styles pour le bouton de fermeture */
+.scd__close {
+    cursor: pointer;
+}
+
+
+
 
 .sf-header__mobile_item {
     text-align: center;

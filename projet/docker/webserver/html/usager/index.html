@@ -58,17 +58,16 @@
                                     </span>
                                 </a>
                                 <a href="#" class="px-1 md:px-2 py-3.5 sf-cart-icon cart-icon" data-event-button="cart">
-                                    <span class="relative block">
-                                        <span class="sf__tooltip-item block sf__tooltip-bottom sf__tooltip-style-2">
-                                            <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                                <path d="M352 128C352 57.42 294.579 0 224 0 153.42 0 96 57.42 96 128H0v304c0 44.183 35.817 80 80 80h288c44.183 0 80-35.817 80-80V128h-96zM224 48c44.112 0 80 35.888 80 80H144c0-44.112 35.888-80 80-80zm176 384c0 17.645-14.355 32-32 32H80c-17.645 0-32-14.355-32-32V176h48v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h160v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h48v256z"></path>
-                                            </svg>
-                                            <span class="sf__tooltip-content">Panier</span>
-                                        </span>
-                                        <span class="sf-cart-count sf-icon-count font-medium">0</span>
+                                <span class="relative block">
+                                    <span class="sf__tooltip-item block sf__tooltip-bottom sf__tooltip-style-2">
+                                        <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="color:#000000;">
+                                            <path d="M352 128C352 57.42 294.579 0 224 0 153.42 0 96 57.42 96 128H0v304c0 44.183 35.817 80 80 80h288c44.183 0 80-35.817 80-80V128h-96zM224 48c44.112 0 80 35.888 80 80H144c0-44.112 35.888-80 80-80zm176 384c0 17.645-14.355 32-32 32H80c-17.645 0-32-14.355-32-32V176h48v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h160v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h48v256z"></path>
+                                        </svg>
+                                        <span class="sf__tooltip-content">Panier</span>
                                     </span>
+                                    <sup class="sf-icon-count font-medium !hidden" data-cart-count="">0</sup>
+                                </span>
                                 </a>
-
                             </div>
                         </div>
                         <div id="BarreCategorie" class="sf-header__mobile_center" style="margin-left: -10px; width: 100vw; background-color: #f6f6f6d6;">
@@ -116,35 +115,30 @@
             </main>
         </div>
 
-        <div class="relative z-st-limit" id="cart-drawer-container">
-            <div>
-                <div id="shopify-section-cart-drawer" class="shopify-section">
-                    <div class="scd__wrapper hidden touch-none transition-colors duration-300 bg-black fixed z-[100] inset-0 mobile" id="cart-drawer">
-                        <div class="scd__content transition-transform duration-300 translate-x-0 ml-auto min-h-full md:w-[450px] bg-white z-50" style="--al-thickness: 3px; --al-color: gray; --al-start-duration: 1000ms; --al-finish-duration: 300ms;">
-                            <form action="/cart" method="post" class="checkout-form flex flex-col h-full" novalidate="">
-                                <div class="scd__top p-4 md:p-6 !pb-3">
-                                    <div class="scd__top-inner flex items-center justify-between">
-                                        <div class="sm-shipping-message text-sm text-center">
-                                            <div class="sm-shipping-message__item default-item">
-                                                <span>LA LISTE DE TOUTE VOTRE SÉLECTION DE PRODUITS</span>
-                                            </div>
-                                            <i class="scd__close cursor-pointer" id="close-cart-drawer">
-                                                <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-                                                    <path d="M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z"></path>
-                                                </svg>
-                                            </i>
-                                        </div>
-                                    </div>
+        <!-- Votre modal de panier -->
+        <div id="cart-modal" class="modal hidden">
+            <div class="modal-content">
+                <form action="/cart" method="post" class="checkout-form flex flex-col h-full" novalidate="">
+                    <div class="scd__top p-4 md:p-6 !pb-3">
+                        <div class="scd__top-inner flex items-center justify-between">
+                            <div class="sm-shipping-message text-sm text-center">
+                                <div class="sm-shipping-message__item default-item">
+                                    <span>LA LISTE DE TOUTE VOTRE SÉLECTION DE PRODUITS</span>
                                 </div>
-                                <div class="scd_main flex-grow sf__custom_scroll pvrtscroll-contrain px-4 md:px-6 pb-4">
-                                    <div class="scd__body flex flex-col">
-                                        <div class="scd-empty-msg py-32 text-center">Votre panier est actuellement vide.</div>
-                                    </div>
-                                </div>
-                            </form>
+                                <i class="scd__close cursor-pointer" id="close-cart-modal">
+                                    <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                                        <path d="M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z"></path>
+                                    </svg>
+                                </i>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    <div class="scd_main flex-grow sf__custom_scroll pvrtscroll-contrain px-4 md:px-6 pb-4">
+                        <div class="scd__body flex flex-col">
+                            <div class="scd-empty-msg py-32 text-center">Votre panier est actuellement vide.</div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
         <script src="index.js"></script>
