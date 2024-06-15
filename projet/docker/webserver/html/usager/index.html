@@ -1,159 +1,149 @@
-<!Doctype html>
+<!DOCTYPE html>
 <html class="js supports-cookies" lang="fr" style="--sf-page-opacity: 1; --sf-header-height: 140px;" data-template="">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <link rel="stylesheet" href="index.css">
-        <title>Com5a8</title>
-
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script src="http://localhost:8180/js/keycloak.js"></script>
-
-    </head>
-    <body onload="initKeycloak()">
-
-        <div class="Annonce">
-            <p>L'alcool à partir de 3 $ |
-                <k href="#" title="Vente">ACHETER MAINTENANT</k>
-            </p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="index.css">
+    <title>Com5a8</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="http://localhost:8180/js/keycloak.js"></script>
+</head>
+<body onload="initKeycloak()">
+<div class="Annonce">
+    <p>L'alcool à partir de 3 $ |
+        <k href="#" title="Vente">ACHETER MAINTENANT</k>
+    </p>
+</div>
+<div class="zircon-section">
+    <section data-section-id="header" data-section-type="header" data-page="/" data-header-design="logo-center__2l" class="sf-header opacity-0 transition-opacity opacity-100" data-transparent="false" data-sticky="true" style="opacity: 1;">
+        <div class="absolute inset-x-0 z-[70] header__wrapper">
+            <header>
+                <div class="flex">
+                    <div class="sf-header__mobile-left w-1/4 flex flex-1 items-center justify-start">
+                        <div class="sf-header__mobile-menu-item">
+                            <a href="#" class="sf-header__mobile-menu-link">
+                                <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                    <path d="M442 114H6a6 6 0 0 1-6-6V84a6 6 0 0 1 6-6h436a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6zm0 160H6a6 6 0 0 1-6-6v-24a6 6 0 0 1 6-6h436a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6zm0 160H6a6 6 0 0 1-6-6v-24a6 6 0 0 1 6-6h436a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6z"></path>
+                                </svg>
+                            </a>
+                        </div>
+                        <div id="horloge" class="horloge"></div>
+                    </div>
+                    <div class="sf-logo sf-logo--mobile has-logo-img px-4 block py-2.5 relative">
+                        <a href="#" class="sf-header__mobile-center w-1/2 flex flex-1 items-center justify-center"></a>
+                    </div>
+                    <div class="sf-header__mobile-right w-1/4 flex flex-1 items-center justify-end">
+                        <a href="#" id="user-role" class="sf__tooltip-item block sf__tooltip-bottom sf__tooltip-style-2"></a>
+                        <a href="#" class="sf__tooltip-item block sf__tooltip-bottom sf__tooltip-style-2">
+                            <div class="icon-text-container relative block">
+                                <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                    <path d="M313.6 304c-28.7 0-42.5 16-89.6 16-47.1 0-60.8-16-89.6-16C60.2 304 0 364.2 0 438.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-25.6c0-74.2-60.2-134.4-134.4-134.4zM400 464H48v-25.6c0-47.6 38.8-86.4 86.4-86.4 14.6 0 38.3 16 89.6 16 51.7 0 74.9-16 89.6-16 47.6 0 86.4 38.8 86.4 86.4V464zM224 288c79.5 0 144-64.5 144-144S303.5 0 224 0 80 64.5 80 144s64.5 144 144 144zm0-240c52.9 0 96 43.1 96 96s-43.1 96-96 96-96-43.1-96-96 43.1-96 96-96z"></path>
+                                </svg>
+                                <span class="sf__tooltip-content">Compte</span>
+                            </div>
+                        </a>
+                        <a class="px-1 md:px-2 py-3.5" data-event-button="wish-count">
+                            <span class="icon-text-container relative block">
+                                <span class="sf__tooltip-item sf__tooltip-bottom sf__tooltip-style-2 block !p-[4px]">
+                                    <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                        <path d="M528.1 171.5L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6zM388.6 312.3l23.7 138.4L288 385.4l-124.3 65.3 23.7-138.4-100.6-98 139-20.2 62.2-126 62.2 126 139 20.2-100.6 98z"></path>
+                                    </svg>
+                                    <span class="sf__tooltip-content">Favoris</span>
+                                </span>
+                                <sup class="font-medium !hidden" data-wishlist-count="">0</sup>
+                            </span>
+                        </a>
+                        <a class="px-1 md:px-2 py-3.5" data-event-button="panier-button">
+                            <span class="icon-text-container relative block">
+                                <span href="#" id="panier-button" class="sf__tooltip-item block sf__tooltip-bottom sf__tooltip-style-2">
+                                    <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="color:#000000;">
+                                        <path d="M352 128C352 57.42 294.579 0 224 0 153.42 0 96 57.42 96 128H0v304c0 44.183 35.817 80 80 80h288c44.183 0 80-35.817 80-80V128h-96zM224 48c44.112 0 80 35.888 80 80H144c0-44.112 35.888-80 80-80zm176 384c0 17.645-14.355 32-32 32H80c-17.645 0-32-14.355-32-32V176h48v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h160v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h48v256z"></path>
+                                    </svg>
+                                    <span class="sf__tooltip-content">Panier</span>
+                                </span>
+                                <sup class="font-medium !hidden" data-cart-count="">0</sup>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                <div id="BarreCategorie" class="sf-header__mobile_center" style="margin-left: -10px; width: 100vw; background-color: #f6f6f6d6;"></div>
+            </header>
+            <div class="sf-header__overlay hidden md:block pointer-events-none fixed bg-black -inset-0"></div>
         </div>
-
-        <div class="zircon-section">
-            <section data-section-id="header" data-section-type="header" data-page="/" data-header-design="logo-center__2l" class="sf-header opacity-0 transition-opacity opacity-100" data-transparent="false" data-sticky="true" style="opacity: 1;">
-                <div class="absolute inset-x-0 z-[70] header__wrapper" >
-                    <header>
-                        <div class="flex">
-                            <div class="sf-header__mobile-left w-1/4 flex flex-1 items-center justify-start">
-                                <div class="sf-header__mobile-menu-item">
-                                    <a href="#" class="sf-header__mobile-menu-link">
-                                        <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                            <path d="M442 114H6a6 6 0 0 1-6-6V84a6 6 0 0 1 6-6h436a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6zm0 160H6a6 6 0 0 1-6-6v-24a6 6 0 0 1 6-6h436a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6zm0 160H6a6 6 0 0 1-6-6v-24a6 6 0 0 1 6-6h436a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6z"></path>
-                                        </svg>
-                                    </a>
+    </section>
+</div>
+<button id="scroll-to-top-button" class="sf__btn btn-scroll-top sf__btn-primary fixed z-50 items-center justify-center opacity-0 transition-opacity">
+    <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+        <path d="M4.465 263.536l7.07 7.071c4.686 4.686 12.284 4.686 16.971 0L207 92.113V468c0 6.627 5.373 12 12 12h10c6.627 0 12-5.373 12-12V92.113l178.494 178.493c4.686 4.686 12.284 4.686 16.971 0l7.07-7.071c4.686-4.686 4.686-12.284 0-16.97l-211.05-211.05c-4.686-4.686-12.284-4.686-16.971 0L4.465 246.566c-4.687 4.686-4.687 12.284 0 16.97z"></path>
+    </svg>
+</button>
+<div>
+    <main role="main" id="MainContent">
+        <div id="zircon-section-template--17055081300194__main" class="zircon-section">
+            <section
+                    data-section-id="template--17055081300194__main"
+                    data-filters-position="fixed"
+                    data-enable-filters="true"
+                    data-enable-sorting="true"
+                    data-show-col-switchers="false"
+                    data-pagination-type="infinite"
+                    data-product-count="50"
+                    data-initial-column="4"
+            >
+                <div class="px-4 xl:px-[30px]">
+                    <div class="sf__collection-container sidebar__fixed">
+                        <div class="sf__sidebar touch-none z-st-limit" data-type="fixed">
+                            <div id="CollectionProductGrid" class="flex-1">
+                                <div class="sf__product-listing sf__col-4" data-total-pages="8" data-product-container="" data-gtag-wrapper="" data-gtag-items-key="collections" data-wish-container="">
+                                    <div class="product-grid" id="product-container"></div>
                                 </div>
-                                <div id="horloge" class="horloge"></div>
-                            </div>
-                            <div class="sf-logo sf-logo--mobile has-logo-img px-4 block py-2.5  relative">
-                                <a href="#" class="sf-header__mobile-center w-1/2 flex flex-1 items-center justify-center">
-                                </a>
-                            </div>
-                            <div class="sf-header__mobile-right w-1/4 flex flex-1 items-center justify-end">
-                                <a href="#" class="px-1 md:px-2 py-3.5" data-event-button="account">
-                                    <span class="sf__tooltip-item block sf__tooltip-bottom sf__tooltip-style-2">
-                                        <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                            <path d="M313.6 304c-28.7 0-42.5 16-89.6 16-47.1 0-60.8-16-89.6-16C60.2 304 0 364.2 0 438.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-25.6c0-74.2-60.2-134.4-134.4-134.4zM400 464H48v-25.6c0-47.6 38.8-86.4 86.4-86.4 14.6 0 38.3 16 89.6 16 51.7 0 74.9-16 89.6-16 47.6 0 86.4 38.8 86.4 86.4V464zM224 288c79.5 0 144-64.5 144-144S303.5 0 224 0 80 64.5 80 144s64.5 144 144 144zm0-240c52.9 0 96 43.1 96 96s-43.1 96-96 96-96-43.1-96-96 43.1-96 96-96z"></path>
-                                        </svg>
-                                        <span class="sf__tooltip-content">Compte</span>
-                                    </span>
-                                </a>
-
-                                <a class="px-1 md:px-2 py-3.5" data-event-button="wish-count">
-                                    <span class="relative block">
-                                        <span class="sf__tooltip-item sf__tooltip-bottom sf__tooltip-style-2 block !p-[4px]">
-                                            <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                                                <path d="M528.1 171.5L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6zM388.6 312.3l23.7 138.4L288 385.4l-124.3 65.3 23.7-138.4-100.6-98 139-20.2 62.2-126 62.2 126 139 20.2-100.6 98z"></path>
-                                            </svg>
-                                            <span class="sf__tooltip-content">Favoris</span>
-                                        </span>
-                                        <sup class="font-medium !hidden" data-wishlist-count="">0</sup>
-                                    </span>
-                                </a>
-                                <a class="px-1 md:px-2 py-3.5" data-event-button="cart">
-                                    <span class="relative block">
-                                        <span href="/ical" class="sf__tooltip-item block sf__tooltip-bottom sf__tooltip-style-2">
-                                            <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="color:#000000;">
-                                                <path d="M352 128C352 57.42 294.579 0 224 0 153.42 0 96 57.42 96 128H0v304c0 44.183 35.817 80 80 80h288c44.183 0 80-35.817 80-80V128h-96zM224 48c44.112 0 80 35.888 80 80H144c0-44.112 35.888-80 80-80zm176 384c0 17.645-14.355 32-32 32H80c-17.645 0-32-14.355-32-32V176h48v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h160v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h48v256z"></path>
-                                            </svg>
-                                            <span class="sf__tooltip-content">Panier</span>
-                                        </span>
-                                        <sup class="font-medium !hidden" data-cart-count="">0</sup>
-                                    </span>
-                                </a>
                             </div>
                         </div>
-                        <div id="BarreCategorie" class="sf-header__mobile_center" style="margin-left: -10px; width: 100vw; background-color: #f6f6f6d6;">
-                        </div>
-                    </header>
-                    <div class="sf-header__overlay hidden md:block pointer-events-none fixed bg-black -inset-0"></div>
+                    </div>
                 </div>
             </section>
         </div>
+    </main>
+</div>
 
-        <button id="scroll-to-top-button" class="sf__btn btn-scroll-top sf__btn-primary fixed z-50 items-center justify-center opacity-0 transition-opacity">
-            <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path d="M4.465 263.536l7.07 7.071c4.686 4.686 12.284 4.686 16.971 0L207 92.113V468c0 6.627 5.373 12 12 12h10c6.627 0 12-5.373 12-12V92.113l178.494 178.493c4.686 4.686 12.284 4.686 16.971 0l7.07-7.071c4.686-4.686 4.686-12.284 0-16.97l-211.05-211.05c-4.686-4.686-12.284-4.686-16.971 0L4.465 246.566c-4.687 4.686-4.687 12.284 0 16.97z"></path>
-            </svg>
-        </button>
-
-        <div>
-            <main role="main" id="MainContent">
-                <div id="zircon-section-template--17055081300194__main" class="zircon-section">
-                    <section
-                            data-section-id="template--17055081300194__main"
-                            data-filters-position="fixed"
-                            data-enable-filters="true"
-                            data-enable-sorting="true"
-                            data-show-col-switchers="false"
-                            data-pagination-type="infinite"
-                            data-product-count="50"
-                            data-initial-column="4"
-                    >
-                        <div class=" px-4 xl:px-[30px]">
-                            <div class="sf__collection-container sidebar__fixed">
-                                <div class="sf__sidebar touch-none z-st-limit" data-type="fixed">
-                                    <div id="CollectionProductGrid" class="flex-1 ">
-                                        <div class="sf__product-listing sf__col-4" data-total-pages="8" data-product-container="" data-gtag-wrapper="" data-gtag-items-key="collections" data-wish-container="">
-                                            <div class="product-grid" id="product-container">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-            </main>
+<div id="ical" class="modal open" tabindex="0" style="z-index: 1003; display: none; opacity: 1; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+    <div class="modal-content">
+        <div class="justify-center items-center valign-wrapper warning sticky-top" style="flex: 0 0 auto; top: 0;">
+            <span>PANIER DE SÉLECTION</span>
         </div>
-
-        <div id="ical" class="modal open" tabindex="0" style="z-index: 1003; display: none; opacity: 1; top: 30%; left: 50%; transform: translate(-50%, -50%);">
-            <div class="modal-content">
-                <div class="justify-center items-center valign-wrapper warning">
-                    <span>PANIER DE SÉLECTION</span>
+        <div class="scd__body flex flex-col" style="flex: 1 1 auto; overflow-y: auto;">
+            <div class="py-32 text-center" id="ical-panier"></div>
+        </div>
+        <div class="scd__footer py-4 px-6 sticky-bottom" style="flex: 0 0 auto; bottom: 0;">
+            <div class="mb-4 pt-4" data-cart-summary="">
+                <div data-discounts="">
+                    <ul class="scd-cart__discounts" role="list" data-discounts-list=""></ul>
                 </div>
-
-                <div class="scd__body flex flex-col">
-                    <div class="py-32 text-center">Votre panier est actuellement vide.</div>
-                </div>
-
-                <div class="scd__footer py-4 px-6">
-                    <div class="mb-4 pt-4" data-cart-summary="">
-                        <div data-discounts="">
-                            <ul class="scd-cart__discounts" role="list" data-discounts-list=""></ul>
-                        </div>
-                        <div class="scd__subtotal flex justify-center" data-cart-subtotal="">
-                            <span class="font-medium">Sous-total</span>
-                            <span>==</span>
-                            <span class="scd__subtotal-price font-medium sf-currency" data-cart-subtotal-price="">
+                <div class="scd__subtotal flex justify-center" data-cart-subtotal="">
+                    <span class="font-medium">Sous-total</span>
+                    <span>==</span>
+                    <span class="scd__subtotal-price font-medium sf-currency" data-cart-subtotal-price="">
                         <span class="money">
-                            <span class="transcy-money">0,00 $</span> <!--Le montant total des produits-->
+                            <span class="transcy-money">0,00 $</span>
                         </span>
                     </span>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <div class="flex flex-col left">
-                            <button type="submit" class="btn blue waves-effect waves-light" name="" style="border-radius: 20px;">Payer</button>
-                        </div>
-
-                        <div class="flex flex-col right">
-                            <button onclick="closeModal()" type="submit" class="btn black waves-effect waves-light" name="" style="border-radius: 20px;" >Fermer</button>
-                        </div>
-                    </div>
                 </div>
-                <div class="scd__overlay inset-0"></div>
+            </div>
+            <div class="modal-footer">
+                <div class="flex flex-col left">
+                    <button type="submit" class="btn blue waves-effect waves-light" name="" style="border-radius: 20px;">Payer</button>
+                </div>
+                <div class="flex flex-col right">
+                    <button type="submit" class="btn black waves-effect waves-light" name="" style="border-radius: 20px;" id="close-modal-button">Fermer</button>
+                </div>
             </div>
         </div>
-        <script src="index.js"></script>
-    </body>
+    </div>
+    <div class="scd__overlay inset-0"></div>
+</div>
+
+<div id="panier-section" class="hidden"></div>
+
+<script src="index.js"></script>
+</body>
 </html>

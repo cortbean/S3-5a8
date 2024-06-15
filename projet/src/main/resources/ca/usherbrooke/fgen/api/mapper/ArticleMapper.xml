@@ -7,7 +7,8 @@
     <select id="selectArticle" resultType="ca.usherbrooke.fgen.api.business.Item">
         select id_Produit as id,
                Nom as nom,
-               Prix as prix
+               Prix as prix,
+               image_url as image
         from projet.Produit
         where
             (id_categorie) = (coalesce(#{id_categorie}, id_categorie))

@@ -28,7 +28,7 @@ public class ConnectionService {
     SecurityContext securityContext;
 
     @Inject
-    JsonWebToken jwt;
+     JsonWebToken jwt;
 
     @Inject
     PersonMapper personMapper;

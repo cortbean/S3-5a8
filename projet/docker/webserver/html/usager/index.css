@@ -59,6 +59,7 @@ sub {
     vertical-align: baseline;
     bottom: -0.25em;
 }
+
 sup {
     font-size: 75%;
     line-height: 0;
@@ -75,9 +76,11 @@ button, input, optgroup, select, textarea {
     margin: 0;
     padding: 0;
 }
+
 button, select {
     text-transform: none;
 }
+
 [type='button'], [type='reset'], [type='submit'], button {
     -webkit-appearance: button;
     background-color: transparent;
@@ -186,7 +189,7 @@ header k.logo {
 }
 
 .horloge {
-    margin-left: 40px; /* Ajustez la valeur selon vos besoins */
+    margin-left: 40px;
 }
 
 .header__wrapper {
@@ -252,15 +255,27 @@ header k.logo {
     text-align: left;
 }
 
+.icon-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sf__tooltip-content {
+    margin-top: 0.40rem; /* Adjust the margin as needed */
+    text-align: center;
+}
+
+/* Ensure the hover effect remains intact */
 .sf__tooltip-item .sf__tooltip-content {
     border-radius: 0.25rem;
     font-size: 0.875rem;
-    line-height: 1.25rem;
+    line-height: 0.75rem;
     min-width: max-content;
     opacity: 0;
-    padding: 0.25rem 0.75rem;
+    padding: 0.20rem;
     position: absolute;
-    transform: translateY(0);
+    transform: translateY(6px);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     visibility: hidden;
     z-index: 20;
@@ -333,7 +348,7 @@ header k.logo {
 }
 .select-items::-webkit-scrollbar,
 .sf__custom_scroll::-webkit-scrollbar {
-    width: var(4px, 3px); /*ajout 4px*/
+    width: var(4px, 3px);
 }
 .select-items::-webkit-scrollbar-thumb,
 .sf__custom_scroll::-webkit-scrollbar-thumb {
@@ -346,10 +361,6 @@ header k.logo {
 
 .overscroll-contain {
     overscroll-behavior: contain;
-}
-
-.scd__body {
-    overflow-x: hidden;
 }
 
 .items-center {
@@ -486,7 +497,7 @@ header k.logo {
 
 .sf-header header {
     background-color: #056c0a;
-    padding: 0px 10px;
+    padding: 0 10px;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -508,21 +519,18 @@ cart-iconsection.sf-header.cart-has-items .sf-header__mobile .cart-icon {
     margin-right: 0;
 }
 
-/* Styles pour .sf-header__mobile-left */
 .sf-header__mobile-left {
     display: flex;
     align-items: center;
     justify-content: flex-start;
 }
 
-/* Styles pour .sf-header__mobile-center */
 .sf-header__mobile-center {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* Styles pour .sf-logo--mobile et .has-logo-img */
 .sf-logo--mobile.has-logo-img {
     display: flex;
     justify-content: center;
@@ -531,9 +539,20 @@ cart-iconsection.sf-header.cart-has-items .sf-header__mobile .cart-icon {
     background-size: contain;
     background-repeat: no-repeat;
     height: 70px;
+    width: 200px; /* Ajouter une largeur */
 }
 
-/* Styles pour .sf-header__mobile-right */
+.add-section{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.add-section > p {
+    text-align: center;
+}
+
 .sf-header__mobile-right {
     display: flex;
     align-items: center;
@@ -541,22 +560,21 @@ cart-iconsection.sf-header.cart-has-items .sf-header__mobile .cart-icon {
 }
 
 .sf-header__mobile-menu-icon {
-    width: 40px; /* Ajustez la taille selon vos besoins */
-    height: auto; /* Pour conserver les proportions de l'image */
-    cursor: pointer; /* Change le curseur pour indiquer que c'est clickable */
-    transition: transform 0.2s, box-shadow 0.2s; /* Pour des effets de transition */
+    width: 40px;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .sf-header__mobile-menu-icon:hover {
-    transform: scale(1.1); /* Agrandit légèrement l'image au survol */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ajoute une ombre */
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .sf-header__mobile-menu-link {
-    display: inline-block; /* Pour s'assurer que l'image soit considérée comme un élément en ligne */
+    display: inline-block;
 }
 
-/* Styles pour l'élément de compte */
 a.account {
     padding: 1rem;
     display: flex;
@@ -639,6 +657,7 @@ section.sf-header.cart-has-items .sf-cart-count {
     transition: opacity 0.2s cubic-bezier(0.02, 0.01, 0.47, 1), background 0.15s, height 0.15s;
     width: 100vw;
 }
+
 .sf-mega-active .sf-header__dropdown-bg {
     opacity: 1;
 }
@@ -672,32 +691,41 @@ body.modal-open {
 
 .modal {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1003;
-    display: block;
-    opacity: 1;
-    width: 90%;
-    max-width: 800px;
-    max-height: 90vh; /* Limite la hauteur à 90% de la vue */
-    overflow-y: auto; /* Ajoute un défilement si le contenu dépasse la hauteur */
+    width: 70%;
+    max-width: 100px;
+    max-height: 90vh;
+    overflow-y: hidden; /* Masque le défilement pour le modal en entier */
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     background-color: #fefefe;
     border: 1px solid #888;
     border-radius: 10px;
-    padding: 30px; /* Augmente le padding pour un contenu plus espacé */
+    padding: 30px;
+    display: none;
 }
 
 .modal-content {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    height: 100%;
 }
 
 .modal-footer {
     display: flex;
     justify-content: space-between;
+}
+
+.scd__body {
+    flex: 1 1 auto;
+    overflow-y: auto; /* Permet le défilement uniquement pour la section produit */
+}
+
+.justify-center.items-center.valign-wrapper.warning {
+    flex: 0 0 auto; /* Section en-tête fixe */
+}
+
+.scd__footer {
+    flex: 0 0 auto; /* Section pied de page fixe */
 }
 
 /* Styles pour le bouton de fermeture */
@@ -717,7 +745,6 @@ body.modal-open {
     margin-right: 10px; /* Espacement entre les éléments */
     cursor: pointer;
 }
-
 
 #scroll-to-top-button {
     display: inline-flex;
@@ -818,7 +845,6 @@ body.modal-open {
     padding-bottom: 0.75rem;
     padding-top: 0.75rem;
 }
-
 
 .sf__btn-link.shopify-payment-button__button.shopify-payment-button__button--unbranded,
 .sf__btn.sf__btn-link,
@@ -1413,7 +1439,6 @@ sf__pcard-style-4 .sf__pcard-content .sf__pcard-action {
         display: block;
     }
 }
-
 @media screen and (min-width: 1024px) {
     .container-fluid {
     }
@@ -2655,9 +2680,6 @@ sf__pcard-style-4 .sf__pcard-content .sf__pcard-action {
     .lg\:font-semibold {
         font-weight: 600;
     }
-    .lg\:font-medium {
-        font-weight: 500;
-    }
     .lg\:leading-tight {
         line-height: 1.25;
     }
@@ -2961,7 +2983,7 @@ sf__pcard-style-4 .sf__pcard-content .sf__pcard-action {
     }
 }
 
-/* CSS pour le modal */
+
 #ical {
     max-width: 700px;
 }
@@ -3044,6 +3066,55 @@ h4 {
     font-size: 2.28rem;
     line-height: 110%;
     margin: 1.52rem 0 .912rem 0;
+}
+
+.cart-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+    border: 1px solid #efafaf;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    position: relative;
+}
+
+.cart-item p {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.button_img {
+    margin: 0 10px;
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.button_img:hover {
+    background-color: #ffffff;
+}
+
+.remove-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #000000;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+#ical-panier {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
 .warning {
@@ -3233,7 +3304,7 @@ input {
     letter-spacing: normal;
     word-spacing: normal;
     text-transform: none;
-    text-indent: 0px;
+    text-indent: 0;
     text-shadow: none;
     text-align: start;
     appearance: auto;
@@ -3319,3 +3390,4 @@ input {
     background: #000;
     margin-bottom: 40px;
 }
+
