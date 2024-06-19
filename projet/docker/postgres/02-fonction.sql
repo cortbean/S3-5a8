@@ -20,12 +20,23 @@ RETURN NULL; -- result is ignored since this is an AFTER trigger
 END;
 $$ LANGUAGE plpgsql;
 
---Fonction pour faire les commandes
-
-
-
-
-
-
+-- Function to insert into CommandeVueAdmin
+CREATE OR REPLACE FUNCTION InsertIntoCommandeVueAdmin(order_id VARCHAR)
+RETURNS void AS $$
+BEGIN
+INSERT INTO projet.CommandeVueAdmin (id_commande, produit_nom, produit_prix, quantite)
+SELECT
+    c.id_commande,
+    p.Nom AS produit_nom,
+    p.Prix AS produit_prix,
+    pl.quantite
+FROM
+    projet.plusieurs pl
+        JOIN projet.commande c ON pl.id_commande = c.id_commande
+        JOIN projet.produit p ON pl.id_Produit = p.id_Produit
+WHERE
+    c.id_commande = order_id;
+END;
+$$ LANGUAGE plpgsql;
 
 

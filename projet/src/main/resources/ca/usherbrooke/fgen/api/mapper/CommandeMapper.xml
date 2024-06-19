@@ -36,6 +36,10 @@
         where c.id_commande = #{idCommande}
     </select>
 
+    <insert id="insertIntoCommandeVueAdmin">
+        CALL InsertIntoCommandeVueAdmin(#{idCommande})
+    </insert>
+
 </mapper>
 
 

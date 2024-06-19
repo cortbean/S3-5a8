@@ -48,6 +48,14 @@ public class CommandeService {
     }
 
     @GET
+    @Path("/CommandePourAdmin") //retourne le numero de la commande qu'on ouvre pour ajouter des produits dedans
+    @RolesAllowed({"client"})
+    public void AfficheCommandeAdmin(@QueryParam("idCommande") String idCommande) {
+        commandeMapper.insertIntoCommandeVueAdmin(idCommande);
+    }
+
+
+    @GET
     @Path("/addProduit") //Ajoute un produit dans dans le id commande
     @RolesAllowed({"client"})
     public Produit Ajoutproduit(

@@ -4,4 +4,5 @@ public class Item {
     public String id;
     public String nom;
     public float prix;
+    public String image;
 }

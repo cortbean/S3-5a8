@@ -28,4 +28,6 @@ public interface CommandeMapper {
 
     // Select from commande_produits view
     List<CommandeView> selectFromCommandeProduits(@Param("idCommande") String idCommande);
+
+    void insertIntoCommandeVueAdmin(@Param("idCommande") String idCommande);
 }
