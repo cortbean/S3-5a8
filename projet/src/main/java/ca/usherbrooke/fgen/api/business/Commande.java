@@ -1,6 +1,5 @@
 package ca.usherbrooke.fgen.api.business;
 
-import java.util.List;
 import java.time.LocalDateTime;
 
 // définit la date et le Id commande de l'usager qui utilise le site

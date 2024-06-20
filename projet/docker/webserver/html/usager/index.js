@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
     var keycloak;
+
     function initKeycloak() {
         keycloak = new Keycloak({
             "realm": "usager",
@@ -45,6 +46,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 })
             });
     }
+
     function requestadmin() {
         axios.get("http://localhost:8888/api/admin", {
             headers: {
@@ -63,10 +65,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 })
             });
     }
+
     function logout() {
         // let logoutURL = "http://localhost:8080//realms/usager/protocol/openid-connect/logout"
         // window.location.href = logoutURL;
     }
+
     function updateCategorie() {
         const BarreCategorie = document.getElementById('BarreCategorie');
         BarreCategorie.innerHTML = "";
@@ -96,14 +100,17 @@ document.addEventListener("DOMContentLoaded", function() {
                     console.log('Échec du rafraîchissement du token');
                 });
             });
+
         // Ajoutez la logique pour afficher ou cacher la section en fonction de l'événement du clic sur le bouton "Bière"
         const annonceSection = document.querySelector('.CollectionProductGrid');
         annonceSection.style.display = 'none'; // Cachez la section par défaut
+
         const boutonBiere = document.querySelector('button'); // Sélectionne le premier bouton dans le document
         boutonBiere.addEventListener('click', function() {
             annonceSection.style.display = 'block'; // Affichez la section lorsque le bouton "Bière" est cliqué
         });
     }
+
     function showArticles(id_categorie) {
         const productContainer = document.getElementById("product-container");
         productContainer.innerHTML = "";
@@ -118,8 +125,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 response.data.forEach(article => {
                     // Create a product object that matches the structure expected by generateProductHTML
                     const product = {
-                        id: article.id,
                         image: article.image || "images/Biere.png",
+                        id: article.id,
                         name: article.nom,
                         price: article.prix + "$",
                         color: article.color || 'rgb(214,232,206)',
@@ -160,20 +167,18 @@ document.addEventListener("DOMContentLoaded", function() {
                                     <p class="panier-text" style="background-color: ${product.color}">
                                         ${product.colorText}
                                     </p>
-                                    <div data-id="" data-fav-id="" data-fav-sku="" data-product-url="" data-product-handle="">
+                                    <a href="#" onclick="changementProduit(${product.id}, 1)">
                                         <svg class="button_img" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="color:#000000;">
                                             <path d="M352 128C352 57.42 294.579 0 224 0 153.42 0 96 57.42 96 128H0v304c0 44.183 35.817 80 80 80h288c44.183 0 80-35.817 80-80V128h-96zM224 48c44.112 0 80 35.888 80 80H144c0-44.112 35.888-80 80-80zm176 384c0 17.645-14.355 32-32 32H80c-17.645 0-32-14.355-32-32V176h48v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h160v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h48v256z"></path>
                                         </svg>
-                                    </div>
+                                    </a>
                                 </div>
                                 
-                                <a href="#" class="panier-text"> ${product.name} </a>
-    
-                                <p class="panier-text">${product.price}</p>
-                                
-                                <!-- New button to add product to cart -->
-                                <button class="add-to-cart-button" onclick="SelectionProduit(${product.id})">Ajout au Panier</button>
-                        
+                                <p class="panier-text"> ${product.name} </p>
+                                <div class="fl-panier">
+                                    <p class="panier-text">${product.price}</p>
+                                    
+                                </div>                        
 
                         </div>
                     </form>
@@ -187,96 +192,85 @@ document.addEventListener("DOMContentLoaded", function() {
         if (paniersection.classList.contains('hidden')) {
             paniersection.classList.remove('hidden');
             paniersection.classList.add('visible');
+            generatePanierHTML();
         } else {
             paniersection.classList.remove('visible');
             paniersection.classList.add('hidden');
         }
     });
-});
 
-document.addEventListener("DOMContentLoaded", function() {
-    let idCommande;
 
-    function AjoutCommande() {
-        alert('Dans AjoutCommande');
 
-        axios.get("http://localhost:8888/api/IdCommande", {
-            headers: {
-                'Authorization': 'Bearer ' + keycloak.token
-            }
-        })
-            .then(response => {
-                idCommande = response.data; // Store the idCommande in the variable
-                document.getElementById('result').innerText = 'Commande ID: ' + idCommande;
-                alert('a change le idCommande' + idCommande);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+    // Function to fetch cart items from localStorage
+    function getCartItemsFromStorage() {
+        const cartItemsJson = localStorage.getItem('cartItems');
+        return cartItemsJson ? JSON.parse(cartItemsJson) : [];
     }
 
-    function FinirCommande() {
-        // Permettre a la commande d'apparaitre pour admin
-        axios.get(`http://localhost:8888/api/CommandePourAdmin?idCommande=${idCommande}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + keycloak.token
-            }
-        })
-            .then(() => {
-                AjoutCommande(); // change le numero du id_commande
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+// Function to save cart items to localStorage
+    function saveCartItemsToStorage(cartItems) {
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
     }
 
-    window.SelectionProduit = function (idProduit) {
+// Initialize cart items from localStorage
+    let cartItems = getCartItemsFromStorage();
+
+    window.changementProduit = function (idProduit, changement) {
         // Convert idProduit to an integer
         idProduit = parseInt(idProduit);
 
-        // Pour creer la nouvel commande
-        if (!idCommande) {
-            AjoutCommande();
-        }
+        const existingItem = cartItems.find(item => item.idProduit === idProduit);
 
-        // Create a pop-up to enter the quantity
-        let quantite = prompt("Please enter the quantity:" + idProduit, "1");
-        // convert quantite to an integer
-        quantite = parseInt(quantite);
-
-        // Check if the user entered a valid quantity
-        if (quantite !== null && !isNaN(quantite) && quantite > 0) {
-            axios.get(`http://localhost:8888/api/addProduit?idProduit=${idProduit}&idCommande=${idCommande}&quantite=${quantite}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + keycloak.token
-                }
-            })
-                .then(response => {
-                    const data = response.data;
-                    document.getElementById('result').innerText += `\nProduit ajouté: ${data.idProduit}, Quantité: ${data.quantite}`;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+        if (existingItem) {
+            // Update the amount if the product is already in the cart
+            existingItem.quantity += changement;
         } else {
-            alert("Invalid quantity entered. Please enter a valid number.");
+            // Add the product to the cart with the specified amount
+            cartItems.push({ idProduit, quantity: changement });
         }
+
+        // Save updated cart items to localStorage
+        saveCartItemsToStorage(cartItems);
+        console.log(cartItems)
+        generatePanierHTML()
+    }
+
+    function generatePanierHTML(){
+        const panierContainer = document.getElementById('panier-section');
+
+        // Clear previous content
+        panierContainer.innerHTML = '';
+
+        // Iterate over cartItems and generate HTML for each item
+        cartItems.forEach(item => {
+            const itemDiv = document.createElement('div');
+            itemDiv.classList.add('cart-item');
+            itemDiv.innerHTML = `
+                
+                    <p>Product ID: ${item.idProduit}</p>
+                    <div class="add-section">
+                         <button class="button_img button_center" onclick="changementProduit(${item.idProduit}, -1)">-</button>
+                         <p class="button_img button_center">${item.quantity}</p>
+                         <button class="button_img button_center" onclick="changementProduit(${item.idProduit}, 1)">+</button>
+                    </div>
+            `;
+                panierContainer.appendChild(itemDiv);
+        })
     }
 });
 
 document.addEventListener("DOMContentLoaded", function() {
     const scrollToTopButton = document.getElementById('scroll-to-top-button');
+
     scrollToTopButton.addEventListener('click', function() {
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
         });
     });
+
     function toggleScrollToTopButton() {
-        console.log(window.scrollY);
-        if (window.scrollY > 0) { // Vérifie si la position de défilement verticale est supérieure à zéro
+        if (window.scrollY > 20) { // Vérifie si la position de défilement verticale est supérieure à zéro
             scrollToTopButton.style.opacity = '1'; // Affiche le bouton
         } else {
             scrollToTopButton.style.opacity = '0'; // Masque le bouton
@@ -287,51 +281,6 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-    // Fonction pour afficher le tiroir du panier
-    function showCartDrawer() {
-        document.getElementById('cart-drawer-container').classList.remove('hidden');
-    }
-    // Fonction pour masquer le tiroir du panier
-    function hideCartDrawer() {
-        document.getElementById('cart-drawer-container').classList.add('hidden');
-    }
-    // Fonction pour gérer les clics des boutons
-    function handleButtonClick(event) {
-        event.preventDefault(); // Prévenir le comportement par défaut du lien
-        const buttonType = event.currentTarget.getAttribute('data-event-button');
-        switch(buttonType) {
-            case 'wish-count':
-                console.log('Bouton de souhait cliqué');
-                alert('Article ajouté à votre liste de souhaits !');
-                break;
-            case 'account':
-                console.log('Bouton de compte cliqué');
-                alert('Tentative de connexion !');
-                break;
-            case 'cart':
-                console.log('Bouton de panier cliqué');
-                showCartDrawer(); // Afficher le tiroir du panier
-                break;
-            default:
-                console.log('Bouton inconnu cliqué');
-        }
-    }
-    // Sélectionner tous les boutons avec l'attribut data-event-button
-    const buttons = document.querySelectorAll('a[data-event-button]');
-    // Ajouter un événement 'click' à chaque bouton
-    buttons.forEach(function(button) {
-        button.addEventListener('click', handleButtonClick);
-    });
-    // Ajouter un événement 'click' à l'icône de fermeture du tiroir du panier
-    const closeIcon = document.getElementById('close-cart-drawer');
-    if (closeIcon) {
-        closeIcon.addEventListener('click', function(event) {
-            hideCartDrawer(); // Masquer le tiroir du panier
-        });
-    }
-});
-
-document.addEventListener("DOMContentLoaded", function() {
     function getTime() {
         const now = new Date();
         const heures = String(now.getHours()).padStart(2, '0');
@@ -339,68 +288,45 @@ document.addEventListener("DOMContentLoaded", function() {
         const secondes = String(now.getSeconds()).padStart(2, '0');
         return `${heures}:${minutes}:${secondes}`;
     }
+
     function afficherHeure() {
         const horloge = document.getElementById('horloge');
         horloge.textContent = getTime();
     }
     afficherHeure();
     setInterval(afficherHeure, 1000);
+
     function getTimeDifference() {
         const now = new Date();
         const tutoratFin = getNextTutoratTimeStamp();
+
         const difference = tutoratFin - now;
+
         if (difference > 86400000) {
             const heures = Math.floor(difference / (1000 * 60 * 60));
             const minutes = Math.floor((difference % (1000 * 60 * 60)) /(1000 * 60));
             const secondes = Math.floor((difference % (1000 * 60)) / 1000);
+
             document.getElementById('time_difference').textContent =
                 `${heures} heures, ${minutes} minutes, ${secondes} secondes`;
         }
         else {
             document.getElementById('submit_exchange_button_id').disabled = true;
             document.getElementById('submit_exchange_button_id').classList.add('disabled');
+
             if (difference > 0) {
                 const heures = Math.floor(difference / (1000 * 60 * 60));
                 const minutes = Math.floor((difference % (1000 * 60 * 60)) /(1000 * 60));
                 const secondes = Math.floor((difference % (1000 * 60)) / 1000);
+
                 document.getElementById('time_difference').textContent =
                     `${heures} heures, ${minutes} minutes, ${secondes} secondes`;
             }
         }
     }
+
     getTimeDifference();
     function submitExchangeRequest() {
         alert("Request submitted");
     }
 });
-
-document.addEventListener('DOMContentLoaded', function () {
-    const cartIcon = document.getElementById('cart-icon');
-    const cartModal = document.getElementById('cart-modal');
-    const closeCartModal = document.getElementById('close-cart-modal');
-    console.log('DOM fully loaded and parsed');
-    console.log('cartIcon:', cartIcon);
-    console.log('cartModal:', cartModal);
-    console.log('closeCartModal:', closeCartModal);
-    if (cartIcon && cartModal && closeCartModal) {
-        cartIcon.addEventListener('click', function (event) {
-            event.preventDefault();
-            console.log('Cart icon clicked');
-            cartModal.classList.remove('hidden');
-        });
-        closeCartModal.addEventListener('click', function () {
-            console.log('Close cart modal clicked');
-            cartModal.classList.add('hidden');
-        });
-        // Fermer le modal en cliquant en dehors de celui-ci
-        window.addEventListener('click', function(event) {
-            if (event.target === cartModal) {
-                cartModal.classList.add('hidden');
-            }
-        });
-    } else {
-        console.log('One or more elements are missing');
-    }
-});
-
-
