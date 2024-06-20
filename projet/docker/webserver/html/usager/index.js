@@ -212,6 +212,11 @@ document.addEventListener("DOMContentLoaded", function() {
         localStorage.setItem('cartItems', JSON.stringify(cartItems));
     }
 
+    function removeFromCart(idProduit) {
+        cartItems = cartItems.filter(item => item.idProduit !== idProduit);
+        generatePanierHTML(); // Update HTML after removal
+    }
+
 // Initialize cart items from localStorage
     let cartItems = getCartItemsFromStorage();
 
@@ -224,10 +229,17 @@ document.addEventListener("DOMContentLoaded", function() {
         if (existingItem) {
             // Update the amount if the product is already in the cart
             existingItem.quantity += changement;
+            if (existingItem.quantity < 1)
+            {
+                removeFromCart(existingItem.idProduit)
+            }
         } else {
-            // Add the product to the cart with the specified amount
-            cartItems.push({ idProduit, quantity: changement });
+            // Add the product to the cart with the specified
+            if (changement > 0){
+                cartItems.push({ idProduit, quantity: changement });
+            }
         }
+
 
         // Save updated cart items to localStorage
         saveCartItemsToStorage(cartItems);
