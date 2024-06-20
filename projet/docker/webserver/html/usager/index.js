@@ -25,6 +25,8 @@ document.addEventListener("DOMContentLoaded", function() {
             console.error('Failed to initialize Keycloak', error);
         });
     }
+    initKeycloak(); // Initialiser Keycloak au chargement de la page
+
 
     function requestclient() {
         axios.get("http://localhost:8888/api/client", {
@@ -181,8 +183,16 @@ document.addEventListener("DOMContentLoaded", function() {
     `;
     }
 
-
-    initKeycloak(); // Initialiser Keycloak au chargement de la page
+    document.getElementById('panier-button').addEventListener('click', function() {
+        var paniersection = document.getElementById('panier-section');
+        if (paniersection.classList.contains('hidden')) {
+            paniersection.classList.remove('hidden');
+            paniersection.classList.add('visible');
+        } else {
+            paniersection.classList.remove('visible');
+            paniersection.classList.add('hidden');
+        }
+    });
 });
 
 document.addEventListener("DOMContentLoaded", function() {

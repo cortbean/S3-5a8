@@ -27,7 +27,7 @@
             </svg>
         </a>
     </div>
-    <img src="logo/logo5a8.png" alt="Girl in a jacket" class="headerimg">
+    <img src="logo/logo5a8.png" class="headerimg">
     <div class="right-buttons">
         <a href="#">
                         <span class="button_box">
@@ -46,7 +46,7 @@
                                 <span class="box_content">Favoris</span>
                             </span>
         </a>
-        <a href="#">
+        <a href="#" id="panier-button">
                             <span class="button_box">
                                 <svg class="button_img" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                     <path d="M352 128C352 57.42 294.579 0 224 0 153.42 0 96 57.42 96 128H0v304c0 44.183 35.817 80 80 80h288c44.183 0 80-35.817 80-80V128h-96zM224 48c44.112 0 80 35.888 80 80H144c0-44.112 35.888-80 80-80zm176 384c0 17.645-14.355 32-32 32H80c-17.645 0-32-14.355-32-32V176h48v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h160v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h48v256z"></path>
@@ -88,27 +88,11 @@
             </div>
         </section>
     </div>
-
-
-    <div id="cart-modal" class="modal">
-        <div class="modal-content">
-            <form action="/cart" method="post" class="flex" novalidate="">
-                <div class=" flex items-center">
-                    <div>LA LISTE DE TOUTE VOTRE SÉLECTION DE PRODUITS</div>
-                    <i class="scd__close cursor-pointer" id="close-cart-modal">
-                        <svg class="button_img" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
-                            <path d="M193.94 256L296.5 153.44l21.15-21.15c3.12-3.12 3.12-8.19 0-11.31l-22.63-22.63c-3.12-3.12-8.19-3.12-11.31 0L160 222.06 36.29 98.34c-3.12-3.12-8.19-3.12-11.31 0L2.34 120.97c-3.12 3.12-3.12 8.19 0 11.31L126.06 256 2.34 379.71c-3.12 3.12-3.12 8.19 0 11.31l22.63 22.63c3.12 3.12 8.19 3.12 11.31 0L160 289.94 262.56 392.5l21.15 21.15c3.12 3.12 8.19 3.12 11.31 0l22.63-22.63c3.12-3.12 3.12-8.19 0-11.31L193.94 256z"></path>
-                        </svg>
-                    </i>
-                </div>
-                <div class="px-4">
-                    <div class="flex">
-                        <div>Votre panier est actuellement vide.</div>
-                    </div>
-                </div>
-            </form>
-        </div>
+    <div id="panier-section" class="hidden">
+        <p>test</p>
     </div>
+
+
 </div>
 
 </body>
