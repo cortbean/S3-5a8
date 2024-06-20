@@ -16,7 +16,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import java.security.Principal;
 import java.util.List;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -38,23 +40,24 @@ public class CommandeService {
     CommandeMapper commandeMapper;
 
     @GET
-    @Path("/IdCommande") //retourne le numero de la commande qu'on ouvre pour ajouter des produits dedans
-    @RolesAllowed({"client"})
-    public String Ajoutcommande() {
+    @Path("/IdCommande")
+    public Response Ajoutcommande() {
+        Principal principal = securityContext.getUserPrincipal();
+        if (principal == null) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity("User not authenticated").build();
+        }
+
         Commande c = new Commande();
-        c.cip = this.securityContext.getUserPrincipal().getName();
+        c.cip = principal.getName();
         c.idCommande = commandeMapper.getNextCommandeId();
-        System.out.println("Generated Commande ID: " + c.idCommande);
         c.dateCommande = LocalDateTime.now();
         commandeMapper.insertCommande(c);
-        System.out.println("Inserted Commande: " + c);
-        return c.idCommande;
-
+        return Response.ok(c.idCommande).build();
     }
 
     @GET
     @Path("/CommandePourAdmin") //retourne le numero de la commande qu'on ouvre pour ajouter des produits dedans
-    @RolesAllowed({"client"})
+    @RolesAllowed({"admin"})
     public void AfficheCommandeAdmin(@QueryParam("idCommande") String idCommande) {
         commandeMapper.insertIntoCommandeVueAdmin(idCommande);
     }
@@ -62,11 +65,14 @@ public class CommandeService {
 
     @GET
     @Path("/addProduit") //Ajoute un produit dans dans le id commande
-    @RolesAllowed({"client"})
     public Produit Ajoutproduit(
             @QueryParam("idProduit") int idProduit,
             @QueryParam("idCommande") String idCommande,
             @QueryParam("quantite") int quantite) {
+        Principal principal = securityContext.getUserPrincipal();
+        if (principal == null) {
+            throw new SecurityException("User not authenticated");
+        }
         Produit p = new Produit();
         p.idProduit = idProduit;
         p.idCommande = idCommande;
@@ -77,7 +83,7 @@ public class CommandeService {
 
     @GET
     @Path("/getCommandeProduits") //va chercher la commande du Id_commande
-    @RolesAllowed({"client"})
+    @RolesAllowed({"admin"})
     public List<CommandeView> getCommandeProduits(@QueryParam("idCommande") String idCommande) {
         return commandeMapper.selectFromCommandeProduits(idCommande);
     }

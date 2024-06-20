@@ -1,15 +1,7 @@
-var keycloak;
-let idCommande = '1'; // Variable to store the idCommande
-keycloak = new Keycloak({
-    "realm": "usager",
-    "auth-server-url": "http://localhost:8180/",
-    "ssl-required": "external",
-    "clientId": "frontend",
-    "public-client": true,
-    "confidential-port": 0
-});
 document.addEventListener("DOMContentLoaded", function() {
     var keycloak;
+    let idCommande = ''; // Variable to store the idCommande
+
     function initKeycloak() {
         keycloak = new Keycloak({
             "realm": "usager",
@@ -19,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
             "public-client": true,
             "confidential-port": 0
         });
-        keycloak.init({ onLoad: 'login-required' }).then(function (authenticated) {
+        keycloak.init({ onLoad: 'login-required' }).then(function(authenticated) {
             console.log(authenticated ? 'authenticated' : 'not authenticated');
             if (authenticated) {
                 if (keycloak.hasRealmRole('client')) {
@@ -30,221 +22,193 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
                 updateCategorie();
             }
-        }).catch(function (error) {
+        }).catch(function(error) {
             console.error('Failed to initialize Keycloak', error);
         });
     }
-    function requestclient() {
-        axios.get("http://localhost:8888/api/client", {
-            headers: {
-                'Authorization': 'Bearer ' + keycloak.token
+
+    function ensureToken(callback) {
+        keycloak.updateToken(30).then(function(refreshed) {
+            if (refreshed) {
+                console.log('Token was successfully refreshed');
+            } else {
+                console.log('Token is still valid');
             }
-        })
-            .then(function (response) {
-                console.log("Response: ", response.status);
-            })
-            .catch(function (error) {
-                console.log('refreshing');
-                keycloak.updateToken(5).then(function () {
-                    console.log('Token refreshed');
-                }).catch(function () {
-                    console.log('Failed to refresh token');
-                })
-            });
-    }
-    function requestadmin() {
-        axios.get("http://localhost:8888/api/admin", {
-            headers: {
-                'Authorization': 'Bearer ' + keycloak.token
-            }
-        })
-            .then(function (response) {
-                console.log("Response: ", response.status);
-            })
-            .catch(function (error) {
-                console.log('refreshing');
-                keycloak.updateToken(5).then(function () {
-                    console.log('Token refreshed');
-                }).catch(function () {
-                    console.log('Failed to refresh token');
-                })
-            });
-    }
-    function logout() {
-        // let logoutURL = "http://localhost:8080//realms/usager/protocol/openid-connect/logout"
-        // window.location.href = logoutURL;
-    }
-    function updateCategorie() {
-        const BarreCategorie = document.getElementById('BarreCategorie');
-        BarreCategorie.innerHTML = "";
-        axios.get("http://localhost:8888/api/getcategorie", {
-            headers: {
-                'Authorization': 'Bearer ' + keycloak.token
-            }
-        })
-            .then(function (response) {
-                console.log("Response: ", response.status);
-                for (let i in response.data) {
-                    const div = document.createElement('button'); // Créez une nouvelle division pour chaque catégorie
-                    div.className = 'sf-header__mobile_item';
-                    div.textContent = response.data[i].nom;
-                    div.addEventListener('click', function() {
-                        showArticles(response.data[i].id);
-                    });
-                    BarreCategorie.appendChild(div);
-                }
-            })
-            .catch(function (error) {
-                console.log('Erreur: ', error);
-                keycloak.updateToken(5).then(function () {
-                    console.log('Token rafraîchi');
-                    updateCategorie();
-                }).catch(function () {
-                    console.log('Échec du rafraîchissement du token');
-                });
-            });
-        // Ajoutez la logique pour afficher ou cacher la section en fonction de l'événement du clic sur le bouton "Bière"
-        const annonceSection = document.querySelector('.CollectionProductGrid');
-        annonceSection.style.display = 'none'; // Cachez la section par défaut
-        const boutonBiere = document.querySelector('button'); // Sélectionne le premier bouton dans le document
-        boutonBiere.addEventListener('click', function() {
-            annonceSection.style.display = 'block'; // Affichez la section lorsque le bouton "Bière" est cliqué
+            callback();
+        }).catch(function() {
+            console.log('Failed to refresh the token, or the session has expired');
         });
     }
+
+    function requestclient() {
+        ensureToken(function() {
+            axios.get("http://localhost:8888/api/client", {
+                headers: {
+                    'Authorization': 'Bearer ' + keycloak.token
+                }
+            })
+                .then(function(response) {
+                    console.log("Response: ", response.status);
+                })
+                .catch(function(error) {
+                    console.error('Error:', error);
+                });
+        });
+    }
+
+    function requestadmin() {
+        ensureToken(function() {
+            axios.get("http://localhost:8888/api/admin", {
+                headers: {
+                    'Authorization': 'Bearer ' + keycloak.token
+                }
+            })
+                .then(function(response) {
+                    console.log("Response: ", response.status);
+                })
+                .catch(function(error) {
+                    console.error('Error:', error);
+                });
+        });
+    }
+
+    function updateCategorie() {
+        ensureToken(function() {
+            const BarreCategorie = document.getElementById('BarreCategorie');
+            BarreCategorie.innerHTML = "";
+            axios.get("http://localhost:8888/api/getcategorie", {
+                headers: {
+                    'Authorization': 'Bearer ' + keycloak.token
+                }
+            })
+                .then(function(response) {
+                    console.log("Response: ", response.status);
+                    for (let i in response.data) {
+                        const div = document.createElement('button'); // Créez une nouvelle division pour chaque catégorie
+                        div.className = 'sf-header__mobile_item';
+                        div.textContent = response.data[i].nom;
+                        div.addEventListener('click', function() {
+                            showArticles(response.data[i].id);
+                        });
+                        BarreCategorie.appendChild(div);
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error:', error);
+                });
+        });
+    }
+
     function showArticles(id_categorie) {
-        const productContainer = document.getElementById("product-container");
-        productContainer.innerHTML = "";
-        axios.get("http://localhost:8888/api/selectarticle?id_categorie=" + id_categorie, {
-            headers: {
-                'Authorization': 'Bearer ' + keycloak.token
-            }
-        })
-            .then(function (response) {
-                console.log("Response: ", response.status);
-                console.log(response.data);
-                response.data.forEach(article => {
-                    // Create a product object that matches the structure expected by generateProductHTML
-                    const product = {
-                        id: article.id,
-                        image: article.image || "images/Biere.png",
-                        name: article.nom,
-                        price: article.prix + "$",
-                        color: article.color || 'rgb(214,232,206)',
-                        colorText: article.colorText || '3%'
-                    };
-                    // Append the generated HTML to BarreCategorie
-                    productContainer.innerHTML += generateProductHTML(product);
-                });
+        ensureToken(function() {
+            const productContainer = document.getElementById("product-container");
+            productContainer.innerHTML = "";
+            axios.get("http://localhost:8888/api/selectarticle?id_categorie=" + id_categorie, {
+                headers: {
+                    'Authorization': 'Bearer ' + keycloak.token
+                }
             })
-            .catch(function (error) {
-                console.log('Erreur: ', error);
-                keycloak.updateToken(5).then(function () {
-                    console.log('Token rafraîchi');
-                    showArticles(id_categorie);
-                }).catch(function () {
-                    console.log('Échec du rafraîchissement du token');
+                .then(function(response) {
+                    console.log("Response: ", response.status);
+                    console.log(response.data);
+                    response.data.forEach(article => {
+                        const product = {
+                            id: article.id,
+                            image: article.image || "images/Biere.png",
+                            name: article.nom,
+                            price: article.prix + "$",
+                            color: article.color || 'rgb(214,232,206)',
+                            colorText: article.colorText || '3%'
+                        };
+                        productContainer.innerHTML += generateProductHTML(product);
+                    });
+                })
+                .catch(function(error) {
+                    console.error('Error:', error);
                 });
-            });
+        });
     }
 
-    function generateProductHTML(product) {
-        return `
-        <div class="sf__col-item">
-                <div data-view="Panier">
-                            <div class="overflow-hidden relative">
-                                <div class="flex justify-center items-center">
-                                    <a href="#" data-gtag-selector="product_image">
-                                            <div data-image-id=""  data-image-wrapper="" data-image-loading="" style="--aspect-ratio: 3/4;">
-                                                <img class="sf-image" src="${product.image}" alt="Product Image">
-                                            </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-    
-                        <div>
-                                <div class="fl-panier">
-                                    <p class="panier-text" style="background-color: ${product.color}">
-                                        ${product.colorText}
-                                    </p>
-                                    <div data-id="" data-fav-id="" data-fav-sku="" data-product-url="" data-product-handle="">
-                                        <svg class="button_img" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="color:#000000;">
-                                            <path d="M352 128C352 57.42 294.579 0 224 0 153.42 0 96 57.42 96 128H0v304c0 44.183 35.817 80 80 80h288c44.183 0 80-35.817 80-80V128h-96zM224 48c44.112 0 80 35.888 80 80H144c0-44.112 35.888-80 80-80zm176 384c0 17.645-14.355 32-32 32H80c-17.645 0-32-14.355-32-32V176h48v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h160v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h48v256z"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                                
-                                <a href="#" class="panier-text"> ${product.name} </a>
-    
-                                <p class="panier-text">${product.price}</p>
-                                
-                                <!-- New button to add product to cart -->
-                                <button class="add-to-cart-button" onclick="SelectionProduit(${product.id})">Ajout au Panier</button>
-                        
+    function AjoutCommande(callback) {
+        ensureToken(function() {
+            alert('Dans AjoutCommande');
 
-                        </div>
-                    </form>
-                </div>
-            </div>
-    `;
-    }
-
-    initKeycloak(); // Initialiser Keycloak au chargement de la page
-});
-
-
-document.addEventListener("DOMContentLoaded", function() {
-    let idCommande;
-
-    function AjoutCommande() {
-        alert('Dans AjoutCommande');
-
-        axios.get("http://localhost:8888/api/IdCommande", {
-            headers: {
-                'Authorization': 'Bearer ' + keycloak.token
-            }
-        })
-            .then(response => {
-                idCommande = response.data; // Store the idCommande in the variable
-                document.getElementById('result').innerText = 'Commande ID: ' + idCommande;
-                alert('a change le idCommande' + idCommande);
+            axios.get("http://localhost:8888/api/IdCommande", {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + keycloak.token
+                }
             })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+                .then(response => {
+                    console.log('Response:', response); // Log the full response
+                    if (response.status === 200) {
+                        idCommande = response.data; // Store the idCommande in the variable
+                        const resultElement = document.getElementById('result');
+                        if (resultElement) {
+                            resultElement.innerText = 'Commande ID: ' + idCommande;
+                        } else {
+                            console.warn('Element with id "result" not found in the DOM');
+                        }
+                        alert('a change le idCommande' + idCommande);
+                        if (callback) callback();
+                    } else {
+                        console.error('Unexpected status code:', response.status);
+                        alert('Unexpected status code: ' + response.status);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error); // Log the full error
+                    if (error.response) {
+                        console.error('Error response:', error.response); // Log the error response if available
+                        alert('Error response: ' + JSON.stringify(error.response.data));
+                    } else {
+                        console.error('Error message:', error.message); // Log the error message
+                        alert('Error message: ' + error.message);
+                    }
+                    alert('rip ' + idCommande);
+                });
+        });
     }
+
+
 
     function FinirCommande() {
-        // Permettre a la commande d'apparaitre pour admin
-        axios.get(`http://localhost:8888/api/CommandePourAdmin?idCommande=${idCommande}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + keycloak.token
-            }
-        })
-            .then(() => {
-                AjoutCommande(); // change le numero du id_commande
+        ensureToken(function() {
+            axios.get(`http://localhost:8888/api/CommandePourAdmin?idCommande=${idCommande}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + keycloak.token
+                }
             })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+                .then(() => {
+                    AjoutCommande(); // change le numero du id_commande
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
     }
 
-    window.SelectionProduit = function (idProduit) {
-        // Convert idProduit to an integer
-        idProduit = parseInt(idProduit);
+    window.SelectionProduit = function(idProduit) {
+        ensureToken(function() {
+            const NumCommande = document.getElementById("numCommande");
+            NumCommande.innerHTML = "";
+            idProduit = parseInt(idProduit);
 
-        // Pour creer la nouvel commande
-        if (!idCommande) {
-            AjoutCommande();
-        }
+            if (!idCommande) {
+                AjoutCommande(function() {
+                    addProduitToCommande(idProduit);
+                });
+            } else {
+                addProduitToCommande(idProduit);
+            }
+        });
+    }
 
-        // Create a pop-up to enter the quantity
-        let quantite = prompt("Please enter the quantity:" + idProduit, "1");
-        // convert quantite to an integer
+    function addProduitToCommande(idProduit) {
+        let quantite = prompt("Please enter the quantity: " + idProduit, "1");
         quantite = parseInt(quantite);
 
-        // Check if the user entered a valid quantity
         if (quantite !== null && !isNaN(quantite) && quantite > 0) {
             axios.get(`http://localhost:8888/api/addProduit?idProduit=${idProduit}&idCommande=${idCommande}&quantite=${quantite}`, {
                 headers: {
@@ -263,7 +227,49 @@ document.addEventListener("DOMContentLoaded", function() {
             alert("Invalid quantity entered. Please enter a valid number.");
         }
     }
+
+    function generateProductHTML(product) {
+        return `
+        <div class="sf__col-item">
+            <div data-view="Panier">
+                <div class="overflow-hidden relative">
+                    <div class="flex justify-center items-center">
+                        <a href="#" data-gtag-selector="product_image">
+                            <div data-image-id="" data-image-wrapper="" data-image-loading="" style="--aspect-ratio: 3/4;">
+                                <img class="sf-image" src="${product.image}" alt="Product Image">
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="fl-panier">
+                    <p class="panier-text" style="background-color: ${product.color}">
+                        ${product.colorText}
+                    </p>
+                    <div data-id="" data-fav-id="" data-fav-sku="" data-product-url="" data-product-handle="">
+                        <svg class="button_img" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="color:#000000;">
+                            <path d="M352 128C352 57.42 294.579 0 224 0 153.42 0 96 57.42 96 128H0v304c0 44.183 35.817 80 80 80h288c44.183 0 80-35.817 80-80V128h-96zM224 48c44.112 0 80 35.888 80 80H144c0-44.112 35.888-80 80-80zm176 384c0 17.645-14.355 32-32 32H80c-17.645 0-32-14.355-32-32V176h48v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h160v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h48v256z"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <a href="#" class="panier-text"> ${product.name} </a>
+                <p class="panier-text">${product.price}</p>
+
+                <button id="numCommande" class="add-to-cart-button" onclick="SelectionProduit(${product.id})">Ajout au Panier</button>
+                 <div id="result"></div>
+                
+            
+            </div>
+        </div>
+    `;
+    }
+    initKeycloak();
 });
+
+
 
 document.addEventListener("DOMContentLoaded", function() {
     const scrollToTopButton = document.getElementById('scroll-to-top-button');
