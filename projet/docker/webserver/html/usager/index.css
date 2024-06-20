@@ -224,3 +224,21 @@ nav > button {
     text-decoration: none;
     font-weight: bold;
 }
+
+.add-to-cart-button {
+    background-color: #4CAF50; /* Green background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    padding: 10px 20px; /* Some padding */
+    text-align: center; /* Centered text */
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Get it to fit within the container */
+    font-size: 16px; /* Increase font size */
+    margin-top: 10px; /* Some space at the top */
+    cursor: pointer; /* Pointer/hand icon on hover */
+    border-radius: 5px; /* Rounded corners */
+}
+
+.add-to-cart-button:hover {
+    background-color: #45a049; /* Darker green background on hover */
+}

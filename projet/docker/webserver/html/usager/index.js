@@ -1,5 +1,5 @@
 var keycloak;
-let idCommande = ''; // Variable to store the idCommande
+let idCommande = '1'; // Variable to store the idCommande
 keycloak = new Keycloak({
     "realm": "usager",
     "auth-server-url": "http://localhost:8180/",
@@ -125,6 +125,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 response.data.forEach(article => {
                     // Create a product object that matches the structure expected by generateProductHTML
                     const product = {
+                        id: article.id,
                         image: article.image || "images/Biere.png",
                         name: article.nom,
                         price: article.prix + "$",
@@ -145,6 +146,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
             });
     }
+
     function generateProductHTML(product) {
         return `
         <div class="sf__col-item">
@@ -175,6 +177,11 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <a href="#" class="panier-text"> ${product.name} </a>
     
                                 <p class="panier-text">${product.price}</p>
+                                
+                                <!-- New button to add product to cart -->
+                                <button class="add-to-cart-button" onclick="SelectionProduit(${product.id})">Ajout au Panier</button>
+                        
+
                         </div>
                     </form>
                 </div>
@@ -184,6 +191,80 @@ document.addEventListener("DOMContentLoaded", function() {
 
     initKeycloak(); // Initialiser Keycloak au chargement de la page
 });
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    let idCommande;
+
+    function AjoutCommande() {
+        alert('Dans AjoutCommande');
+
+        axios.get("http://localhost:8888/api/IdCommande", {
+            headers: {
+                'Authorization': 'Bearer ' + keycloak.token
+            }
+        })
+            .then(response => {
+                idCommande = response.data; // Store the idCommande in the variable
+                document.getElementById('result').innerText = 'Commande ID: ' + idCommande;
+                alert('a change le idCommande' + idCommande);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function FinirCommande() {
+        // Permettre a la commande d'apparaitre pour admin
+        axios.get(`http://localhost:8888/api/CommandePourAdmin?idCommande=${idCommande}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + keycloak.token
+            }
+        })
+            .then(() => {
+                AjoutCommande(); // change le numero du id_commande
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    window.SelectionProduit = function (idProduit) {
+        // Convert idProduit to an integer
+        idProduit = parseInt(idProduit);
+
+        // Pour creer la nouvel commande
+        if (!idCommande) {
+            AjoutCommande();
+        }
+
+        // Create a pop-up to enter the quantity
+        let quantite = prompt("Please enter the quantity:" + idProduit, "1");
+        // convert quantite to an integer
+        quantite = parseInt(quantite);
+
+        // Check if the user entered a valid quantity
+        if (quantite !== null && !isNaN(quantite) && quantite > 0) {
+            axios.get(`http://localhost:8888/api/addProduit?idProduit=${idProduit}&idCommande=${idCommande}&quantite=${quantite}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + keycloak.token
+                }
+            })
+                .then(response => {
+                    const data = response.data;
+                    document.getElementById('result').innerText += `\nProduit ajouté: ${data.idProduit}, Quantité: ${data.quantite}`;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        } else {
+            alert("Invalid quantity entered. Please enter a valid number.");
+        }
+    }
+});
+
 document.addEventListener("DOMContentLoaded", function() {
     const scrollToTopButton = document.getElementById('scroll-to-top-button');
     scrollToTopButton.addEventListener('click', function() {
@@ -203,6 +284,8 @@ document.addEventListener("DOMContentLoaded", function() {
     toggleScrollToTopButton();
     window.addEventListener('scroll', toggleScrollToTopButton);
 });
+
+
 document.addEventListener("DOMContentLoaded", function() {
     // Fonction pour afficher le tiroir du panier
     function showCartDrawer() {
@@ -247,6 +330,8 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 });
+
+
 document.addEventListener("DOMContentLoaded", function() {
     function getTime() {
         const now = new Date();
@@ -289,6 +374,8 @@ document.addEventListener("DOMContentLoaded", function() {
         alert("Request submitted");
     }
 });
+
+
 document.addEventListener('DOMContentLoaded', function () {
     const cartIcon = document.getElementById('cart-icon');
     const cartModal = document.getElementById('cart-modal');
@@ -318,77 +405,4 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-function AjoutCommande() { // faire une nouvelle commande
-    axios.get("http://localhost:8888/api/IdCommande", {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + keycloak.token
-        }
-    })
-        .then(response => {
-            idCommande = response.data; // Store the idCommande in the variable
-            document.getElementById('result').innerText = 'Commande ID: ' + idCommande;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
 
-function FinirCommande(){ // Permettre a la commande d'apparaitre pour admin
-    axios.get(`http://localhost:8888/api/CommandePourAdmin?idCommande=${idCommande}`, {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + keycloak.token
-        }
-    })
-}
-
-function SelectionProduit(idProduit){
-    // Create a pop-up to enter the quantity
-    let quantite = prompt("Please enter the quantity:", "1");
-
-    // Check if the user entered a valid quantity
-    if (quantite !== null && !isNaN(quantite) && quantite > 0) {
-        axios.get(`http://localhost:8888/api/addProduit?idProduit=${idProduit}&idCommande=${idCommande}&quantite=${quantite}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + keycloak.token
-            }
-        })
-            .then(response => {
-                const data = response.data;
-                document.getElementById('result').innerText += `\nProduit ajouté: ${data.idProduit}, Quantité: ${data.quantite}`;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    } else {
-        alert("Invalid quantity entered. Please enter a valid number.");
-    }
-}
-
-
-
-function AjoutProduit() {
-    if (!idCommande) {
-        alert('Please create a Commande first.');
-        return;
-    }
-
-    const idProduit = Math.floor(Math.random() * 10) + 1; // Example product ID
-    const quantite = Math.floor(Math.random() * 10) + 1; // Random quantity between 1 and 10
-
-    axios.get(`http://localhost:8888/api/addProduit?idProduit=${idProduit}&idCommande=${idCommande}&quantite=${quantite}`, {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + keycloak.token
-        }
-    })
-        .then(response => {
-            const data = response.data;
-            document.getElementById('result').innerText += `\nProduit ajouté: ${data.idProduit}, Quantité: ${data.quantite}`;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}

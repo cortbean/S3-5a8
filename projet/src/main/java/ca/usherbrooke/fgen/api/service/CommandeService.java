@@ -21,6 +21,8 @@ import java.util.List;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static io.smallrye.openapi.runtime.io.IoLogging.logger;
+
 @Path("/api")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -42,9 +44,12 @@ public class CommandeService {
         Commande c = new Commande();
         c.cip = this.securityContext.getUserPrincipal().getName();
         c.idCommande = commandeMapper.getNextCommandeId();
+        System.out.println("Generated Commande ID: " + c.idCommande);
         c.dateCommande = LocalDateTime.now();
         commandeMapper.insertCommande(c);
+        System.out.println("Inserted Commande: " + c);
         return c.idCommande;
+
     }
 
     @GET
