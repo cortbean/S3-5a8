@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
     var keycloak;
-
     function initKeycloak() {
         keycloak = new Keycloak({
             "realm": "usager",
@@ -46,7 +45,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 })
             });
     }
-
     function requestadmin() {
         axios.get("http://localhost:8888/api/admin", {
             headers: {
@@ -65,12 +63,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 })
             });
     }
-
     function logout() {
         // let logoutURL = "http://localhost:8080//realms/usager/protocol/openid-connect/logout"
         // window.location.href = logoutURL;
     }
-
     function updateCategorie() {
         const BarreCategorie = document.getElementById('BarreCategorie');
         BarreCategorie.innerHTML = "";
@@ -100,17 +96,14 @@ document.addEventListener("DOMContentLoaded", function() {
                     console.log('Échec du rafraîchissement du token');
                 });
             });
-
         // Ajoutez la logique pour afficher ou cacher la section en fonction de l'événement du clic sur le bouton "Bière"
         const annonceSection = document.querySelector('.CollectionProductGrid');
         annonceSection.style.display = 'none'; // Cachez la section par défaut
-
         const boutonBiere = document.querySelector('button'); // Sélectionne le premier bouton dans le document
         boutonBiere.addEventListener('click', function() {
             annonceSection.style.display = 'block'; // Affichez la section lorsque le bouton "Bière" est cliqué
         });
     }
-
     function showArticles(id_categorie) {
         const productContainer = document.getElementById("product-container");
         productContainer.innerHTML = "";
@@ -125,6 +118,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 response.data.forEach(article => {
                     // Create a product object that matches the structure expected by generateProductHTML
                     const product = {
+                        id: article.id,
                         image: article.image || "images/Biere.png",
                         name: article.nom,
                         price: article.prix + "$",
@@ -176,6 +170,11 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <a href="#" class="panier-text"> ${product.name} </a>
     
                                 <p class="panier-text">${product.price}</p>
+                                
+                                <!-- New button to add product to cart -->
+                                <button class="add-to-cart-button" onclick="SelectionProduit(${product.id})">Ajout au Panier</button>
+                        
+
                         </div>
                     </form>
                 </div>
@@ -196,15 +195,85 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-    const scrollToTopButton = document.getElementById('scroll-to-top-button');
+    let idCommande;
 
+    function AjoutCommande() {
+        alert('Dans AjoutCommande');
+
+        axios.get("http://localhost:8888/api/IdCommande", {
+            headers: {
+                'Authorization': 'Bearer ' + keycloak.token
+            }
+        })
+            .then(response => {
+                idCommande = response.data; // Store the idCommande in the variable
+                document.getElementById('result').innerText = 'Commande ID: ' + idCommande;
+                alert('a change le idCommande' + idCommande);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function FinirCommande() {
+        // Permettre a la commande d'apparaitre pour admin
+        axios.get(`http://localhost:8888/api/CommandePourAdmin?idCommande=${idCommande}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + keycloak.token
+            }
+        })
+            .then(() => {
+                AjoutCommande(); // change le numero du id_commande
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    window.SelectionProduit = function (idProduit) {
+        // Convert idProduit to an integer
+        idProduit = parseInt(idProduit);
+
+        // Pour creer la nouvel commande
+        if (!idCommande) {
+            AjoutCommande();
+        }
+
+        // Create a pop-up to enter the quantity
+        let quantite = prompt("Please enter the quantity:" + idProduit, "1");
+        // convert quantite to an integer
+        quantite = parseInt(quantite);
+
+        // Check if the user entered a valid quantity
+        if (quantite !== null && !isNaN(quantite) && quantite > 0) {
+            axios.get(`http://localhost:8888/api/addProduit?idProduit=${idProduit}&idCommande=${idCommande}&quantite=${quantite}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + keycloak.token
+                }
+            })
+                .then(response => {
+                    const data = response.data;
+                    document.getElementById('result').innerText += `\nProduit ajouté: ${data.idProduit}, Quantité: ${data.quantite}`;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        } else {
+            alert("Invalid quantity entered. Please enter a valid number.");
+        }
+    }
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    const scrollToTopButton = document.getElementById('scroll-to-top-button');
     scrollToTopButton.addEventListener('click', function() {
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
         });
     });
-
     function toggleScrollToTopButton() {
         console.log(window.scrollY);
         if (window.scrollY > 0) { // Vérifie si la position de défilement verticale est supérieure à zéro
@@ -222,17 +291,14 @@ document.addEventListener("DOMContentLoaded", function() {
     function showCartDrawer() {
         document.getElementById('cart-drawer-container').classList.remove('hidden');
     }
-
     // Fonction pour masquer le tiroir du panier
     function hideCartDrawer() {
         document.getElementById('cart-drawer-container').classList.add('hidden');
     }
-
     // Fonction pour gérer les clics des boutons
     function handleButtonClick(event) {
         event.preventDefault(); // Prévenir le comportement par défaut du lien
         const buttonType = event.currentTarget.getAttribute('data-event-button');
-
         switch(buttonType) {
             case 'wish-count':
                 console.log('Bouton de souhait cliqué');
@@ -250,15 +316,12 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.log('Bouton inconnu cliqué');
         }
     }
-
     // Sélectionner tous les boutons avec l'attribut data-event-button
     const buttons = document.querySelectorAll('a[data-event-button]');
-
     // Ajouter un événement 'click' à chaque bouton
     buttons.forEach(function(button) {
         button.addEventListener('click', handleButtonClick);
     });
-
     // Ajouter un événement 'click' à l'icône de fermeture du tiroir du panier
     const closeIcon = document.getElementById('close-cart-drawer');
     if (closeIcon) {
@@ -276,43 +339,35 @@ document.addEventListener("DOMContentLoaded", function() {
         const secondes = String(now.getSeconds()).padStart(2, '0');
         return `${heures}:${minutes}:${secondes}`;
     }
-
     function afficherHeure() {
         const horloge = document.getElementById('horloge');
         horloge.textContent = getTime();
     }
     afficherHeure();
     setInterval(afficherHeure, 1000);
-
     function getTimeDifference() {
         const now = new Date();
         const tutoratFin = getNextTutoratTimeStamp();
-
         const difference = tutoratFin - now;
-
         if (difference > 86400000) {
             const heures = Math.floor(difference / (1000 * 60 * 60));
             const minutes = Math.floor((difference % (1000 * 60 * 60)) /(1000 * 60));
             const secondes = Math.floor((difference % (1000 * 60)) / 1000);
-
             document.getElementById('time_difference').textContent =
                 `${heures} heures, ${minutes} minutes, ${secondes} secondes`;
         }
         else {
             document.getElementById('submit_exchange_button_id').disabled = true;
             document.getElementById('submit_exchange_button_id').classList.add('disabled');
-
             if (difference > 0) {
                 const heures = Math.floor(difference / (1000 * 60 * 60));
                 const minutes = Math.floor((difference % (1000 * 60 * 60)) /(1000 * 60));
                 const secondes = Math.floor((difference % (1000 * 60)) / 1000);
-
                 document.getElementById('time_difference').textContent =
                     `${heures} heures, ${minutes} minutes, ${secondes} secondes`;
             }
         }
     }
-
     getTimeDifference();
     function submitExchangeRequest() {
         alert("Request submitted");
@@ -323,24 +378,20 @@ document.addEventListener('DOMContentLoaded', function () {
     const cartIcon = document.getElementById('cart-icon');
     const cartModal = document.getElementById('cart-modal');
     const closeCartModal = document.getElementById('close-cart-modal');
-
     console.log('DOM fully loaded and parsed');
     console.log('cartIcon:', cartIcon);
     console.log('cartModal:', cartModal);
     console.log('closeCartModal:', closeCartModal);
-
     if (cartIcon && cartModal && closeCartModal) {
         cartIcon.addEventListener('click', function (event) {
             event.preventDefault();
             console.log('Cart icon clicked');
             cartModal.classList.remove('hidden');
         });
-
         closeCartModal.addEventListener('click', function () {
             console.log('Close cart modal clicked');
             cartModal.classList.add('hidden');
         });
-
         // Fermer le modal en cliquant en dehors de celui-ci
         window.addEventListener('click', function(event) {
             if (event.target === cartModal) {
@@ -351,7 +402,5 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('One or more elements are missing');
     }
 });
-
-
 
 

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="c404ac74-c64e-4841-810e-2804513304f5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/projet/docker/webserver/html/usager/fonction_web.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/docker/webserver/html/usager/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/webserver/html/usager/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/produit.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/produit.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 2
+}]]></component>
+  <component name="ProjectId" id="2i3PRYywyTAbQeZDz2fZxnDjhEA" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "trigger__bd",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/François/projet s3/S3-5a8/S3-5a8",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.15989.150" />
+        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-IU-241.15989.150" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c404ac74-c64e-4841-810e-2804513304f5" name="Changes" comment="" />
+      <created>1718716279446</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1718716279446</updated>
+      <workItem from="1718716280512" duration="164000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

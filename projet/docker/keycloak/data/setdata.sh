@@ -1,5 +1,4 @@
 #!/bin/bash
-
 timeout 300 /bin/bash -c 'until curl -sI -o /dev/null -w "%{http_code}\n" localhost:8180; do sleep 5; done;'
 
 echo "beginning of finalisation ...."
