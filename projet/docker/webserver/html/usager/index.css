@@ -251,6 +251,15 @@ header k.logo {
     position: relative;
 }
 
+.sf__tooltip-item[type="button"] {
+    text-decoration: none;
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+}
+
+
 .text-left {
     text-align: left;
 }
@@ -856,12 +865,7 @@ button.sf__btn.sf__btn-link {
     padding: 0.25rem 0;
     position: relative;
 }
-.sf__btn-link.sf__btn-light.shopify-payment-button__button.shopify-payment-button__button--unbranded,
-.sf__btn.sf__btn-link.sf__btn-light,
-a.sf__btn.sf__btn-link.sf__btn-light,
-button.sf__btn.sf__btn-link.sf__btn-light {
-    color: #fff;
-}
+
 .sf__btn-link.shopify-payment-button__button.shopify-payment-button__button--unbranded:focus,
 .sf__btn-link.shopify-payment-button__button.shopify-payment-button__button--unbranded:hover,
 .sf__btn.sf__btn-link:focus,
@@ -942,26 +946,7 @@ button.sf__btn.sf__btn-blank:hover {
     background-color: transparent;
     color: rgb(0 0 0 / var(--tw-text-opacity));
 }
-.bg-dark
-:not(.sf__btn-blank.shopify-payment-button__button.shopify-payment-button__button--unbranded:focus):not(.not-change),
-.bg-dark
-:not(.sf__btn-blank.shopify-payment-button__button.shopify-payment-button__button--unbranded:hover):not(.not-change),
-.bg-dark :not(.sf__btn.sf__btn-blank:focus):not(.not-change),
-.bg-dark :not(.sf__btn.sf__btn-blank:hover):not(.not-change),
-.bg-dark :not(a.sf__btn.sf__btn-blank:focus):not(.not-change),
-.bg-dark :not(a.sf__btn.sf__btn-blank:hover):not(.not-change),
-.bg-dark :not(button.sf__btn.sf__btn-blank:focus):not(.not-change),
-.bg-dark :not(button.sf__btn.sf__btn-blank:hover):not(.not-change),
-.sf-header--bg-black .sf__btn-blank.shopify-payment-button__button.shopify-payment-button__button--unbranded:focus,
-.sf-header--bg-black .sf__btn-blank.shopify-payment-button__button.shopify-payment-button__button--unbranded:hover,
-.sf-header--bg-black .sf__btn.sf__btn-blank:focus,
-.sf-header--bg-black .sf__btn.sf__btn-blank:hover,
-.sf-header--bg-black a.sf__btn.sf__btn-blank:focus,
-.sf-header--bg-black a.sf__btn.sf__btn-blank:hover,
-.sf-header--bg-black button.sf__btn.sf__btn-blank:focus,
-.sf-header--bg-black button.sf__btn.sf__btn-blank:hover {
-    color: #fff;
-}
+
 .bg-dark
 a:not(.sf__btn-blank.shopify-payment-button__button.shopify-payment-button__button--unbranded:focus):not(
     .not-change
@@ -1000,13 +985,7 @@ button.sf__btn.sf__btn-secondary.sf__btn-large {
     padding-top: 11px;
 }
 
-.sf__btn-secondary.sf__btn-light.shopify-payment-button__button.shopify-payment-button__button--unbranded,
-.sf__btn.sf__btn-secondary.sf__btn-light,
-a.sf__btn.sf__btn-secondary.sf__btn-light,
-button.sf__btn.sf__btn-secondary.sf__btn-light {
-    border-color: #fff;
-    color: #fff;
-}
+
 .sf__btn-plain.shopify-payment-button__button.shopify-payment-button__button--unbranded,
 .sf__btn.sf__btn-plain,
 a.sf__btn.sf__btn-plain,
@@ -1023,13 +1002,7 @@ button.sf__btn.sf__btn-plain:hover {
     text-decoration: underline !important;
     transform: translate3d(0, -2px, 0);
 }
-.sf__btn-white.shopify-payment-button__button.shopify-payment-button__button--unbranded,
-.sf__btn.sf__btn-white,
-a.sf__btn.sf__btn-white,
-button.sf__btn.sf__btn-white {
-    background: #fff;
-    color: #232323;
-}
+
 .sf__btn-white.shopify-payment-button__button.shopify-payment-button__button--unbranded:hover,
 .sf__btn.sf__btn-white:hover,
 a.sf__btn.sf__btn-white:hover,

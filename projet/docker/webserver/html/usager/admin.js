@@ -15,11 +15,11 @@ document.addEventListener('DOMContentLoaded', function () {
         keycloak.init({ onLoad: 'login-required' }).then(function (authenticated) {
             console.log(authenticated ? 'authenticated' : 'not authenticated');
             if (authenticated) {
-                if (keycloak.hasRealmRole('client')) {
-                    requestclient();
-                    document.getElementById('user-role').textContent = 'Client';
-                } else if (keycloak.hasRealmRole('admin')) {
-                    window.location.href = 'admin.html'; // Redirige vers la page admin
+                if (keycloak.hasRealmRole('admin')) {
+                    requestadmin();
+                    document.getElementById('user-role').textContent = 'Admin';
+                } else if (keycloak.hasRealmRole('client')) {
+                    window.location.href = 'index.html'; // Redirige vers la page client
                 }
                 updateCategorie();
             }
@@ -28,9 +28,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Requête pour le rôle client
-    function requestclient() {
-        axios.get("http://localhost:8888/api/client", {
+    // Requête pour le rôle admin
+    function requestadmin() {
+        axios.get("http://localhost:8888/api/admin", {
             headers: {
                 'Authorization': 'Bearer ' + keycloak.token
             }
@@ -158,68 +158,77 @@ document.addEventListener('DOMContentLoaded', function () {
     // Générer le HTML pour un produit
     function generateProductHTML(product) {
         return `
-            <div class="sf__col-item">
-                <div class="sf__pcard sf__pcard--onsale cursor-pointer sf-prod__block sf__pcard-style-1" data-view="Panier">
-                    <form method="post" action="/Panier/add" accept-charset="UTF-8" class="product-form form initialized" enctype="multipart/form-data" novalidate="novalidate" data-product-id="${product.image}" data-product-handle="">
-                        <div class="sf__pcard-image">
-                            <div class="overflow-hidden cursor-pointer relative sf__image-box">
-                                <div class="flex justify-center items-center">
-                                    <a href="${product.image}" data-gtag-selector="product_image" class="select_item_image block w-full">
-                                        <div class="spc__main-img">
-                                            <div data-image-id="" class="sf-image" data-image-wrapper="" data-image-loading="" style="--aspect-ratio: 3/4;">
-                                                <img src="${product.image}" alt="Product Image">
+                <div class="sf__col-item">
+                    <div class="sf__pcard sf__pcard--onsale cursor-pointer sf-prod__block sf__pcard-style-1" data-view="Panier">
+                        <form method="post" action="/Panier/add" accept-charset="UTF-8" class="product-form form initialized" enctype="multipart/form-data" novalidate="novalidate" data-product-id="${product.image}" data-product-handle="">
+                            <div class="sf__pcard-image">
+                                <div class="overflow-hidden cursor-pointer relative sf__image-box">
+                                    <div class="flex justify-center items-center">
+                                        <a href="${product.image}" data-gtag-selector="product_image" class="select_item_image block w-full">
+                                            <div class="spc__main-img">
+                                                <div data-image-id="" class="sf-image" data-image-wrapper="" data-image-loading="" style="--aspect-ratio: 3/4;">
+                                                    <img src="${product.image}" alt="Product Image">
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="sf__pcard-action hidden md:block z-10">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sf__pcard-content text-left">
+                                <div class="mt-3 lg:mt-5">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex flex-1 flex-wrap ProductColorShow" data-id="">
+                                            <div class="sf__pcard-color-excess">
+                                                <span class="block w-6 h-6 rounded-circle mr-4 mb-4" style="background-color: ${product.color}">${product.colorText}</span>
                                             </div>
                                         </div>
-                                    </a>
-                                </div>
-                                <div class="sf__pcard-action hidden md:block z-10">
-                                    <a class="sf__tooltip-item sf__btn-icon sf__tooltip-left sf__tooltip-style-1" data-product-handle="${product.image}" data-id="" data-fav-id="" data-fav-sku="" data-gtag-selector="wishlist" data-event-button="wish" type="button">
-                                        <span class="sf__tooltip-icon block">
-                                            <svg class="w-[20px] h-[20px]" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                                                <path d="M528.1 171.5L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6zM388.6 312.3l23.7 138.4L288 385.4l-124.3 65.3 23.7-138.4-100.6-98 139-20.2 62.2-126 62.2 126 139 20.2-100.6 98z"></path>
+                                        <a onclick="toggleEyeIcon(this)" type="button" class="sf-pqv__button mb-4">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="eye-icon eye-open">
+                                                <path d="M12 4.5C7.30558 4.5 3.14054 7.157 1.229 11.25C3.14054 15.343 7.30558 18 12 18C16.6944 18 20.8595 15.343 22.771 11.25C20.8595 7.157 16.6944 4.5 12 4.5ZM12 15.75C9.65279 15.75 7.75 13.8472 7.75 11.5C7.75 9.15279 9.65279 7.25 12 7.25C14.3472 7.25 16.25 9.15279 16.25 11.5C16.25 13.8472 14.3472 15.75 12 15.75ZM12 9.75C10.7574 9.75 9.75 10.7574 9.75 12C9.75 13.2426 10.7574 14.25 12 14.25C13.2426 14.25 14.25 13.2426 14.25 12C14.25 10.7574 13.2426 9.75 12 9.75Z" fill="currentColor"/>
                                             </svg>
-                                        </span>
-                                        <span class="sf__tooltip-content" data-revert-text="Remove from wishlist">Add</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="sf__pcard-content text-left">
-                            <div class="mt-3 lg:mt-5">
-                                <div class="flex items-start justify-between">
-                                    <div class="flex flex-1 flex-wrap ProductColorShow" data-id="">
-                                        <div class="sf__pcard-color-excess">
-                                            <span class="block w-6 h-6 rounded-circle mr-4 mb-4" style="background-color: ${product.color}">${product.colorText}</span>
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="eye-icon eye-closed hidden">
+                                                <path d="M11.9998 4.5C16.6942 4.5 20.8593 7.157 22.7708 11.25C21.6671 13.4651 20.0496 15.2957 18.0794 16.5525L19.5245 17.9975C21.8292 16.4788 23.646 14.2027 24.7708 11.25C22.8593 7.157 18.6942 4.5 13.9998 4.5C9.30541 4.5 5.14036 7.157 3.22884 11.25C4.13608 13.4208 5.66302 15.2493 7.56238 16.4175L9.00835 14.9725C7.33034 13.9297 6.13608 12.4651 5.22984 10.5C7.24967 6.85707 10.7864 4.5 14.9998 4.5H12H11.9998ZM12.9998 13.2422L14.0586 14.3011C13.5633 14.5704 13.0185 14.75 12.4998 14.75C10.1526 14.75 8.24976 12.8472 8.24976 10.5C8.24976 9.98133 8.42935 9.43648 8.69868 8.94118L9.75757 10L12.9998 13.2422ZM19.292 3.70711L18.2929 2.70711L2.29291 18.7071L3.29291 19.7071L19.292 3.70711Z" fill="currentColor"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                    <div class="max-w-full w-full">
+                                        <h3 class="block text-base">
+                                            <a href="#" data-id="" data-gtag-selector="product_title" data-fav-id="" class="select_item_button block mb-[5px] leading-normal sf__pcard-name font-medium truncate-lines hover:text-color-secondary uppercase">
+                                                ${product.name}
+                                            </a>
+                                        </h3>
+                                    </div>
+                                    <div class="sf__pcard-price leading-normal">
+                                        <div class="product-prices inline-flex items-center flex-wrap">
+                                            <span class="prod__price text-color-regular-price">
+                                                <span class="money">
+                                                    <span class="transcy-money">${product.price}</span>
+                                                </span>
+                                            </span>
                                         </div>
                                     </div>
-                                    <a onclick="changementProduit(${product.id}, 1)" type="button" class="sf-pqv__button mb-4">
-                                        <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="color:#000000;">
-                                            <path d="M352 128C352 57.42 294.579 0 224 0 153.42 0 96 57.42 96 128H0v304c0 44.183 35.817 80 80 80h288c44.183 0 80-35.817 80-80V128h-96zM224 48c44.112 0 80 35.888 80 80H144c0-44.112 35.888-80 80-80zm176 384c0 17.645-14.355 32-32 32H80c-17.645 0-32-14.355-32-32V176h48v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h160v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h48v256z"></path>
-                                        </svg>
-                                    </a>
-                                </div>
-                                <div class="max-w-full w-full">
-                                    <h3 class="block text-base">
-                                        <a href="#" data-id="" data-gtag-selector="product_title" data-fav-id="" class="select_item_button block mb-[5px] leading-normal sf__pcard-name font-medium truncate-lines hover:text-color-secondary uppercase">
-                                            ${product.name}
-                                        </a>
-                                    </h3>
-                                </div>
-                                <div class="sf__pcard-price leading-normal">
-                                    <div class="product-prices inline-flex items-center flex-wrap">
-                                        <span class="prod__price text-color-regular-price">
-                                            <span class="money">
-                                                <span class="transcy-money">${product.price}</span>
-                                            </span>
-                                        </span>
-                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
+    }
+
+    // Fonction pour basculer entre les icônes de l'œil ouvert et fermé
+    window.toggleEyeIcon = function (element) {
+        const eyeOpen = element.querySelector('.eye-open');
+        const eyeClosed = element.querySelector('.eye-closed');
+
+        if (eyeOpen.classList.contains('hidden')) {
+            eyeOpen.classList.remove('hidden');
+            eyeClosed.classList.add('hidden');
+        } else {
+            eyeOpen.classList.add('hidden');
+            eyeClosed.classList.remove('hidden');
+        }
     }
 
     // Gestionnaire pour le bouton du panier

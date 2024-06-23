@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="index.css">
-    <title>Com5a8 - Client</title>
+    <title>Com5a8 - Admin</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="http://localhost:8180/js/keycloak.js"></script>
 </head>
@@ -56,10 +56,13 @@
                         <a class="px-1 md:px-2 py-3.5" data-event-button="panier-button">
                             <span class="icon-text-container relative block">
                                 <span href="#" id="panier-button" class="sf__tooltip-item block sf__tooltip-bottom sf__tooltip-style-2">
-                                    <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="color:#000000;">
-                                        <path d="M352 128C352 57.42 294.579 0 224 0 153.42 0 96 57.42 96 128H0v304c0 44.183 35.817 80 80 80h288c44.183 0 80-35.817 80-80V128h-96zM224 48c44.112 0 80 35.888 80 80H144c0-44.112 35.888-80 80-80zm176 384c0 17.645-14.355 32-32 32H80c-17.645 0-32-14.355-32-32V176h48v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h160v40c0 13.255 10.745 24 24 24s24-10.745 24-24v-40h48v256z"></path>
+                                    <svg class="eye-icon eye-open w-[20px] h-[20px]" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                        <path d="M12 4.5C7.30558 4.5 3.14054 7.157 1.229 11.25C3.14054 15.343 7.30558 18 12 18C16.6944 18 20.8595 15.343 22.771 11.25C20.8595 7.157 16.6944 4.5 12 4.5ZM12 15.75C9.65279 15.75 7.75 13.8472 7.75 11.5C7.75 9.15279 9.65279 7.25 12 7.25C14.3472 7.25 16.25 9.15279 16.25 11.5C16.25 13.8472 14.3472 15.75 12 15.75ZM12 9.75C10.7574 9.75 9.75 10.7574 9.75 12C9.75 13.2426 10.7574 14.25 12 14.25C13.2426 14.25 14.25 13.2426 14.25 12C14.25 10.7574 13.2426 9.75 12 9.75Z" fill="currentColor"/>
                                     </svg>
-                                    <span class="sf__tooltip-content">Panier</span>
+                                    <svg class="eye-icon eye-closed w-[20px] h-[20px] hidden" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                        <path d="M11.9998 4.5C16.6942 4.5 20.8593 7.157 22.7708 11.25C21.6671 13.4651 20.0496 15.2957 18.0794 16.5525L19.5245 17.9975C21.8292 16.4788 23.646 14.2027 24.7708 11.25C22.8593 7.157 18.6942 4.5 13.9998 4.5C9.30541 4.5 5.14036 7.157 3.22884 11.25C4.13608 13.4208 5.66302 15.2493 7.56238 16.4175L9.00835 14.9725C7.33034 13.9297 6.13608 12.4651 5.22984 10.5C7.24967 6.85707 10.7864 4.5 14.9998 4.5H12H11.9998ZM12.9998 13.2422L14.0586 14.3011C13.5633 14.5704 13.0185 14.75 12.4998 14.75C10.1526 14.75 8.24976 12.8472 8.24976 10.5C8.24976 9.98133 8.42935 9.43648 8.69868 8.94118L9.75757 10L12.9998 13.2422ZM19.292 3.70711L18.2929 2.70711L2.29291 18.7071L3.29291 19.7071L19.292 3.70711Z" fill="currentColor"/>
+                                    </svg>
+                                    <span class="sf__tooltip-content">Vue</span>
                                 </span>
                                 <sup class="sf-icon-count font-medium !hidden" data-cart-count="0">0</sup>
                             </span>
@@ -110,7 +113,7 @@
 <div id="ical" class="modal open" tabindex="0" style="z-index: 1003; display: none; opacity: 1; top: 50%; left: 50%; transform: translate(-50%, -50%);">
     <div class="modal-content">
         <div class="justify-center items-center valign-wrapper warning sticky-top" style="flex: 0 0 auto; top: 0;">
-            <span>PANIER DE SÉLECTION</span>
+            <span>VUE DU CLIENT</span>
         </div>
         <div class="scd__body flex flex-col" style="flex: 1 1 auto; overflow-y: auto;">
             <div class="py-32 text-center" id="ical-panier"></div>
@@ -120,19 +123,9 @@
                 <div data-discounts="">
                     <ul class="scd-cart__discounts" role="list" data-discounts-list=""></ul>
                 </div>
-                <div class="scd__subtotal flex justify-center" data-cart-subtotal="">
-                    <span class="scd__subtotal-price font-medium sf-currency" data-cart-subtotal-price="">
-                        <span id="cart-subtotal" class="money">
-                            <span class="transcy-money">0,00 $</span>
-                        </span>
-                    </span>
-                </div>
             </div>
-            <div class="modal-footer">
-                <div class="flex flex-col left">
-                    <button type="submit" class="btn blue waves-effect waves-light" name="" style="border-radius: 20px;">Payer</button>
-                </div>
-                <div class="flex flex-col right">
+            <div class="modal-footer flex justify-center">
+                <div class="flex flex-col items-center">
                     <button type="submit" class="btn black waves-effect waves-light" name="" style="border-radius: 20px;" id="close-modal-button">Fermer</button>
                 </div>
             </div>
@@ -144,6 +137,6 @@
 
 <div id="panier-section" class="hidden"></div>
 
-<script src="index.js"></script>
+<script src="admin.js"></script>
 </body>
 </html>
