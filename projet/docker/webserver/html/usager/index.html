@@ -61,9 +61,10 @@
                                     </svg>
                                     <span class="sf__tooltip-content">Panier</span>
                                 </span>
-                                <sup class="font-medium !hidden" data-cart-count="">0</sup>
+                                <sup class="sf-icon-count font-medium !hidden" data-cart-count="0">0</sup>
                             </span>
                         </a>
+
                     </div>
                 </div>
                 <div id="BarreCategorie" class="sf-header__mobile_center" style="margin-left: -10px; width: 100vw; background-color: #f6f6f6d6;"></div>
@@ -120,10 +121,8 @@
                     <ul class="scd-cart__discounts" role="list" data-discounts-list=""></ul>
                 </div>
                 <div class="scd__subtotal flex justify-center" data-cart-subtotal="">
-                    <span class="font-medium">Sous-total</span>
-                    <span>==</span>
                     <span class="scd__subtotal-price font-medium sf-currency" data-cart-subtotal-price="">
-                        <span class="money">
+                        <span id="cart-subtotal" class="money">
                             <span class="transcy-money">0,00 $</span>
                         </span>
                     </span>
@@ -141,6 +140,7 @@
     </div>
     <div class="scd__overlay inset-0"></div>
 </div>
+
 
 <div id="panier-section" class="hidden"></div>
 

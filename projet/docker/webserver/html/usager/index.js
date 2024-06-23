@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
-    var keycloak;
-    var productDetails = {};
+    let keycloak;
+    const productDetails = {};
 
     // Initialiser Keycloak
     function initKeycloak() {
@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Gestionnaire pour le bouton du panier
     document.getElementById('panier-button').addEventListener('click', function() {
-        var paniersection = document.getElementById('panier-section');
+        const paniersection = document.getElementById('panier-section');
         if (paniersection.classList.contains('hidden')) {
             paniersection.classList.remove('hidden');
             paniersection.classList.add('visible');
@@ -275,13 +275,8 @@ document.addEventListener('DOMContentLoaded', function () {
         cartItems = cartItems.filter(item => item.idProduit !== idProduit);
         cleanCartItems();
         saveCartItemsToStorage(cartItems);
+        updateCartCount();
         generatePanierHTML(); // Mettre à jour le HTML après la suppression
-    }
-
-    // Fonction pour nettoyer les articles avec un identifiant null
-    function cleanCartItems() {
-        cartItems = cartItems.filter(item => item.idProduit !== null && item.idProduit !== undefined);
-        saveCartItemsToStorage(cartItems);
     }
 
     // Initialiser les articles du panier depuis le localStorage
@@ -316,7 +311,14 @@ document.addEventListener('DOMContentLoaded', function () {
         cleanCartItems();
         console.log(cartItems);
         saveCartItemsToStorage(cartItems); // Assurez-vous de sauvegarder les articles après modification
+        updateCartCount();
         generatePanierHTML();
+    }
+
+    // Fonction pour nettoyer les articles avec un identifiant null ou undefined
+    function cleanCartItems() {
+        cartItems = cartItems.filter(item => item.idProduit !== null && item.idProduit !== undefined);
+        saveCartItemsToStorage(cartItems);
     }
 
     // Fonction pour générer le HTML du panier
@@ -342,23 +344,56 @@ document.addEventListener('DOMContentLoaded', function () {
                 itemDiv.classList.add('cart-item');
 
                 itemDiv.innerHTML = `
-                    <div style="display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 15px;">
-                        <div style="width: 150px;">
-                            <img src="${product.image}" alt="${product.name}" style="width: 100%; height: auto; margin-bottom: 10px;">
-                        </div>
-                        <div style="flex-grow: 1;">
-                            <p style="margin: 0;">${product.name}</p>
-                            <p style="margin: 0;">${product.price}</p>
-                        </div>
-                        <div style="display: flex; align-items: center;">
-                            <button class="button_img button_center" onclick="changementProduit(${item.idProduit}, -1)">-</button>
-                            <p class="button_img button_center" style="margin: 0 10px;">${item.quantity}</p>
-                            <button class="button_img button_center" onclick="changementProduit(${item.idProduit}, 1)">+</button>
-                        </div>
+                <div style="display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 15px;">
+                    <div style="width: 150px;">
+                        <img src="${product.image}" alt="${product.name}" style="width: 100%; height: auto; margin-bottom: 10px;">
                     </div>
-                `;
+                    <div style="flex-grow: 1;">
+                        <p style="margin: 0;">${product.name}</p>
+                        <p style="margin: 0;">${product.price}</p>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <button class="button_img button_center" onclick="changementProduit(${item.idProduit}, -1)">-</button>
+                        <p class="button_img button_center" style="margin: 0 10px;">${item.quantity}</p>
+                        <button class="button_img button_center" onclick="changementProduit(${item.idProduit}, 1)">+</button>
+                    </div>
+                </div>
+            `;
                 icalPanierContainer.appendChild(itemDiv);
             });
+
+            // Ajouter le sous-total avec la taxe
+            updateSubtotal();
+        }
+    }
+
+    // Fonction pour mettre à jour le sous-total avec la taxe
+    function updateSubtotal() {
+        const subtotal = cartItems.reduce((total, item) => {
+            const product = productDetails[item.idProduit];
+            if (product) {
+                return total + (parseFloat(product.price.replace('$', '')) * item.quantity);
+            }
+            return total;
+        }, 0);
+        const taxRate = 0.15; // 15% taxe
+        const totalWithTax = subtotal * (1 + taxRate);
+        const subtotalElement = document.getElementById('cart-subtotal');
+        if (subtotalElement) {
+            subtotalElement.textContent = `Sous-total (avec taxe de 15%) : ${totalWithTax.toFixed(2)} $`;
+        }
+    }
+
+    // Fonction pour mettre à jour le compteur du panier
+    function updateCartCount() {
+        const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+        const cartCountElement = document.querySelector('sup[data-cart-count]');
+        if (cartCount > 0) {
+            cartCountElement.classList.remove('!hidden');
+            cartCountElement.textContent = cartCount;
+        } else {
+            cartCountElement.classList.add('!hidden');
+            cartCountElement.textContent = '0';
         }
     }
 
@@ -444,4 +479,5 @@ document.addEventListener('DOMContentLoaded', function () {
     initHorloge();
     initModal();
     showArticles(1);
+    updateCartCount();
 });
