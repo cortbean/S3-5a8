@@ -1,7 +1,9 @@
+
 package ca.usherbrooke.fgen.api.mapper;
 
 
 import ca.usherbrooke.fgen.api.business.Item;
+import ca.usherbrooke.fgen.api.business.VisibleProduct;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,4 +13,7 @@ import java.util.List;
 public interface ArticleMapper {
 
     List<Item> selectArticle(@Param("id_categorie") String id_categorie);
+    List<Item> selectVisibleArticle(@Param("id_categorie") String id_categorie);
+    void updateVisibleProducts(@Param("produits") List<VisibleProduct> produits);
+
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ca.usherbrooke.fgen.api.mapper.CommandeMapper">
+
+    <!-- Insérer une commande dans la table projet.commande -->
+    <insert id="insertCommande">
+        INSERT INTO projet.commande(id_commande, cip, date_commande)
+        VALUES (#{commande.idCommande}, #{commande.cip}, #{commande.dateCommande})
+            ON CONFLICT (id_commande) DO NOTHING;
+    </insert>
+
+    <!-- Insérer un produit dans la table projet.plusieurs -->
+    <insert id="insertProduit">
+        INSERT INTO projet.plusieurs(id_produit, id_commande, quantite)
+        VALUES (#{produitCommander.idProduit}, #{produitCommander.idCommande}, #{produitCommander.quantite});
+    </insert>
+
+    <!-- Sélectionner une commande par son ID -->
+    <select id="selectCommande" resultType="ca.usherbrooke.fgen.api.business.Commande">
+        SELECT id_commande AS idCommande, date_commande AS dateCommande, cip
+        FROM projet.commande
+        WHERE id_commande = #{idCommande}
+    </select>
+
+    <!-- Sélectionner les produits associés à une commande -->
+    <select id="selectFromCommandeProduits" resultType="ca.usherbrooke.fgen.api.business.ProduitCommander">
+        SELECT
+            p.id_produit AS idProduit,
+            p.nom AS nom,
+            p.prix AS prix,
+            pl.quantite AS quantite
+        FROM projet.plusieurs pl
+                 JOIN projet.commande c ON pl.id_commande = c.id_commande
+                 JOIN projet.produit p ON pl.id_produit = p.id_produit
+        WHERE c.id_commande = #{idCommande}
+    </select>
+
+    <!-- Insérer une commande dans une vue spécifique pour l'admin -->
+    <insert id="insertIntoCommandeVueAdmin">
+        CALL InsertIntoCommandeVueAdmin(#{idCommande})
+    </insert>
+
+</mapper>

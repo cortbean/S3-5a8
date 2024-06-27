@@ -1,7 +1,5 @@
 package ca.usherbrooke.fgen.api.business;
 
-import java.util.List;
-
 public class Person {
     public String cip;
     public String lastName;

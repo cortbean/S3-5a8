@@ -116,7 +116,7 @@
       "lastName": "St-Jean",
       "email": "stjm1101@usherbrooke.ca",
       "realmRoles": [
-        "admin",
+        "client",
         "default-roles-master"
       ],
       "credentials": [

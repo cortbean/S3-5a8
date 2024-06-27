@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ca.usherbrooke.fgen.api.mapper.ArticleMapper">
 
+    <!-- Sélectionner un article -->
     <select id="selectArticle" resultType="ca.usherbrooke.fgen.api.business.Item">
         select id_Produit as id,
                Nom as nom,
@@ -13,4 +14,27 @@
         where
             (id_categorie) = (coalesce(#{id_categorie}, id_categorie))
     </select>
+
+    <!-- Sélectionner les articles visibles -->
+    <select id="selectVisibleArticle" resultType="ca.usherbrooke.fgen.api.business.Item">
+        select p.id_Produit as id,
+               p.Nom as nom,
+               p.Prix as prix,
+               p.image_url as image
+        from projet.Produit p
+                 join projet.produit_visible pv on (p.id_Produit = pv.id_produit)
+        where
+            (id_categorie) = (coalesce(#{id_categorie}, id_categorie))
+    </select>
+
+    <!-- Mettre à jour les produits visibles -->
+    <insert id="updateVisibleProducts">
+        DELETE FROM projet.produit_visible;
+        INSERT INTO projet.produit_visible (id_produit)
+        VALUES
+        <foreach collection="produits" item="produit" separator=",">
+            (#{produit.idProduit})
+        </foreach>
+    </insert>
+
 </mapper>

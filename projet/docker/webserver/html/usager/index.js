@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     let keycloak;
+    let cartItems = getCartItemsFromCookie();
     const productDetails = {};
 
     // Initialiser Keycloak
@@ -16,20 +17,32 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log(authenticated ? 'authenticated' : 'not authenticated');
             if (authenticated) {
                 if (keycloak.hasRealmRole('client')) {
-                    requestclient();
+                    requestClient();
                     document.getElementById('user-role').textContent = 'Client';
                 } else if (keycloak.hasRealmRole('admin')) {
                     window.location.href = 'admin.html'; // Redirige vers la page admin
                 }
                 updateCategorie();
+                fetchVisibleProducts("Cocktail");
             }
         }).catch(function (error) {
             console.error('Échec de l\'initialisation de Keycloak', error);
         });
     }
 
+    // Fonction pour s'assurer que le token est valide
+    function ensureToken(callback) {
+        if (keycloak.token) {
+            keycloak.updateToken(5).then(callback).catch(function() {
+                console.error('Échec du rafraîchissement du token');
+            });
+        } else {
+            console.error('Pas de token Keycloak disponible');
+        }
+    }
+
     // Requête pour le rôle client
-    function requestclient() {
+    function requestClient() {
         axios.get("http://localhost:8888/api/client", {
             headers: {
                 'Authorization': 'Bearer ' + keycloak.token
@@ -48,51 +61,11 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    function logout() {
-        // let logoutURL = "http://localhost:8080//realms/usager/protocol/openid-connect/logout"
-        // window.location.href = logoutURL;
-    }
-
-    function updateCategorie() {
-        const BarreCategorie = document.getElementById('BarreCategorie');
-        if (!BarreCategorie) {
-            console.error('BarreCategorie élément non trouvé');
-            return;
-        }
-        BarreCategorie.innerHTML = "";
-        axios.get("http://localhost:8888/api/getcategorie", {
-            headers: {
-                'Authorization': 'Bearer ' + keycloak.token
-            }
-        })
-            .then(function (response) {
-                console.log("Réponse: ", response.status);
-                for (let i in response.data) {
-                    const div = document.createElement('div'); // Créez une nouvelle division pour chaque catégorie
-                    div.className = 'sf-header__mobile_item';
-                    div.textContent = response.data[i].nom;
-                    div.addEventListener('click', function() {
-                        showArticles(response.data[i].id);
-                    });
-                    BarreCategorie.appendChild(div);
-                }
-            })
-            .catch(function (error) {
-                console.log('Erreur: ', error);
-                keycloak.updateToken(5).then(function () {
-                    console.log('Token rafraîchi');
-                    updateCategorie();
-                }).catch(function () {
-                    console.log('Échec du rafraîchissement du token');
-                });
-            });
-    }
-
-    // Afficher les articles de la catégorie sélectionnée
-    function showArticles(id_categorie) {
+    // Récupérer les produits visibles
+    function fetchVisibleProducts(id_categorie) {
         const productContainer = document.getElementById("product-container");
         productContainer.innerHTML = "";
-        axios.get("http://localhost:8888/api/selectarticle?id_categorie=" + id_categorie, {
+        axios.get("http://localhost:8888/api/showVisibleProducts?id_categorie=" + id_categorie, {
             headers: {
                 'Authorization': 'Bearer ' + keycloak.token
             }
@@ -116,15 +89,51 @@ document.addEventListener('DOMContentLoaded', function () {
                         color: article.color || 'rgb(214,232,206)',
                         colorText: article.colorText || '3%'
                     };
-                    // Ajoutez le HTML généré à BarreCategorie
+                    // Ajoutez le HTML généré à productContainer
                     productContainer.innerHTML += generateProductHTML(product);
                 });
+
             })
             .catch(function (error) {
                 console.log('Erreur: ', error);
                 keycloak.updateToken(5).then(function () {
                     console.log('Token rafraîchi');
-                    showArticles(id_categorie);
+                    fetchVisibleProducts(id_categorie);
+                }).catch(function () {
+                    console.log('Échec du rafraîchissement du token');
+                });
+            });
+    }
+
+    function updateCategorie() {
+        const BarreCategorie = document.getElementById('BarreCategorie');
+        if (!BarreCategorie) {
+            console.error('BarreCategorie élément non trouvé');
+            return;
+        }
+        BarreCategorie.innerHTML = "";
+        axios.get("http://localhost:8888/api/getcategorie", {
+            headers: {
+                'Authorization': 'Bearer ' + keycloak.token
+            }
+        })
+            .then(function (response) {
+                console.log("Réponse: ", response.status);
+                for (let i in response.data) {
+                    const div = document.createElement('div'); // Créez une nouvelle division pour chaque catégorie
+                    div.className = 'sf-header__mobile_item';
+                    div.textContent = response.data[i].nom;
+                    div.addEventListener('click', function() {
+                        fetchVisibleProducts(response.data[i].id);
+                    });
+                    BarreCategorie.appendChild(div);
+                }
+            })
+            .catch(function (error) {
+                console.log('Erreur: ', error);
+                keycloak.updateToken(5).then(function () {
+                    console.log('Token rafraîchi');
+                    updateCategorie();
                 }).catch(function () {
                     console.log('Échec du rafraîchissement du token');
                 });
@@ -132,10 +141,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Initialiser le bouton de retour en haut
-    function initScrollToTop() {
-        const scrollToTopButton = document.getElementById('scroll-to-top-button');
+    function initScrollToTopClient() {
+        const scrollToTopButtonClient = document.getElementById('scroll-to-top-button');
 
-        scrollToTopButton.addEventListener('click', function() {
+        scrollToTopButtonClient.addEventListener('click', function() {
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
@@ -145,9 +154,9 @@ document.addEventListener('DOMContentLoaded', function () {
         function toggleScrollToTopButton() {
             console.log(window.scrollY);
             if (window.scrollY > 0) {
-                scrollToTopButton.style.opacity = '1';
+                scrollToTopButtonClient.style.opacity = '1';
             } else {
-                scrollToTopButton.style.opacity = '0';
+                scrollToTopButtonClient.style.opacity = '0';
             }
         }
 
@@ -172,16 +181,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         </div>
                                     </a>
                                 </div>
-                                <div class="sf__pcard-action hidden md:block z-10">
-                                    <a class="sf__tooltip-item sf__btn-icon sf__tooltip-left sf__tooltip-style-1" data-product-handle="${product.image}" data-id="" data-fav-id="" data-fav-sku="" data-gtag-selector="wishlist" data-event-button="wish" type="button">
-                                        <span class="sf__tooltip-icon block">
-                                            <svg class="w-[20px] h-[20px]" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                                                <path d="M528.1 171.5L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6zM388.6 312.3l23.7 138.4L288 385.4l-124.3 65.3 23.7-138.4-100.6-98 139-20.2 62.2-126 62.2 126 139 20.2-100.6 98z"></path>
-                                            </svg>
-                                        </span>
-                                        <span class="sf__tooltip-content" data-revert-text="Remove from wishlist">Add</span>
-                                    </a>
-                                </div>
+                                <div class="sf__pcard-action hidden md:block z-10"></div>
                             </div>
                         </div>
                         <div class="sf__pcard-content text-left">
@@ -222,44 +222,71 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
     }
 
+    // Fonction pour ajouter un produit au panier
+    function addToCart(idProduit) {
+        if (!productDetails[idProduit]) {
+            console.warn(`Produit avec ID ${idProduit} n'existe pas dans les détails du produit.`);
+            return;
+        }
+
+        const cartItems = getCartItemsFromCookie();
+        const existingItem = cartItems.find(item => item.idProduit === idProduit);
+        if (!existingItem) {
+            cartItems.push({ idProduit, quantity: 1 });
+        } else {
+            existingItem.quantity++;
+        }
+        setCookieClient('cartItems', cartItems, 7);
+        updateCartCount();
+        generatePanierHTML();
+    }
+
+    // Fonction pour retirer un produit du panier
+    function removeFromCart(idProduit) {
+        let cartItems = getCartItemsFromCookie();
+        cartItems = cartItems.filter(item => item.idProduit !== idProduit);
+        setCookieClient('cartItems', cartItems, 7);
+        updateCartCount();
+        generatePanierHTML();
+    }
+
     // Gestionnaire pour le bouton du panier
     document.getElementById('panier-button').addEventListener('click', function() {
-        const paniersection = document.getElementById('panier-section');
-        if (paniersection.classList.contains('hidden')) {
-            paniersection.classList.remove('hidden');
-            paniersection.classList.add('visible');
+        const paniersectionClient = document.getElementById('panier-section');
+        if (paniersectionClient.classList.contains('hidden')) {
+            paniersectionClient.classList.remove('hidden');
+            paniersectionClient.classList.add('visible');
             generatePanierHTML();
         } else {
-            paniersection.classList.remove('visible');
-            paniersection.classList.add('hidden');
+            paniersectionClient.classList.remove('visible');
+            paniersectionClient.classList.add('hidden');
         }
     });
 
-    // Fonction pour récupérer les articles du panier depuis le localStorage
-    function getCartItemsFromStorage() {
-        const cartItemsJson = localStorage.getItem('cartItems');
-        const cartItems = cartItemsJson ? JSON.parse(cartItemsJson) : [];
-        // Filtrer les articles avec un identifiant null
-        return cartItems.filter(item => item.idProduit !== null && item.idProduit !== undefined);
+    // Fonction pour récupérer les articles du panier depuis les cookies
+    function getCartItemsFromCookie() {
+        const cartItems = getCookieClient('cartItems');
+        return cartItems ? cartItems : [];
     }
 
-    // Fonction pour sauvegarder les articles du panier dans le localStorage
-    function saveCartItemsToStorage(cartItems) {
-        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    // Fonction pour sauvegarder les articles du panier dans les cookies
+    function setCookieClient(name, value, days) {
+        const dateClient = new Date();
+        dateClient.setTime(dateClient.getTime() + (days * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + dateClient.toUTCString();
+        document.cookie = name + "=" + JSON.stringify(value) + ";" + expires + ";path=/";
     }
 
-    // Fonction pour supprimer un article du panier
-    function removeFromCart(idProduit) {
-        cartItems = cartItems.filter(item => item.idProduit !== idProduit);
-        cleanCartItems();
-        saveCartItemsToStorage(cartItems);
-        updateCartCount();
-        generatePanierHTML(); // Mettre à jour le HTML après la suppression
+    function getCookieClient(name) {
+        const nameEQClient = name + "=";
+        const ca = document.cookie.split(';');
+        for(let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQClient) === 0) return JSON.parse(c.substring(nameEQClient.length, c.length));
+        }
+        return null;
     }
-
-    // Initialiser les articles du panier depuis le localStorage
-    let cartItems = getCartItemsFromStorage();
-    cleanCartItems();
 
     // Fonction pour gérer les changements de quantité d'un produit
     window.changementProduit = function (idProduit, changement) {
@@ -274,47 +301,33 @@ document.addEventListener('DOMContentLoaded', function () {
         const existingItem = cartItems.find(item => item.idProduit === idProduit);
 
         if (existingItem) {
-            // Mettre à jour la quantité si le produit est déjà dans le panier
             existingItem.quantity += changement;
             if (existingItem.quantity < 1) {
-                removeFromCart(existingItem.idProduit);
+                // Supprimer le produit du panier si la quantité est inférieure à 1
+                cartItems = cartItems.filter(item => item.idProduit !== idProduit);
             }
-        } else {
-            // Ajouter le produit au panier avec la quantité spécifiée
-            if (changement > 0) {
-                cartItems.push({ idProduit, quantity: changement });
-            }
+        } else if (changement > 0) {
+            cartItems.push({ idProduit, quantity: changement });
         }
 
-        cleanCartItems();
-        console.log(cartItems);
-        saveCartItemsToStorage(cartItems); // Assurez-vous de sauvegarder les articles après modification
+        setCookieClient('cartItems', cartItems, 7);
         updateCartCount();
         generatePanierHTML();
     }
 
-    // Fonction pour nettoyer les articles avec un identifiant null ou undefined
-    function cleanCartItems() {
-        cartItems = cartItems.filter(item => item.idProduit !== null && item.idProduit !== undefined);
-        saveCartItemsToStorage(cartItems);
-    }
-
     // Fonction pour générer le HTML du panier
-    function generatePanierHTML() {
+    function generatePanierHTML(successMessage) {
         const icalPanierContainer = document.getElementById('ical-panier');
         icalPanierContainer.innerHTML = '';
 
+        const cartItems = getCartItemsFromCookie();
         if (cartItems.length === 0) {
-            icalPanierContainer.innerHTML = 'Votre panier est actuellement vide.';
+            icalPanierContainer.innerHTML = successMessage ? successMessage : 'Votre panier est actuellement vide.';
         } else {
-            // Parcourir les articles du panier et générer le HTML pour chaque article
             cartItems.forEach(item => {
-                const product = productDetails[item.idProduit]; // Utiliser les détails du produit stockés précédemment
-                console.log("Produit dans le panier:", product); // Ajout de logs pour débogage
-
-                // Vérifier si product est défini
+                const product = productDetails[item.idProduit];
                 if (!product) {
-                    console.warn(`Les détails du produit pour ID: ${item.idProduit} ne sont pas trouvés.`);
+                    console.warn(`Les détails du produit pour l'ID: ${item.idProduit} ne sont pas trouvés.`);
                     return;
                 }
 
@@ -327,6 +340,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <img src="${product.image}" alt="${product.name}" style="width: 100%; height: auto; margin-bottom: 10px;">
                     </div>
                     <div style="flex-grow: 1;">
+                        <p style="margin: 0;">${item.idProduit}</p>
                         <p style="margin: 0;">${product.name}</p>
                         <p style="margin: 0;">${product.price}</p>
                     </div>
@@ -339,14 +353,13 @@ document.addEventListener('DOMContentLoaded', function () {
             `;
                 icalPanierContainer.appendChild(itemDiv);
             });
-
-            // Ajouter le sous-total avec la taxe
-            updateSubtotal();
         }
+        updateSubtotal();
     }
 
     // Fonction pour mettre à jour le sous-total avec la taxe
     function updateSubtotal() {
+        const cartItems = getCartItemsFromCookie();
         const subtotal = cartItems.reduce((total, item) => {
             const product = productDetails[item.idProduit];
             if (product) {
@@ -364,6 +377,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Fonction pour mettre à jour le compteur du panier
     function updateCartCount() {
+        const cartItems = getCartItemsFromCookie();
         const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
         const cartCountElement = document.querySelector('sup[data-cart-count]');
         if (cartCount > 0) {
@@ -376,8 +390,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Initialiser l'horloge
-    function initHorloge() {
-        function getTime() {
+    function initHorlogeClient() {
+        function getTimeClient() {
             const now = new Date();
             const heures = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
@@ -387,7 +401,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function afficherHeure() {
             const horloge = document.getElementById('horloge');
-            horloge.textContent = getTime();
+            horloge.textContent = getTimeClient();
         }
 
         afficherHeure();
@@ -396,20 +410,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Initialiser la modale
     function initModal() {
-        function openModal() {
+        function openModalClient() {
             document.getElementById('ical').style.display = 'block';
             document.body.classList.add('modal-open');
             generatePanierHTML(); // Appeler generatePanierHTML pour mettre à jour la modale
         }
 
-        function closeModal() {
+        function closeModalClient() {
             document.getElementById('ical').style.display = 'none';
             document.body.classList.remove('modal-open');
         }
 
         window.onclick = function(event) {
             if (event.target === document.getElementById('ical')) {
-                closeModal();
+                closeModalClient();
             }
         }
 
@@ -417,7 +431,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (cartButton) {
             cartButton.addEventListener('click', function(event) {
                 event.preventDefault();
-                openModal();
+                openModalClient();
             });
         }
 
@@ -425,7 +439,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (closeModalButton) {
             closeModalButton.addEventListener('click', function(event) {
                 event.preventDefault();
-                closeModal();
+                closeModalClient();
             });
         }
 
@@ -451,11 +465,84 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    function generateOrderId() {
+        return Math.floor(10000 + Math.random() * 90000).toString();
+    }
+
+    function passerCommandeClient() {
+        ensureToken(function() {
+            const produitsPayload = cartItems.map(item => ({
+                idProduit: item.idProduit,
+                quantite: item.quantity
+            }));
+
+            const pad = (num) => (num < 10 ? '0' : '') + num;
+
+            const date = new Date();
+            const dateCommande = date.getUTCFullYear() +
+                '-' + pad(date.getUTCMonth() + 1) +
+                '-' + pad(date.getUTCDate()) +
+                'T' + pad(date.getUTCHours()) +
+                ':' + pad(date.getUTCMinutes()) +
+                ':' + pad(date.getUTCSeconds()) +
+                '.' + (date.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) + 'Z';
+
+            const orderData = {
+                idCommande: generateOrderId(),
+                cip: keycloak.tokenParsed.preferred_username,
+                dateCommande: dateCommande, // Utiliser le format de date avec millisecondes et 'Z'
+                produits: produitsPayload
+            };
+
+            console.log("Données de la commande envoyée :", JSON.stringify(orderData, null, 2));
+
+            if (orderData.produits.length === 0) {
+                console.log("Aucun produit sélectionné pour la commande.");
+                const messageContainer = document.getElementById('messageContainer');
+                messageContainer.textContent = "Aucun produit n'est sélectionné pour la commande.";
+                messageContainer.style.display = 'block';
+                return;
+            }
+
+            function envoyerCommande() {
+                axios.post("http://localhost:8888/api/commande", orderData, {
+                    headers: {
+                        'Authorization': 'Bearer ' + keycloak.token,
+                        'Content-Type': 'application/json'
+                    }
+                }).then(function(response) {
+                    console.log("Réponse du serveur après passage de la commande :", response.data);
+                    cartItems = [];
+                    setCookieClient('cartItems', cartItems, 7);
+                    updateCartCount();
+                    generatePanierHTML("Commande effectuée avec succès !");
+                    const messageContainer = document.getElementById('messageContainer');
+                    messageContainer.textContent = "Commande effectuée avec succès !";
+                    messageContainer.style.display = 'block';
+                }).catch(function(error) {
+                    console.error("Erreur lors du passage de la commande :", error);
+                    const messageContainer = document.getElementById('messageContainer');
+                    messageContainer.textContent = "Erreur lors du passage de la commande. Veuillez réessayer.";
+                    messageContainer.style.display = 'block';
+                    if (error.response && error.response.status === 401) {
+                        ensureToken(envoyerCommande);
+                    }
+                });
+            }
+
+            envoyerCommande();
+        });
+    }
+
+    document.getElementById('passer-commande-client-button').addEventListener('click', function() {
+        passerCommandeClient();
+    });
+
     // Initialiser les fonctions
     initKeycloak();
-    initScrollToTop();
-    initHorloge();
+    initScrollToTopClient();
+    initHorlogeClient();
     initModal();
-    showArticles(1);
+    fetchVisibleProducts("Shooter");
     updateCartCount();
 });

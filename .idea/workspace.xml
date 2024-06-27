@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="003c6222-1cf1-45fc-b71c-08db04864354" name="Changes" comment="L'admin et le client communique via l'update">
+      <change afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/service/ArticleService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/service/CommandeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/S3-5a8.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/Projet 5 à 8.lo1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/Projet 5 à 8.loo" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/docker/keycloak/data/users.json" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/keycloak/data/users.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/docker/webserver/html/usager/admin.js" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/webserver/html/usager/admin.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/docker/webserver/html/usager/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/webserver/html/usager/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/Commande.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/Commande.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/CommandeView.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/CommandeView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/Message.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/Person.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/VisibleProduct.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/VisibleProduct.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/controller/VisibleProductController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/mapper/ArticleMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/mapper/ArticleMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/mapper/MessageMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/mapper/VisibleProductMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/service/ConnectionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/service/ConnectionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/service/MessageService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/service/RoleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/service/RoleService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/resources/ca/usherbrooke/fgen/api/mapper/ArticleMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/resources/ca/usherbrooke/fgen/api/mapper/ArticleMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/resources/ca/usherbrooke/fgen/api/mapper/MessageMapper.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/resources/ca/usherbrooke/fgen/api/mapper/VisibleProductMapper.xml" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$/projet">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="message" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;bakk1001&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/cortbean/S3-5a8&quot;,
+    &quot;accountId&quot;: &quot;cf54288b-a8ad-4840-8ded-85dc686a43e8&quot;
+  }
+}</component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2hO88Oo6TYcNE4oOtukmiSuInvP" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Gradle.Build projet.executor": "Run",
+    "Quarkus.message.main.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "NewVersionServerWeb",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/bakay/OneDrive - USherbrooke/SEMESTRE 3 Genie/PROJET SCOLAIRE/S3-5a8/projet",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
+    ]
+  }
+}]]></component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="QuarkusRunConfigurationType" />
+      </set>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="message.main" type="QuarkusRunConfigurationType" factoryName="Quarkus" nameIsGenerated="true">
+      <module name="message.main" />
+      <QsGradleRunConfiguration>
+        <ExternalSystemSettings>
+          <option name="executionName" />
+          <option name="externalProjectPath" value="$PROJECT_DIR$/projet" />
+          <option name="externalSystemIdString" value="GRADLE" />
+          <option name="scriptParameters" />
+          <option name="taskDescriptions">
+            <list />
+          </option>
+          <option name="taskNames">
+            <list>
+              <option value="quarkusDev" />
+            </list>
+          </option>
+          <option name="vmOptions" />
+        </ExternalSystemSettings>
+        <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+        <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+        <DebugAllEnabled>false</DebugAllEnabled>
+        <RunAsTest>false</RunAsTest>
+        <profile>dev</profile>
+      </QsGradleRunConfiguration>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.15989.150" />
+        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-IU-241.15989.150" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="003c6222-1cf1-45fc-b71c-08db04864354" name="Changes" comment="" />
+      <created>1717453602779</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1717453602779</updated>
+      <workItem from="1717453603804" duration="117000" />
+      <workItem from="1717453740286" duration="1781000" />
+      <workItem from="1717673861810" duration="7238000" />
+      <workItem from="1717684929218" duration="22165000" />
+      <workItem from="1717757728052" duration="7736000" />
+      <workItem from="1717770544326" duration="4896000" />
+      <workItem from="1717777796071" duration="15905000" />
+      <workItem from="1717856668792" duration="10615000" />
+      <workItem from="1717875739301" duration="10120000" />
+      <workItem from="1717894411753" duration="3627000" />
+      <workItem from="1718021709459" duration="1551000" />
+      <workItem from="1718041838921" duration="564000" />
+      <workItem from="1718165944552" duration="7139000" />
+      <workItem from="1718244645664" duration="7000" />
+      <workItem from="1718402632916" duration="2828000" />
+      <workItem from="1718415244468" duration="5039000" />
+      <workItem from="1718828516622" duration="1206000" />
+      <workItem from="1718831778408" duration="5206000" />
+      <workItem from="1718844644934" duration="5511000" />
+      <workItem from="1718886411425" duration="6798000" />
+      <workItem from="1718896370673" duration="8824000" />
+      <workItem from="1718907205198" duration="3413000" />
+      <workItem from="1718944754865" duration="426000" />
+      <workItem from="1718976489820" duration="28000" />
+      <workItem from="1719064235315" duration="6708000" />
+      <workItem from="1719073027398" duration="1633000" />
+      <workItem from="1719077842572" duration="3566000" />
+      <workItem from="1719082854094" duration="6774000" />
+      <workItem from="1719096341080" duration="3378000" />
+      <workItem from="1719099967491" duration="8512000" />
+      <workItem from="1719112586919" duration="24378000" />
+      <workItem from="1719163018744" duration="564000" />
+      <workItem from="1719163839259" duration="2941000" />
+      <workItem from="1719174477967" duration="12813000" />
+      <workItem from="1719191455018" duration="1656000" />
+      <workItem from="1719193465272" duration="581000" />
+      <workItem from="1719232698466" duration="3385000" />
+      <workItem from="1719236121197" duration="64000" />
+      <workItem from="1719336491214" duration="608000" />
+      <workItem from="1719339669082" duration="363000" />
+      <workItem from="1719342272939" duration="633000" />
+      <workItem from="1719349484559" duration="1866000" />
+      <workItem from="1719351571801" duration="101000" />
+      <workItem from="1719352085846" duration="10373000" />
+      <workItem from="1719366274670" duration="2372000" />
+      <workItem from="1719368955490" duration="682000" />
+      <workItem from="1719373009612" duration="8256000" />
+      <workItem from="1719416120501" duration="3267000" />
+      <workItem from="1719422668432" duration="532000" />
+      <workItem from="1719424666115" duration="6017000" />
+      <workItem from="1719436524928" duration="2872000" />
+      <workItem from="1719439867270" duration="329000" />
+      <workItem from="1719440563464" duration="306000" />
+      <workItem from="1719454758195" duration="8186000" />
+      <workItem from="1719493470258" duration="21723000" />
+      <workItem from="1719544509421" duration="76000" />
+      <workItem from="1719544646416" duration="14000" />
+      <workItem from="1719544942104" duration="149000" />
+      <workItem from="1719545139741" duration="44000" />
+    </task>
+    <task id="LOCAL-00001" summary="merge de interface graphique avec le code de mederik pour voir les article">
+      <option name="closed" value="true" />
+      <created>1717680604870</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1717680604870</updated>
+    </task>
+    <task id="LOCAL-00002" summary="nouvelle version de la page web">
+      <option name="closed" value="true" />
+      <created>1717766475754</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1717766475754</updated>
+    </task>
+    <task id="LOCAL-00003" summary="nouvelle version de la page web du 2024-06-08">
+      <option name="closed" value="true" />
+      <created>1717888579614</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1717888579614</updated>
+    </task>
+    <task id="LOCAL-00004" summary="nouvelle version de la page web du 2024-06-08 bar du bas enlever">
+      <option name="closed" value="true" />
+      <created>1717894902185</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1717894902185</updated>
+    </task>
+    <task id="LOCAL-00005" summary="nouvelle version de la page web du 2024-06-08 bar du bas enlever">
+      <option name="closed" value="true" />
+      <created>1718415761986</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1718415761986</updated>
+    </task>
+    <task id="LOCAL-00006" summary="nouvelle version de la page web du 2024-06-08 bar du bas enlever">
+      <option name="closed" value="true" />
+      <created>1719105903572</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1719105903572</updated>
+    </task>
+    <task id="LOCAL-00007" summary="dans cette version je passe le montant total de la commande et je momntre le nombre d'elememnt dans le panier">
+      <option name="closed" value="true" />
+      <created>1719116914888</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1719116914888</updated>
+    </task>
+    <task id="LOCAL-00008" summary="dans cette version je passe le montant total de la commande et je momntre le nombre d'elememnt dans le panier">
+      <option name="closed" value="true" />
+      <created>1719116965899</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1719116965899</updated>
+    </task>
+    <task id="LOCAL-00009" summary="dans cette version je passe le montant total de la commande et je momntre le nombre d'elememnt dans le panier">
+      <option name="closed" value="true" />
+      <created>1719151159824</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1719151159824</updated>
+    </task>
+    <task id="LOCAL-00010" summary="L'admin et le client communique via l'update">
+      <option name="closed" value="true" />
+      <created>1719456077329</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1719456077329</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="77f74418-065f-4433-9bb4-68ff23d70be6" value="TOOL_WINDOW" />
+      </map>
+    </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="77f74418-065f-4433-9bb4-68ff23d70be6">
+          <value>
+            <State />
+          </value>
+        </entry>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="serverWeb" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="merge de interface graphique avec le code de mederik pour voir les article" />
+    <MESSAGE value="nouvelle version de la page web" />
+    <MESSAGE value="nouvelle version de la page web du 2024-06-08" />
+    <MESSAGE value="nouvelle version de la page web du 2024-06-08 bar du bas enlever" />
+    <MESSAGE value="dans cette version je passe le montant total de la commande et je momntre le nombre d'elememnt dans le panier" />
+    <MESSAGE value="L'admin et le client communique via l'update" />
+    <option name="LAST_COMMIT_MESSAGE" value="L'admin et le client communique via l'update" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
