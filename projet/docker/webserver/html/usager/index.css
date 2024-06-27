@@ -533,11 +533,12 @@ cart-iconsection.sf-header.cart-has-items .sf-header__mobile .cart-icon {
     align-items: center;
     justify-content: flex-start;
 }
-
 .sf-header__mobile-center {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    height: 100%;
 }
 
 .sf-logo--mobile.has-logo-img {
@@ -545,10 +546,17 @@ cart-iconsection.sf-header.cart-has-items .sf-header__mobile .cart-icon {
     justify-content: center;
     align-items: center;
     background-image: url('logo/logo5a8.png');
-    background-size: contain;
+    background-size: contain; /* Ajustez ici pour que l'image prenne toute la largeur */
+    background-position: center; /* Assurez-vous que l'image est centrée */
     background-repeat: no-repeat;
     height: 70px;
-    width: 200px; /* Ajouter une largeur */
+    width: 100%; /* Prend toute la largeur disponible */
+    max-width: 200px; /* Limite la largeur maximale si nécessaire */
+}
+
+.logo-img {
+    width: 100%;
+    height: auto; /* This ensures the image maintains its aspect ratio */
 }
 
 .add-section{

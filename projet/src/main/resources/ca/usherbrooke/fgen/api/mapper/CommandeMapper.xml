@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ca.usherbrooke.fgen.api.mapper.CommandeMapper">
+
+    <insert id="insertCommande">
+        insert into projet.commande(id_commande, date_commande, cip)
+        values (#{commande.idCommande},
+                #{commande.dateCommande},
+                #{commande.cip})
+            on conflict (id_commande) do nothing;
+    </insert>
+
+    <insert id="insertProduit">
+        insert into projet.plusieurs(id_produit, id_commande, quantite)
+        values (#{produit.idProduit},
+                #{produit.idCommande},
+                #{produit.quantite})
+    </insert>
+
+
+    <select id="selectCommande" resultType="ca.usherbrooke.fgen.api.business.Commande">
+        select * from projet.commande where id_commande = #{idCommande}
+    </select>
+
+    <select id="selectFromCommandeProduits" resultType="ca.usherbrooke.fgen.api.business.CommandeView">
+        select
+            c.id_commande as idCommande,
+            p.Nom as produitNom,
+            p.Prix as produitPrix,
+            pl.quantite as quantite
+        from projet.plusieurs pl
+                 join projet.commande c on pl.id_commande = c.id_commande
+                 join projet.Produit p on pl.id_produit = p.id_produit
+        where c.id_commande = #{idCommande}
+    </select>
+
+    <insert id="insertIntoCommandeVueAdmin">
+        CALL InsertIntoCommandeVueAdmin(#{idCommande})
+    </insert>
+
+</mapper>

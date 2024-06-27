@@ -1,0 +1,14 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ca.usherbrooke.fgen.api.mapper.VisibleProductMapper">
+    <insert id="updateVisibleProducts">
+        DELETE FROM projet.produit_visible;
+        INSERT INTO projet.produit_visible (id_produit)
+        VALUES
+        <foreach collection="produits" item="produit" separator=",">
+            (#{produit.idProduit})
+        </foreach>
+    </insert>
+    <select id="getVisibleProducts" resultType="ca.usherbrooke.fgen.api.business.VisibleProduct">
+        SELECT id_produit as idProduit FROM projet.produit_visible
+    </select>
+</mapper>

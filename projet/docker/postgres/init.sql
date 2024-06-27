@@ -1,6 +1,4 @@
---
 -- PostgreSQL database dump
---
 
 -- Dumped from database version 13.6 (Debian 13.6-1.pgdg110+1)
 -- Dumped by pg_dump version 14.1
@@ -18,40 +16,17 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
---
--- TOC entry 6 (class 2615 OID 16385)
--- Name: app; Type: SCHEMA; Schema: -; Owner: postgres
---
-
-
 -- Create schema projet
 CREATE SCHEMA projet;
 ALTER SCHEMA projet OWNER TO postgres;
 SET default_tablespace = '';
-
 SET default_table_access_method = heap;
 
--- Additional tables in schema projet
-
+-- Tables
 CREATE TABLE projet.Programme (
                                   Programme VARCHAR(50),
                                   faculte VARCHAR(50) NOT NULL,
                                   PRIMARY KEY(Programme)
-);
-
-CREATE TABLE projet.logs (
-                             log_id INTEGER,
-                             table_name TEXT,
-                             operation TEXT,
-                             changed_data JSONB,
-                             log_time TIMESTAMP,
-                             PRIMARY KEY(log_id)
-);
-
-CREATE TABLE projet.commande (
-                                 id_commande VARCHAR(50),
-                                 date_commande TIMESTAMP,
-                                 PRIMARY KEY(id_commande)
 );
 
 CREATE TABLE projet.Categorie (
@@ -67,10 +42,8 @@ CREATE TABLE projet.Utilisateur (
                                     Courriel VARCHAR(255) NOT NULL,
                                     role VARCHAR(50),
                                     promotion VARCHAR(50),
-                                    id_commande VARCHAR(50),
-                                    Programme VARCHAR(50) NULL,
+                                    Programme VARCHAR(50),
                                     PRIMARY KEY(cip),
-                                    FOREIGN KEY(id_commande) REFERENCES projet.commande(id_commande),
                                     FOREIGN KEY(Programme) REFERENCES projet.Programme(Programme)
 );
 
@@ -84,6 +57,14 @@ CREATE TABLE projet.Produit (
                                 FOREIGN KEY(id_categorie) REFERENCES projet.Categorie(id_categorie)
 );
 
+CREATE TABLE projet.commande (
+                                 id_commande VARCHAR(50),
+                                 date_commande TIMESTAMP,
+                                 cip VARCHAR(8),
+                                 PRIMARY KEY(id_commande),
+                                 FOREIGN KEY(cip) REFERENCES projet.Utilisateur(cip)
+);
+
 CREATE TABLE projet.plusieurs (
                                   id_Produit INTEGER,
                                   id_commande VARCHAR(50),
@@ -93,9 +74,41 @@ CREATE TABLE projet.plusieurs (
                                   FOREIGN KEY(id_commande) REFERENCES projet.commande(id_commande)
 );
 
-ALTER TABLE projet.Utilisateur OWNER TO postgres;
+CREATE TABLE projet.logs(
+                            log_id SERIAL PRIMARY KEY,
+                            table_name TEXT,
+                            operation TEXT,
+                            changed_data JSONB,
+                            log_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
+CREATE TABLE projet.produit_visible (
+                                        id_produit INTEGER,
+                                        PRIMARY KEY(id_produit),
+                                        FOREIGN KEY(id_produit) REFERENCES projet.Produit(id_produit)
+);
 
+CREATE VIEW projet.commande_produits AS
+SELECT
+    c.id_commande,
+    p.Nom AS produit_nom,
+    p.Prix AS produit_prix,
+    pl.quantite
+FROM
+    projet.plusieurs pl
+        JOIN
+    projet.commande c ON pl.id_commande = c.id_commande
+        JOIN
+    projet.Produit p ON pl.id_Produit = p.id_Produit;
+
+CREATE TABLE projet.CommandeVueAdmin (
+                                         id_commande VARCHAR(50),
+                                         produit_nom VARCHAR(100),
+                                         produit_prix DECIMAL(10, 2),
+                                         quantite INT
+);
+
+-- Inserts
 INSERT INTO projet.Programme (Programme, faculte) VALUES
                                                       ('Droit', 'Faculté de droit'),
                                                       ('Administration des affaires', 'École de gestion'),
@@ -119,43 +132,43 @@ INSERT INTO projet.Categorie(id_categorie, description) VALUES
                                                             ('Alcool fort', 'Alcool fort');
 
 INSERT INTO projet.Produit(id_Produit, Nom, Prix, id_categorie, image_url) VALUES
-                                                                               (1, 'Pizza vegetarien', 4.00, 'Nourriture', 'images/pizza_vegetarien.png'),
-                                                                               (2, 'Pizza Poulet', 4.00, 'Nourriture', 'images/pizza_poulet.png'),
-                                                                               (3, 'Pizza Haram', 4.00, 'Nourriture', 'images/pizza_pepperoni.png'),
-                                                                               (4, 'Pizza Margherita', 4.00, 'Nourriture', 'images/pizza_margherita.png'),
-                                                                               (5, 'Sandwich au poulet', 3.00, 'Nourriture', 'images/sandwich_poulet.png'),
-                                                                               (6, 'wrap au poulet', 3.00, 'Nourriture', 'images/wrap_poulet.png'),
-                                                                               (7, 'Hot-Dog', 3.00, 'Nourriture', 'images/hot_dog.png'),
-                                                                               (8, 'Pogo', 3.00, 'Nourriture', 'images/pogo.png'),
-                                                                               (9, 'Tequila', 3.00, 'Shooter', 'images/tequila.png'),
-                                                                               (10, 'Jagerbomb', 3.00, 'Shooter', 'images/jagerbomb.png'),
-                                                                               (11, 'B-52', 3.00, 'Shooter', 'images/b52.png'),
-                                                                               (12, 'Kamikaze', 3.00, 'Shooter', 'images/kamikaze.png'),
-                                                                               (13, 'Lemon Drop', 3.00, 'Shooter', 'images/lemon_drop.png'),
-                                                                               (14, 'Irish Car Bomb', 3.00, 'Shooter', 'images/irish_car_bomb.png'),
-                                                                               (15, 'Sambuca', 3.00, 'Shooter', 'images/sambuca.png'),
-                                                                               (16, 'Buttery Nipple', 3.00, 'Shooter', 'images/buttery_nipple.png'),
-                                                                               (17, 'Margarita', 3.00, 'Cocktails', 'images/margarita.png'),
-                                                                               (18, 'Mojito', 3.00, 'Cocktails', 'images/mojito.png'),
-                                                                               (19, 'Martini', 3.00, 'Cocktails', 'images/martini.png'),
-                                                                               (20, 'Old Fashioned', 3.00, 'Cocktails', 'images/old_fashioned.png'),
-                                                                               (21, 'Cosmopolitan', 3.00, 'Cocktails', 'images/cosmopolitan.png'),
-                                                                               (22, 'Pina Colada', 3.00, 'Cocktails', 'images/pina_colada.png'),
-                                                                               (23, 'Bloody Mary', 3.00, 'Cocktails', 'images/bloody_mary.png'),
-                                                                               (24, 'Negroni', 3.00, 'Cocktails', 'images/negroni.png'),
-                                                                               (25, 'Pale Lager', 3.00, 'Bieres', 'images/pale_lager.png'),
-                                                                               (26, 'Pilsner', 3.00, 'Bieres', 'images/pilsner.png'),
-                                                                               (27, 'Amber Lager', 3.00, 'Bieres', 'images/amber_lager.png'),
-                                                                               (28, 'Dark Lager', 3.00, 'Bieres', 'images/dark_lager.png'),
-                                                                               (29, 'Pale Ale', 3.00, 'Bieres', 'images/pale_ale.png'),
-                                                                               (30, 'Brown Ale', 3.00, 'Bieres', 'images/brown_ale.png'),
-                                                                               (31, 'Hefeweizen', 3.00, 'Bieres', 'images/hefeweizen.png'),
-                                                                               (32, 'Witbier', 3.00, 'Bieres', 'images/witbier.png'),
-                                                                               (33, 'Vodka', 3.00, 'Alcool fort', 'images/vodka.png'),
-                                                                               (34, 'Rhum', 3.00, 'Alcool fort', 'images/rhum.png'),
-                                                                               (35, 'Whisky', 3.00, 'Alcool fort', 'images/whisky.png'),
-                                                                               (36, 'Gin', 3.00, 'Alcool fort', 'images/gin.png'),
-                                                                               (37, 'Tequila', 3.00, 'Alcool fort', 'images/tequila_2.png'),
-                                                                               (38, 'Brandy', 3.00, 'Alcool fort', 'images/brandy.png'),
-                                                                               (39, 'Absinthe', 3.00, 'Alcool fort', 'images/absinthe.png'),
-                                                                               (40, 'Rhum épicé', 3.00, 'Alcool fort', 'images/rhum_epice.png');
+                                                                               (2001, 'Pizza vegetarien', 4.00, 'Nourriture', 'images/pizza_vegetarien.png'),
+                                                                               (2002, 'Pizza Poulet', 4.00, 'Nourriture', 'images/pizza_poulet.png'),
+                                                                               (2003, 'Pizza Haram', 4.00, 'Nourriture', 'images/pizza_pepperoni.png'),
+                                                                               (2004, 'Pizza Margherita', 4.00, 'Nourriture', 'images/pizza_margherita.png'),
+                                                                               (2005, 'Sandwich au poulet', 3.00, 'Nourriture', 'images/sandwich_poulet.png'),
+                                                                               (2006, 'wrap au poulet', 3.00, 'Nourriture', 'images/wrap_poulet.png'),
+                                                                               (2007, 'Hot-Dog', 3.00, 'Nourriture', 'images/hot_dog.png'),
+                                                                               (2008, 'Pogo', 3.00, 'Nourriture', 'images/pogo.png'),
+                                                                               (2009, 'Tequila', 3.00, 'Shooter', 'images/tequila.png'),
+                                                                               (2010, 'Jagerbomb', 3.00, 'Shooter', 'images/jagerbomb.png'),
+                                                                               (2011, 'B-52', 3.00, 'Shooter', 'images/b52.png'),
+                                                                               (2012, 'Kamikaze', 3.00, 'Shooter', 'images/kamikaze.png'),
+                                                                               (2013, 'Lemon Drop', 3.00, 'Shooter', 'images/lemon_drop.png'),
+                                                                               (2014, 'Irish Car Bomb', 3.00, 'Shooter', 'images/irish_car_bomb.png'),
+                                                                               (2015, 'Sambuca', 3.00, 'Shooter', 'images/sambuca.png'),
+                                                                               (2016, 'Buttery Nipple', 3.00, 'Shooter', 'images/buttery_nipple.png'),
+                                                                               (2017, 'Margarita', 3.00, 'Cocktails', 'images/margarita.png'),
+                                                                               (2018, 'Mojito', 3.00, 'Cocktails', 'images/mojito.png'),
+                                                                               (2019, 'Martini', 3.00, 'Cocktails', 'images/martini.png'),
+                                                                               (2020, 'Old Fashioned', 3.00, 'Cocktails', 'images/old_fashioned.png'),
+                                                                               (2021, 'Cosmopolitan', 3.00, 'Cocktails', 'images/cosmopolitan.png'),
+                                                                               (2022, 'Pina Colada', 3.00, 'Cocktails', 'images/pina_colada.png'),
+                                                                               (2023, 'Bloody Mary', 3.00, 'Cocktails', 'images/bloody_mary.png'),
+                                                                               (2024, 'Negroni', 3.00, 'Cocktails', 'images/negroni.png'),
+                                                                               (2025, 'Pale Lager', 3.00, 'Bieres', 'images/pale_lager.png'),
+                                                                               (2026, 'Pilsner', 3.00, 'Bieres', 'images/pilsner.png'),
+                                                                               (2027, 'Amber Lager', 3.00, 'Bieres', 'images/amber_lager.png'),
+                                                                               (2028, 'Dark Lager', 3.00, 'Bieres', 'images/dark_lager.png'),
+                                                                               (2029, 'Pale Ale', 3.00, 'Bieres', 'images/pale_ale.png'),
+                                                                               (2030, 'Brown Ale', 3.00, 'Bieres', 'images/brown_ale.png'),
+                                                                               (2031, 'Hefeweizen', 3.00, 'Bieres', 'images/hefeweizen.png'),
+                                                                               (2032, 'Witbier', 3.00, 'Bieres', 'images/witbier.png'),
+                                                                               (2033, 'Vodka', 3.00, 'Alcool fort', 'images/vodka.png'),
+                                                                               (2034, 'Rhum', 3.00, 'Alcool fort', 'images/rhum.png'),
+                                                                               (2035, 'Whisky', 3.00, 'Alcool fort', 'images/whisky.png'),
+                                                                               (2036, 'Gin', 3.00, 'Alcool fort', 'images/gin.png'),
+                                                                               (2037, 'Tequila', 3.00, 'Alcool fort', 'images/tequila_2.png'),
+                                                                               (2038, 'Brandy', 3.00, 'Alcool fort', 'images/brandy.png'),
+                                                                               (2039, 'Absinthe', 3.00, 'Alcool fort', 'images/absinthe.png'),
+                                                                               (2040, 'Rhum épicé', 3.00, 'Alcool fort', 'images/rhum_epice.png');

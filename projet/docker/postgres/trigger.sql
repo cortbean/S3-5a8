@@ -24,19 +24,3 @@ CREATE TRIGGER plusieurs_log
     FOR EACH ROW EXECUTE FUNCTION projet.log_changes();
 
 -- trigger pour faire les commandes
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
