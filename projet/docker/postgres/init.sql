@@ -303,7 +303,7 @@ INSERT INTO projet.Produit(id_Produit, Nom, Prix, id_categorie, image_url) VALUE
         (2006, 'Wrap au Poulet', 3.00, 'Nourriture', 'images/wrap_poulet.png'),
         (2007, 'Hot-Dog', 3.00, 'Nourriture', 'images/hot_dog.png'),
         (2008, 'Pogo', 3.00, 'Nourriture', 'images/pogo.png'),
-        (2009, 'Pizza Quatre Fromages', 4.00, 'Nourriture', 'images/pizza_quatre_fromages.png'),
+        (2009, 'Pizza Fromages', 4.00, 'Nourriture', 'images/pizza_quatre_fromages.png'),
         (2010, 'Pizza Hawaïenne', 4.00, 'Nourriture', 'images/pizza_hawaienne.png'),
         (2011, 'Sandwich Végétarien', 3.00, 'Nourriture', 'images/sandwich_vegetarien.png'),
         (2012, 'Wrap au Bœuf', 3.00, 'Nourriture', 'images/wrap_boeuf.png'),

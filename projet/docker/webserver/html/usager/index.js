@@ -476,8 +476,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 quantite: item.quantity
             }));
 
+            // Utiliser le format de date avec millisecondes et 'Z'
             const pad = (num) => (num < 10 ? '0' : '') + num;
-
             const date = new Date();
             const dateCommande = date.getUTCFullYear() +
                 '-' + pad(date.getUTCMonth() + 1) +
@@ -490,7 +490,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const orderData = {
                 idCommande: generateOrderId(),
                 cip: keycloak.tokenParsed.preferred_username,
-                dateCommande: dateCommande, // Utiliser le format de date avec millisecondes et 'Z'
+                dateCommande: dateCommande,
                 produits: produitsPayload
             };
 
@@ -498,9 +498,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (orderData.produits.length === 0) {
                 console.log("Aucun produit sélectionné pour la commande.");
+
                 const messageContainer = document.getElementById('messageContainer');
-                messageContainer.textContent = "Aucun produit n'est sélectionné pour la commande.";
+                messageContainer.textContent = "";
                 messageContainer.style.display = 'block';
+                generatePanierHTML("Aucun produit n'est sélectionné pour la commande.");
                 return;
             }
 
@@ -515,15 +517,20 @@ document.addEventListener('DOMContentLoaded', function () {
                     cartItems = [];
                     setCookieClient('cartItems', cartItems, 7);
                     updateCartCount();
-                    generatePanierHTML("Commande effectuée avec succès !");
+
                     const messageContainer = document.getElementById('messageContainer');
-                    messageContainer.textContent = "Commande effectuée avec succès !";
+                    messageContainer.textContent = "";
                     messageContainer.style.display = 'block';
+                    generatePanierHTML("Commande effectuée avec succès Merci! <br> Le Numero de la commande est : " + orderData.idCommande);
+
                 }).catch(function(error) {
                     console.error("Erreur lors du passage de la commande :", error);
+
                     const messageContainer = document.getElementById('messageContainer');
-                    messageContainer.textContent = "Erreur lors du passage de la commande. Veuillez réessayer.";
+                    messageContainer.textContent = "";
                     messageContainer.style.display = 'block';
+                    generatePanierHTML("Erreur lors du passage de la commande. Veuillez réessayer.");
+
                     if (error.response && error.response.status === 401) {
                         ensureToken(envoyerCommande);
                     }

@@ -338,8 +338,9 @@ document.addEventListener('DOMContentLoaded', function () {
         if (cartData.selectedProducts.length === 0) {
             console.log("Aucun produit sélectionné pour mise à jour.");
             const messageContainer = document.getElementById('messageContainer');
-            messageContainer.textContent = "Aucun produit n'est sélectionné pour la mise à jour.";
+            messageContainer.textContent = "";
             messageContainer.style.display = 'block';
+            generatePanierHTML("Aucun produit n'est sélectionné pour la mise à jour.");
             return;
         }
 
@@ -353,18 +354,30 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }).then(function(response) {
             console.log("Réponse du serveur après mise à jour des produits :", response.data);
+
             cartData.selectedProducts = [];
+            cartData.cartItems = [];
+
             saveCartDataToStorage();
             updateCartCount();
-            generatePanierHTML("Mise à jour effectuée avec succès !");
+
             const messageContainer = document.getElementById('messageContainer');
-            messageContainer.textContent = "Mise à jour effectuée avec succès !";
+            messageContainer.textContent = "";
             messageContainer.style.display = 'block';
+            generatePanierHTML("Mise à jour effectuée avec succès !");
+
+            // Fermer les yeux de tous les produits sélectionnés
+            document.querySelectorAll('.eye-open').forEach(eye => eye.classList.add('hidden'));
+            document.querySelectorAll('.eye-closed').forEach(eye => eye.classList.remove('hidden'));
+
         }).catch(function(error) {
             console.error("Erreur lors de la mise à jour des produits :", error);
+
             const messageContainer = document.getElementById('messageContainer');
-            messageContainer.textContent = "Erreur lors de la mise à jour. Veuillez réessayer.";
+            messageContainer.textContent = "";
             messageContainer.style.display = 'block';
+            generatePanierHTML("Erreur lors de la mise à jour. Veuillez réessayer.");
+
             keycloak.updateToken(5).then(function() {
                 console.log('Token rafraîchi et nouvelle tentative d\'envoi.');
             }).catch(function() {
@@ -553,5 +566,5 @@ document.addEventListener('DOMContentLoaded', function () {
     initHorlogeAdmin();
     initModal();
     updateCartCount();
-    showArticles(1);
+    showArticles("Shooter");
 });
