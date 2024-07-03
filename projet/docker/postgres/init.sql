@@ -61,6 +61,7 @@ CREATE TABLE projet.commande (
                                  id_commande VARCHAR(50),
                                  cip VARCHAR(8) NOT NULL,
                                  date_commande TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                 status VARCHAR(50),
                                  PRIMARY KEY (id_commande),
                                  FOREIGN KEY (cip) REFERENCES projet.Utilisateur (cip)
 );

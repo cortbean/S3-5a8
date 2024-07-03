@@ -11,5 +11,17 @@ public class Commande {
     @JsonbDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     public LocalDateTime dateCommande;
     public List<ProduitCommander> produits;
-}
+    public String status;
 
+    // Ajoutez une méthode toString pour faciliter le débogage
+    @Override
+    public String toString() {
+        return "Commande{" +
+                "idCommande='" + idCommande + '\'' +
+                ", cip='" + cip + '\'' +
+                ", dateCommande=" + dateCommande +
+                ", produits=" + produits +
+                ", status='" + status + '\'' +
+                '}';
+    }
+}

@@ -466,7 +466,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function generateOrderId() {
-        return Math.floor(10000 + Math.random() * 90000).toString();
+        return Math.floor(100000 + Math.random() * 900000).toString();
     }
 
     function passerCommandeClient() {
@@ -491,6 +491,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 idCommande: generateOrderId(),
                 cip: keycloak.tokenParsed.preferred_username,
                 dateCommande: dateCommande,
+                status: 'en cours', // Ajout du statut de la commande
                 produits: produitsPayload
             };
 
@@ -550,6 +551,6 @@ document.addEventListener('DOMContentLoaded', function () {
     initScrollToTopClient();
     initHorlogeClient();
     initModal();
-    fetchVisibleProducts("Shooter");
+    fetchVisibleProducts("Alcool fort");
     updateCartCount();
 });

@@ -5,6 +5,7 @@ import ca.usherbrooke.fgen.api.business.ProduitCommander;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -15,12 +16,16 @@ public interface CommandeMapper {
 
     void insertProduit(@Param("produitCommander") ProduitCommander produitCommander);
 
-    @Select("SELECT nextval('projet.commande_id_seq')")
-    String getNextCommandeId();
+    void insertIntoCommandeVueAdmin(@Param("idCommande") String idCommande);
 
-    Commande selectCommande(@Param("idCommande") String idCommande);
+    void markAsCompleted(@Param("idCommande") String idCommande);
+
+    Commande selectCommandeDetails(@Param("idCommande") String idCommande);
 
     List<ProduitCommander> selectFromCommandeProduits(@Param("idCommande") String idCommande);
 
-    void insertIntoCommandeVueAdmin(@Param("idCommande") String idCommande);
+    List<Commande> selectAllCommandesWithProduits();
+
+    @Select("SELECT nextval('projet.commande_id_seq')")
+    String getNextCommandeId();
 }

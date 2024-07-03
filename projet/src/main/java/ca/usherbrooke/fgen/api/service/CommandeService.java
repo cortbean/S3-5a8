@@ -16,6 +16,8 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map;
 
 @Path("/api")
 @Produces(MediaType.APPLICATION_JSON)
@@ -49,9 +51,10 @@ public class CommandeService {
             System.out.println("ID Commande: " + commande.idCommande);
             System.out.println("CIP: " + commande.cip);
             System.out.println("Date Commande: " + commande.dateCommande);
+            System.out.println("Status: " + commande.status);
             System.out.println("Produits: " + commande.produits);
 
-            // Utiliser l'ID de commande fourni par le client
+            // Utiliser l'ID de commande fournie par le client
             if (commande.idCommande == null || commande.idCommande.isEmpty()) {
                 commande.idCommande = UUID.randomUUID().toString();
             }
@@ -59,11 +62,12 @@ public class CommandeService {
             // Génération d'un ID unique pour la commande
             commande.cip = principal.getName();
             commande.dateCommande = LocalDateTime.now();
+            commande.status = "en cours";
 
-            // Insertion de la commande dans la table projet.commande
+            // Insertion de la commande dans la table projet. Commande
             commandeMapper.insertCommande(commande);
 
-            // Insertion des produits dans la table projet.plusieurs
+            // Insertion des produits dans la table projet. Plusieurs
             for (ProduitCommander produit : commande.produits) {
                 produit.idCommande = commande.idCommande;
                 System.out.println("Inserting product: " + produit);  // Ajoutez cette ligne pour le log
@@ -76,7 +80,6 @@ public class CommandeService {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
-
 
     @GET
     @Path("/CommandePourAdmin")
@@ -115,15 +118,31 @@ public class CommandeService {
     }
 
     @GET
-    @Path("/getCommandeProduits")
+    @Path("/getAllCommandesWithProduits")
     @RolesAllowed({"admin"})
-    public Response getCommandeProduits(@QueryParam("idCommande") String idCommande) {
+    public Response getAllCommandesWithProduits() {
         try {
-            List<ProduitCommander> produits = commandeMapper.selectFromCommandeProduits(idCommande);
-            return Response.ok(produits).build();
+            List<Commande> commandes = commandeMapper.selectAllCommandesWithProduits();
+            // Ajoutez un log pour vérifier les commandes retournées
+            System.out.println("Commandes retournées par selectAllCommandesWithProduits: " + commandes);
+            return Response.ok(commandes).build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
+
+    @POST
+    @Path("/markAsCompleted/{idCommande}")
+    @RolesAllowed({"admin"})
+    public Response markAsCompleted(@PathParam("idCommande") String idCommande) {
+        try {
+            commandeMapper.markAsCompleted(idCommande);
+            return Response.ok("Commande marquée comme terminée").build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
+
 }

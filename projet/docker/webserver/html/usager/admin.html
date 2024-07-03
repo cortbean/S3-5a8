@@ -21,11 +21,11 @@
                 <div class="flex">
                     <div class="sf-header__mobile-left w-1/4 flex flex-1 items-center justify-start">
                         <div class="sf-header__mobile-menu-item">
-                            <a href="#" class="sf-header__mobile-menu-link">
+                            <span id="admin-dashboard" class="sf-header__mobile-menu-link">
                                 <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                     <path d="M442 114H6a6 6 0 0 1-6-6V84a6 6 0 0 1 6-6h436a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6zm0 160H6a6 6 0 0 1-6-6v-24a6 6 0 0 1 6-6h436a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6zm0 160H6a6 6 0 0 1-6-6v-24a6 6 0 0 1 6-6h436a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6z"></path>
                                 </svg>
-                            </a>
+                            </span>
                         </div>
                         <div id="horloge" class="horloge"></div>
                     </div>
@@ -54,7 +54,6 @@
                                 <sup class="sf-icon-count font-medium !hidden" data-cart-count="0">0</sup>
                             </span>
                         </a>
-
                     </div>
                 </div>
                 <div id="BarreCategorie" class="sf-header__mobile_center" style="margin-left: -10px; width: 100vw; background-color: #f6f6f6d6;"></div>
@@ -97,12 +96,13 @@
     </main>
 </div>
 
+<!------------------------------------UPDATE VUE DU CLIENT--------------------------------------------->
 <div id="ical" class="modal open" tabindex="0" style="z-index: 1003; display: none; opacity: 1; top: 50%; left: 50%; transform: translate(-50%, -50%);">
     <div class="modal-content">
-        <div class="justify-center items-center valign-wrapper warning sticky-top" style="flex: 0 0 auto; top: 0;">
-            <span>VUE DU CLIENT</span>
+        <div class="justify-center items-center valign-wrapper warning" style="flex: 0 0 auto; top: 0;">
+            <span>Update Vue du Client</span>
         </div>
-        <div class="scd__body flex flex-col" style="flex: 1 1 auto; overflow-y: auto;">
+        <div class="scd__body flex flex-col" style="flex: 1 1 auto; overflow-y: auto; margin-top: 25px;">
             <!-- Message Container -->
             <div id="messageContainer" style="color: green; font-size: 16px; text-align: center; padding: 10px; display: none;"></div>
             <div class="py-32 text-center" id="ical-panier"></div>
@@ -126,8 +126,35 @@
     <div class="scd__overlay inset-0"></div>
 </div>
 
-
 <div id="panier-section" class="hidden"></div>
+
+<!------------------------------------Tableau de Bord Administrateur--------------------------------------------->
+<div id="ical0" class="modal open" tabindex="0" style="z-index: 1003; display: none; opacity: 1; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+    <div class="modal-content">
+        <div class="justify-center items-center valign-wrapper warning" style="flex: 0 0 auto; top: 0;">
+            <span>Tableau de Bord Administrateur</span>
+        </div>
+        <div class="scd__body flex flex-col" style="flex: 1 1 auto; overflow-y: auto; margin-top: 25px;">
+            <!-- Message Conteneur -->
+            <div class="py-32 text-center" id="ical-panier0"></div>
+        </div>
+        <div class="scd__footer py-4 px-6 sticky-bottom" style="flex: 0 0 auto; bottom: 0;">
+            <div class="mb-4 pt-4" data-cart-summary="">
+                <div data-discounts="">
+                    <ul class="scd-cart__discounts" role="list" data-discounts-list=""></ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="flex flex-col right">
+                    <button type="submit" class="btn black waves-effect waves-light" name="" style="border-radius: 20px;" id="close-modal-button0">Retour</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="scd__overlay inset-0"></div>
+</div>
+
+<div id="panier-section0" class="hidden"></div>
 
 <script src="admin.js"></script>
 </body>
