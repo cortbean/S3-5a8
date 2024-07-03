@@ -458,7 +458,7 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log(`Commande ${idCommande} mise à jour avec succès.`);
             // Mettre à jour l'interface utilisateur après la mise à jour de la commande
             getAllCommandes().then(data => {
-                generateDashboardHTML(idCommande);
+                generateDashboardHTML();
             });
         }).catch(function (error) {
             console.error(`Erreur lors de la mise à jour de la commande ${idCommande}:`, error);
