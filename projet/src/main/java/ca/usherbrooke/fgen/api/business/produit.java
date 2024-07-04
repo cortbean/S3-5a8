@@ -5,6 +5,6 @@ import java.util.List;
 public class Produit {
     public int idProduit;
     public String idCommande;
-    public String quantite;
+    public int quantite;
 
 }
