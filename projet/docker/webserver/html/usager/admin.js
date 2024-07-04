@@ -541,7 +541,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        const cartItems = cartData.cartItems;
+        const cartItems = cartData.cartItems ;
 
         // Vérifier si le produit est déjà dans le panier
         const existingItem = cartItems.find(item => item.idProduit === idProduit);
