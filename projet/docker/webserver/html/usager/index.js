@@ -473,7 +473,9 @@ document.addEventListener('DOMContentLoaded', function () {
         ensureToken(function() {
             const produitsPayload = cartItems.map(item => ({
                 idProduit: item.idProduit,
-                quantite: item.quantity
+                quantite: item.quantity,
+                nomProduit: item.nomProduit, // Ajouter le nom du produit
+                PrixProduit: item.PrixProduit // Ajouter le prix du produit
             }));
 
             // Utiliser le format de date avec millisecondes et 'Z'
@@ -487,11 +489,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 ':' + pad(date.getUTCSeconds()) +
                 '.' + (date.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) + 'Z';
 
+            const username = keycloak.tokenParsed.preferred_username;
+            const firstName = keycloak.tokenParsed.given_name;
+            const lastName = keycloak.tokenParsed.family_name;
+
             const orderData = {
                 idCommande: generateOrderId(),
-                cip: keycloak.tokenParsed.preferred_username,
+                cip: username,
                 dateCommande: dateCommande,
-                status: 'en cours', // Ajout du statut de la commande
+                status: 'en cours',
+                Nom: firstName, // Ajouter le prénom
+                Prenom: lastName, // Ajouter le nom
                 produits: produitsPayload
             };
 
@@ -513,7 +521,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         'Authorization': 'Bearer ' + keycloak.token,
                         'Content-Type': 'application/json'
                     }
-                }).then(function(response) {
+            }).then(function(response) {
                     console.log("Réponse du serveur après passage de la commande :", response.data);
                     cartItems = [];
                     setCookieClient('cartItems', cartItems, 7);
@@ -537,7 +545,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
             }
-
             envoyerCommande();
         });
     }

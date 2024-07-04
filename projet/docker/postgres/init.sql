@@ -62,6 +62,8 @@ CREATE TABLE projet.commande (
                                  cip VARCHAR(8) NOT NULL,
                                  date_commande TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                  status VARCHAR(50),
+                                 Nom TEXT,
+                                 Prenom TEXT,
                                  PRIMARY KEY (id_commande),
                                  FOREIGN KEY (cip) REFERENCES projet.Utilisateur (cip)
 );
@@ -70,6 +72,8 @@ CREATE TABLE projet.plusieurs (
                                   id_Produit INTEGER,
                                   id_commande VARCHAR(50),
                                   quantite INTEGER,
+                                  Nom VARCHAR(255) NOT NULL,
+                                  Prix NUMERIC(10,2) NOT NULL,
                                   PRIMARY KEY(id_Produit, id_commande),
                                   FOREIGN KEY(id_Produit) REFERENCES projet.Produit(id_Produit),
                                   FOREIGN KEY(id_commande) REFERENCES projet.commande(id_commande)

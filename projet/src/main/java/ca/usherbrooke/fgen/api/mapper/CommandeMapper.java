@@ -1,11 +1,11 @@
 package ca.usherbrooke.fgen.api.mapper;
 
 import ca.usherbrooke.fgen.api.business.Commande;
+import ca.usherbrooke.fgen.api.business.Person;
 import ca.usherbrooke.fgen.api.business.ProduitCommander;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -26,6 +26,7 @@ public interface CommandeMapper {
 
     List<Commande> selectAllCommandesWithProduits();
 
-    @Select("SELECT nextval('projet.commande_id_seq')")
-    String getNextCommandeId();
+    Person selectPersonDetails(@Param("cip") String cip);
+
+    ProduitCommander selectProductDetails(@Param("idProduit") int idProduit);
 }

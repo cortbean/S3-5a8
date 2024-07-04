@@ -5,4 +5,14 @@ public class Item {
     public String nom;
     public float prix;
     public String image;
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", prix=" + prix +
+                ", image='" + image + '\'' +
+                '}';
+    }
 }

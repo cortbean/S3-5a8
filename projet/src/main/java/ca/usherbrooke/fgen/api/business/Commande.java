@@ -12,6 +12,8 @@ public class Commande {
     public LocalDateTime dateCommande;
     public List<ProduitCommander> produits;
     public String status;
+    public String Nom; // Prénom de l'utilisateur
+    public String Prenom; // Nom de l'utilisateur
 
     // Ajoutez une méthode toString pour faciliter le débogage
     @Override
@@ -22,6 +24,8 @@ public class Commande {
                 ", dateCommande=" + dateCommande +
                 ", produits=" + produits +
                 ", status='" + status + '\'' +
+                ", Nom='" + Nom + '\'' +
+                ", Prenom='" + Prenom + '\'' +
                 '}';
     }
 }

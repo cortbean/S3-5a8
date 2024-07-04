@@ -1,6 +1,7 @@
 package ca.usherbrooke.fgen.api.service;
 
 import ca.usherbrooke.fgen.api.business.Commande;
+import ca.usherbrooke.fgen.api.business.Person;
 import ca.usherbrooke.fgen.api.business.ProduitCommander;
 import ca.usherbrooke.fgen.api.mapper.CommandeMapper;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -16,8 +17,6 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.HashMap;
-import java.util.Map;
 
 @Path("/api")
 @Produces(MediaType.APPLICATION_JSON)
@@ -47,30 +46,47 @@ public class CommandeService {
                 return Response.status(Response.Status.BAD_REQUEST).entity("No products specified").build();
             }
 
-            // Ajoutez des logs pour vérifier les valeurs reçues
-            System.out.println("ID Commande: " + commande.idCommande);
-            System.out.println("CIP: " + commande.cip);
-            System.out.println("Date Commande: " + commande.dateCommande);
-            System.out.println("Status: " + commande.status);
-            System.out.println("Produits: " + commande.produits);
+            // Log details of the order received
+            System.out.println("Received Order: " + commande);
 
-            // Utiliser l'ID de commande fournie par le client
+            // Use the provided order ID or generate a unique ID
             if (commande.idCommande == null || commande.idCommande.isEmpty()) {
                 commande.idCommande = UUID.randomUUID().toString();
             }
 
-            // Génération d'un ID unique pour la commande
+            // Update order information
             commande.cip = principal.getName();
             commande.dateCommande = LocalDateTime.now();
             commande.status = "en cours";
 
-            // Insertion de la commande dans la table projet. Commande
+            // Retrieve user's first name and last name from the Utilisateur table
+            Person person = commandeMapper.selectPersonDetails(principal.getName());
+            if (person == null) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("User details not found").build();
+            }
+
+            commande.Nom = person.firstName;
+            commande.Prenom = person.lastName;
+
+            // Insert the order into the project.Commande table
+            System.out.println("Inserting order: " + commande);
             commandeMapper.insertCommande(commande);
 
-            // Insertion des produits dans la table projet. Plusieurs
+            // Retrieve product details and insert products into the project.Plusieurs table
             for (ProduitCommander produit : commande.produits) {
                 produit.idCommande = commande.idCommande;
-                System.out.println("Inserting product: " + produit);  // Ajoutez cette ligne pour le log
+
+                // Retrieve product details
+                ProduitCommander productDetails = commandeMapper.selectProductDetails(produit.idProduit);
+                if (productDetails != null) {
+                    produit.nomProduit = productDetails.nomProduit;
+                    produit.PrixProduit = productDetails.PrixProduit;
+                } else {
+                    return Response.status(Response.Status.BAD_REQUEST).entity("Product details not found for product ID: " + produit.idProduit).build();
+                }
+
+                // Log the product details, including price
+                System.out.println("Inserting product: " + produit);
                 commandeMapper.insertProduit(produit);
             }
 
@@ -88,29 +104,6 @@ public class CommandeService {
         try {
             commandeMapper.insertIntoCommandeVueAdmin(idCommande);
             return Response.ok().build();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
-        }
-    }
-
-    @GET
-    @Path("/addProduit")
-    public Response ajoutProduit(
-            @QueryParam("idProduit") int idProduit,
-            @QueryParam("idCommande") String idCommande,
-            @QueryParam("quantite") int quantite) {
-        try {
-            Principal principal = securityContext.getUserPrincipal();
-            if (principal == null) {
-                throw new SecurityException("User not authenticated");
-            }
-            ProduitCommander produitCommander = new ProduitCommander();
-            produitCommander.idProduit = idProduit;
-            produitCommander.idCommande = idCommande;
-            produitCommander.quantite = quantite;
-            commandeMapper.insertProduit(produitCommander);
-            return Response.ok(produitCommander).build();
         } catch (Exception e) {
             e.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
@@ -144,6 +137,4 @@ public class CommandeService {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
-
-
 }

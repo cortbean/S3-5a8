@@ -427,14 +427,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log("Aucune commande trouvée. Message affiché.");
             } else {
                 if (allCommandesTerminees.length > 0) {
-                    icalPanierContainer.innerHTML += '<h2>Commandes Terminées</h2>';
+                    icalPanierContainer.innerHTML += '<h2 style="color: #ea3434;">Commandes Terminées</h2>';
                     allCommandesTerminees.forEach(commande => {
                         icalPanierContainer.appendChild(createCommandeItem(commande, true));
                     });
                 }
 
                 if (commandesEnCours.length > 0) {
-                    icalPanierContainer.innerHTML += '<h2>Commandes en Cours</h2>';
+                    icalPanierContainer.innerHTML += '<h2 style="color: #ea3434;">Commandes en Cours</h2>';
                     commandesEnCours.forEach(commande => {
                         icalPanierContainer.appendChild(createCommandeItem(commande, false));
                     });
@@ -469,24 +469,52 @@ document.addEventListener('DOMContentLoaded', function () {
         const itemDiv = document.createElement('div');
         itemDiv.classList.add('commande-item');
         itemDiv.setAttribute('data-id', commande.idCommande);
+
+        // Calcul du montant total avec taxe
+        const TAX_RATE = 0.15;
+        const montantTotal = commande.produits.reduce((total, p) => total + (p.quantite * p.PrixProduit * (1 + TAX_RATE)), 0).toFixed(2);
+
+        // Conversion de la date
+        const dateCommande = new Date(commande.dateCommande);
+        const formattedDate = dateCommande.toLocaleDateString('fr-CA', { year: 'numeric', month: '2-digit', day: '2-digit' });
+        const formattedTime = dateCommande.toLocaleTimeString('fr-CA', { hour: '2-digit', minute: '2-digit'});
+
         itemDiv.innerHTML = `
         <div style="display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 15px;">
             <div style="flex-grow: 1;">
-                <p style="margin: 0;">ID Commande: ${commande.idCommande}</p>
-                <p style="margin: 0;">Date Commande: ${commande.dateCommande}</p>
-                <p style="margin: 0;">Produits:</p>
-                <ul>
-                    ${commande.produits.map(p => `<li>${p.nom} - Quantité: ${p.quantite} - Prix: ${p.prix}</li>`).join('')}
-                </ul>
-                <p style="margin: 0;">Quantité Total: ${commande.produits.reduce((total, p) => total + p.quantite, 0)}</p>
-                ${isCompleted ? '' : `<button onclick="markAsCompleted('${commande.idCommande}')">Marquer comme terminée</button>`}
+                <p style="margin: 0; text-align: center; width: 100%;"><strong>Date Commande :</strong> ${formattedDate} ${formattedTime}</p>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 10px;">
+                    <p style="margin: 0;"><strong>Client :</strong> ${commande.Nom} ${commande.Prenom}</p>
+                    <p style="margin: 0;"><strong>ID Commande :</strong> ${commande.idCommande}</p>
+                </div>
+               
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px;">
+                    ${commande.produits.map(p => `
+                        <div style="border: 1px solid #ccdfc5; background-color: #d6e8ce; padding: 10px; border-radius: 15px;">
+                            <p style="margin: 0; text-align: center;"><strong>${p.nomProduit}</strong></p>
+                            <p style="margin: 0; text-align: center;">Quantité: ${p.quantite}</p>
+                            <p style="margin: 0; text-align: center;">Prix: ${p.PrixProduit} $</p>
+                        </div>`).join('')}
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 20px;">
+                    <p style="margin: 0;"><strong>Quantité Totale :</strong> ${commande.produits.reduce((total, p) => total + p.quantite, 0)}</p>
+                    <p style="margin: 0;"><strong>Montant Total :</strong> ${montantTotal} $</p>
+                </div>
+                
+                ${isCompleted ? '' : `
+                <div style="display: flex; justify-content: center; width: 100%; margin-top: 20px;">
+                    <button style="background-color: #ea3434; color: white; border: none; padding: 10px 20px; cursor: pointer;" onclick="markAsCompleted('${commande.idCommande}')">Marquer comme terminée</button>
+                </div>`}
             </div>
         </div>
     `;
         return itemDiv;
     }
 
-    /*----------------------------------------------------Fin-----------------------------------------------------------*/
+
+    /*---------------------------------------------------- Fin Dashboards -----------------------------------------------------------*/
 
     // Fonction pour supprimer un article du panier
     function removeFromCart(idProduit) {
