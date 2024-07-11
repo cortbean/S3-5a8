@@ -557,13 +557,41 @@ document.addEventListener('DOMContentLoaded', function () {
         generatePanierHTML();
     }
 
-    function generatePanierHTML(successMessage) {
+    function generatePanierHTML(message, messageType) {
         const icalPanierContainer = document.getElementById('ical-panier');
         icalPanierContainer.innerHTML = '';
 
+        let iconPath = '';
+        if (messageType === 'success') {
+            iconPath = 'logo/success-icon.png';
+        } else if (messageType === 'error') {
+            iconPath = 'logo/error-icon.png';
+        } else if (messageType === 'empty') {
+            iconPath = 'logo/aucun-produit.png';
+        }
+
+        if (message) {
+            icalPanierContainer.innerHTML = `
+            <div style="display: flex; align-items: center;">
+                <p>${message}</p>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <img src="${iconPath}" alt="${messageType} Icon" style="width: 50px; height: auto; margin-left: 5px;">
+            </div>
+        `;
+            return;
+        }
+
         const cartItems = cartData.cartItems;
         if (cartItems.length === 0) {
-            icalPanierContainer.innerHTML = successMessage ? successMessage : 'Votre vue est actuellement vide.';
+            icalPanierContainer.innerHTML = `
+            <div style="display: flex; align-items: center;">
+                <p>Votre panier est actuellement vide.</p>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <img src="logo/panier-vide.png" alt="Empty Cart Icon" style="width: 50px; height: auto; margin-left: 5px;">
+            </div>
+        `;
         } else {
             cartItems.forEach(item => {
                 const product = productDetails[item.idProduit];
@@ -711,10 +739,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (cartData.selectedProducts.length === 0) {
             console.log("Aucun produit sélectionné pour mise à jour.");
-            const messageContainer = document.getElementById('messageContainer');
-            messageContainer.textContent = "";
-            messageContainer.style.display = 'block';
-            generatePanierHTML("Aucun produit n'est sélectionné pour la mise à jour.");
+            generatePanierHTML("Aucun produit n'est sélectionné pour la commande.", "empty");
             return;
         }
 
@@ -738,7 +763,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const messageContainer = document.getElementById('messageContainer');
             messageContainer.textContent = "";
             messageContainer.style.display = 'block';
-            generatePanierHTML("Mise à jour effectuée avec succès !");
+            generatePanierHTML("Mise à jour effectuée avec succès !","success");
 
             // Fermer les yeux de tous les produits sélectionnés
             document.querySelectorAll('.eye-open').forEach(eye => eye.classList.add('hidden'));
@@ -746,11 +771,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         }).catch(function(error) {
             console.error("Erreur lors de la mise à jour des produits :", error);
-
-            const messageContainer = document.getElementById('messageContainer');
-            messageContainer.textContent = "";
-            messageContainer.style.display = 'block';
-            generatePanierHTML("Erreur lors de la mise à jour. Veuillez réessayer.");
+            generatePanierHTML("Erreur lors de la mise à jour. Veuillez réessayer.", "error");
 
             keycloak.updateToken(5).then(function() {
                 console.log('Token rafraîchi et nouvelle tentative d\'envoi.');

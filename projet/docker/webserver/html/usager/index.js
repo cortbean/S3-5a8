@@ -277,13 +277,41 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Fonction pour générer le HTML du panier
-    function generatePanierHTML(successMessage) {
+    function generatePanierHTML(message, messageType) {
         const icalPanierContainer = document.getElementById('ical-panier');
         icalPanierContainer.innerHTML = '';
 
+        let iconPath = '';
+        if (messageType === 'success') {
+            iconPath = 'logo/success-icon.png';
+        } else if (messageType === 'error') {
+            iconPath = 'logo/error-icon.png';
+        } else if (messageType === 'empty') {
+            iconPath = 'logo/aucun-produit.png';
+        }
+
+        if (message) {
+            icalPanierContainer.innerHTML = `
+            <div style="display: flex; align-items: center;">
+                <p>${message}</p>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <img src="${iconPath}" alt="${messageType} Icon" style="width: 50px; height: auto; margin-left: 5px;">
+            </div>
+        `;
+            return;
+        }
+
         const cartItems = getCartItemsFromCookie();
         if (cartItems.length === 0) {
-            icalPanierContainer.innerHTML = successMessage ? successMessage : 'Votre panier est actuellement vide.';
+            icalPanierContainer.innerHTML = `
+            <div style="display: flex; align-items: center;">
+                <p>Votre panier est actuellement vide.</p>
+            </div>
+            <div style="display: flex; align-items: center;">
+                <img src="logo/panier-vide.png" alt="Empty Cart Icon" style="width: 50px; height: auto; margin-left: 5px;">
+            </div>
+        `;
         } else {
             cartItems.forEach(item => {
                 const product = productDetails[item.idProduit];
@@ -296,22 +324,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 itemDiv.classList.add('cart-item');
 
                 itemDiv.innerHTML = `
-                <div style="display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 15px;">
-                    <div style="width: 150px;">
-                        <img src="${product.image}" alt="${product.name}" style="width: 100%; height: auto; margin-bottom: 10px;">
-                    </div>
-                    <div style="flex-grow: 1;">
-                        <p style="margin: 0;">${item.idProduit}</p>
-                        <p style="margin: 0;">${product.name}</p>
-                        <p style="margin: 0;">${product.price}</p>
-                    </div>
-                    <div style="display: flex; align-items: center;">
-                        <button class="button_img button_center" onclick="changementProduit(${item.idProduit}, -1)">-</button>
-                        <p class="button_img button_center" style="margin: 0 10px;">${item.quantity}</p>
-                        <button class="button_img button_center" onclick="changementProduit(${item.idProduit}, 1)">+</button>
-                    </div>
+            <div style="display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 15px;">
+                <div style="width: 150px;">
+                    <img src="${product.image}" alt="${product.name}" style="width: 100%; height: auto; margin-bottom: 10px;">
                 </div>
-            `;
+                <div style="flex-grow: 1;">
+                    <p style="margin: 0;">${item.idProduit}</p>
+                    <p style="margin: 0;">${product.name}</p>
+                    <p style="margin: 0;">${product.price}</p>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <button class="button_img button_center" onclick="changementProduit(${item.idProduit}, -1)">-</button>
+                    <p class="button_img button_center" style="margin: 0 10px;">${item.quantity}</p>
+                    <button class="button_img button_center" onclick="changementProduit(${item.idProduit}, 1)">+</button>
+                </div>
+            </div>
+        `;
                 icalPanierContainer.appendChild(itemDiv);
             });
         }
@@ -426,6 +454,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    //
     function openPanierModalClient() {
         closeHistoriqueModalClient(); // Fermer la modale de l'historique si elle est ouverte
         document.getElementById('ical').style.display = 'block';
@@ -433,11 +462,11 @@ document.addEventListener('DOMContentLoaded', function () {
         generatePanierHTML(); // Appeler generatePanierHTML pour mettre à jour la modale
     }
 
+    //
     function closePanierModalClient() {
         document.getElementById('ical').style.display = 'none';
         document.body.classList.remove('modal-open');
     }
-
 
     // Fonction pour generer les id des commandes aléatoirement
     function generateOrderId() {
@@ -450,11 +479,10 @@ document.addEventListener('DOMContentLoaded', function () {
             const produitsPayload = cartItems.map(item => ({
                 idProduit: item.idProduit,
                 quantite: item.quantity,
-                nomProduit: item.nomProduit, // Ajouter le nom du produit
-                PrixProduit: item.PrixProduit // Ajouter le prix du produit
+                nomProduit: item.nomProduit,
+                PrixProduit: item.PrixProduit
             }));
 
-            // Utiliser le format de date avec millisecondes et 'Z'
             const pad = (num) => (num < 10 ? '0' : '') + num;
             const date = new Date();
             const dateCommande = date.getUTCFullYear() +
@@ -474,8 +502,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 cip: username,
                 dateCommande: dateCommande,
                 status: 'en cours',
-                Nom: firstName, // Ajouter le prénom
-                Prenom: lastName, // Ajouter le nom
+                Nom: firstName,
+                Prenom: lastName,
                 produits: produitsPayload
             };
 
@@ -484,10 +512,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (orderData.produits.length === 0) {
                 console.log("Aucun produit sélectionné pour la commande.");
 
-                const messageContainer = document.getElementById('messageContainer');
-                messageContainer.textContent = "";
-                messageContainer.style.display = 'block';
-                generatePanierHTML("Aucun produit n'est sélectionné pour la commande.");
+                generatePanierHTML("Aucun produit n'est sélectionné pour la commande.", "empty");
                 return;
             }
 
@@ -497,24 +522,17 @@ document.addEventListener('DOMContentLoaded', function () {
                         'Authorization': 'Bearer ' + keycloak.token,
                         'Content-Type': 'application/json'
                     }
-            }).then(function(response) {
+                }).then(function(response) {
                     console.log("Réponse du serveur après passage de la commande :", response.data);
                     cartItems = [];
                     setCookieClient('cartItems', cartItems, 7);
                     updateCartCount();
 
-                    const messageContainer = document.getElementById('messageContainer');
-                    messageContainer.textContent = "";
-                    messageContainer.style.display = 'block';
-                    generatePanierHTML("Commande effectuée avec succès Merci! <br> Le Numero de la commande est : " + orderData.idCommande);
+                    generatePanierHTML(`Commande effectuée avec succès Merci! <br> Le Numero de la commande est : ${orderData.idCommande}`, "success");
 
                 }).catch(function(error) {
                     console.error("Erreur lors du passage de la commande :", error);
-
-                    const messageContainer = document.getElementById('messageContainer');
-                    messageContainer.textContent = "";
-                    messageContainer.style.display = 'block';
-                    generatePanierHTML("Erreur lors du passage de la commande. Veuillez réessayer.");
+                    generatePanierHTML("Erreur lors du passage de la commande. Veuillez réessayer.", "error");
 
                     if (error.response && error.response.status === 401) {
                         ensureToken(envoyerCommande);
@@ -655,6 +673,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
+    //
     function createCommandeItem(commande) {
         const itemDiv = document.createElement('div');
         itemDiv.classList.add('commande-item');
