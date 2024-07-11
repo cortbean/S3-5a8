@@ -14,5 +14,6 @@
 
     <mappers>
         <mapper resource="ca/usherbrooke/fgen/api/mapper/CommandeMapper.xml"/>
+        <mapper resource="ca/usherbrooke/fgen/api/mapper/StatistiqueMapper.xml"/>
     </mappers>
 </configuration>

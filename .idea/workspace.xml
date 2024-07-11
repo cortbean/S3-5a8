@@ -5,39 +5,58 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="003c6222-1cf1-45fc-b71c-08db04864354" name="Changes" comment="L'admin et le client communique via l'update">
-      <change afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/service/ArticleService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/service/CommandeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/S3-5a8.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/projet/Projet 5 à 8.lo1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/projet/Projet 5 à 8.loo" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/.$deployment.draw.io.bkp" beforeDir="false" afterPath="$PROJECT_DIR$/projet/.$deployment.draw.io.bkp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/projet/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/projet/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/deployment.draw.io" beforeDir="false" afterPath="$PROJECT_DIR$/projet/deployment.draw.io" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/docker/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/docker/keycloak/data/setdata.sh" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/keycloak/data/setdata.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/projet/docker/keycloak/data/users.json" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/keycloak/data/users.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/docker/postgres/fonction.sql" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/postgres/fonction.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/docker/postgres/init.sql" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/postgres/init.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/docker/postgres/trigger.sql" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/postgres/trigger.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/docker/webserver/html/backend-not-found.html" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/webserver/html/backend-not-found.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/docker/webserver/html/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/webserver/html/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/docker/webserver/html/logout.html" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/webserver/html/logout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/docker/webserver/html/usager/Brouillon/admin.txt" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/webserver/html/usager/Brouillon/admin.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/docker/webserver/html/usager/Brouillon/collection.css" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/webserver/html/usager/Brouillon/collection.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/docker/webserver/html/usager/Brouillon/index.txt" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/webserver/html/usager/Brouillon/index.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/docker/webserver/html/usager/Brouillon/morceau.css" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/webserver/html/usager/Brouillon/morceau.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/docker/webserver/html/usager/Brouillon/theme.css" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/webserver/html/usager/Brouillon/theme.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/docker/webserver/html/usager/admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/webserver/html/usager/admin.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/projet/docker/webserver/html/usager/admin.js" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/webserver/html/usager/admin.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/docker/webserver/html/usager/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/webserver/html/usager/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/docker/webserver/html/usager/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/webserver/html/usager/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/projet/docker/webserver/html/usager/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/webserver/html/usager/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/docker/webserver/nginx.conf" beforeDir="false" afterPath="$PROJECT_DIR$/projet/docker/webserver/nginx.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/projet/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/projet/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/projet/gradlew" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/projet/gradlew.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/hs_err_pid16792.log" beforeDir="false" afterPath="$PROJECT_DIR$/projet/hs_err_pid16792.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/replay_pid16792.log" beforeDir="false" afterPath="$PROJECT_DIR$/projet/replay_pid16792.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/projet/settings.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/Commande.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/Commande.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/CommandeView.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/CommandeView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/Message.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/Item.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/Person.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/ProduitCommander.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/ProduitCommander.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/Roles.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/Roles.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/VisibleProduct.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/business/VisibleProduct.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/controller/VisibleProductController.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/mapper/ArticleMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/mapper/ArticleMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/mapper/MessageMapper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/mapper/VisibleProductMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/mapper/CategorieMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/mapper/CategorieMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/mapper/CommandeMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/mapper/CommandeMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/mapper/PersonMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/mapper/PersonMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/service/ArticleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/service/ArticleService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/service/CommandeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/service/CommandeService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/service/ConnectionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/service/ConnectionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/service/MessageService.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/service/RoleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/java/ca/usherbrooke/fgen/api/service/RoleService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/projet/src/main/resources/ca/usherbrooke/fgen/api/mapper/ArticleMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/resources/ca/usherbrooke/fgen/api/mapper/ArticleMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projet/src/main/resources/ca/usherbrooke/fgen/api/mapper/MessageMapper.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/projet/src/main/resources/ca/usherbrooke/fgen/api/mapper/VisibleProductMapper.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/resources/ca/usherbrooke/fgen/api/mapper/CategorieMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/resources/ca/usherbrooke/fgen/api/mapper/CategorieMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/resources/ca/usherbrooke/fgen/api/mapper/CommandeMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/resources/ca/usherbrooke/fgen/api/mapper/CommandeMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/resources/ca/usherbrooke/fgen/api/mapper/PersonMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/resources/ca/usherbrooke/fgen/api/mapper/PersonMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/projet/src/main/resources/mybatis-config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/projet/src/main/resources/mybatis-config.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +130,7 @@
     "Quarkus.message.main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "NewVersionServerWeb",
+    "git-widget-placeholder": "abi",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/bakay/OneDrive - USherbrooke/SEMESTRE 3 Genie/PROJET SCOLAIRE/S3-5a8/projet",
     "node.js.detected.package.eslint": "true",
