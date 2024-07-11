@@ -554,6 +554,16 @@ cart-iconsection.sf-header.cart-has-items .sf-header__mobile .cart-icon {
     max-width: 200px; /* Limite la largeur maximale si nécessaire */
 }
 
+.eye-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.hidden {
+    display: none;
+}
+
+
 .logo-img {
     width: 100%;
     height: auto; /* This ensures the image maintains its aspect ratio */
@@ -700,6 +710,13 @@ section.sf-header.cart-has-items .sf-cart-count {
     padding: 10px 20px;
     border: none;
     cursor: pointer;
+}
+
+.eye-icon {
+    font-size: 24px;
+}
+.hidden {
+    display: none;
 }
 
 body.modal-open {
@@ -3388,3 +3405,15 @@ input {
     margin-bottom: 40px;
 }
 
+.commande-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.commande-item {
+    border: 1px solid #ccdfc5;
+    background-color: #d6e8ce;
+    padding: 10px;
+    border-radius: 15px;
+}

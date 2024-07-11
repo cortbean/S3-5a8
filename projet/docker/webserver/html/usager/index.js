@@ -250,19 +250,6 @@ document.addEventListener('DOMContentLoaded', function () {
         generatePanierHTML();
     }
 
-    // Gestionnaire pour le bouton du panier
-    document.getElementById('panier-button').addEventListener('click', function() {
-        const paniersectionClient = document.getElementById('panier-section');
-        if (paniersectionClient.classList.contains('hidden')) {
-            paniersectionClient.classList.remove('hidden');
-            paniersectionClient.classList.add('visible');
-            generatePanierHTML();
-        } else {
-            paniersectionClient.classList.remove('visible');
-            paniersectionClient.classList.add('hidden');
-        }
-    });
-
     // Fonction pour récupérer les articles du panier depuis les cookies
     function getCartItemsFromCookie() {
         const cartItems = getCookieClient('cartItems');
@@ -277,6 +264,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.cookie = name + "=" + JSON.stringify(value) + ";" + expires + ";path=/";
     }
 
+    // Fonction pour Obtenir des donnees de la cookie
     function getCookieClient(name) {
         const nameEQClient = name + "=";
         const ca = document.cookie.split(';');
@@ -286,33 +274,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (c.indexOf(nameEQClient) === 0) return JSON.parse(c.substring(nameEQClient.length, c.length));
         }
         return null;
-    }
-
-    // Fonction pour gérer les changements de quantité d'un produit
-    window.changementProduit = function (idProduit, changement) {
-        // Vérifier si l'idProduit est null ou undefined
-        if (idProduit === null || idProduit === undefined) {
-            console.warn("Produit avec un ID null ne peut pas être ajouté");
-            return;
-        }
-
-        idProduit = parseInt(idProduit);
-
-        const existingItem = cartItems.find(item => item.idProduit === idProduit);
-
-        if (existingItem) {
-            existingItem.quantity += changement;
-            if (existingItem.quantity < 1) {
-                // Supprimer le produit du panier si la quantité est inférieure à 1
-                cartItems = cartItems.filter(item => item.idProduit !== idProduit);
-            }
-        } else if (changement > 0) {
-            cartItems.push({ idProduit, quantity: changement });
-        }
-
-        setCookieClient('cartItems', cartItems, 7);
-        updateCartCount();
-        generatePanierHTML();
     }
 
     // Fonction pour générer le HTML du panier
@@ -465,10 +426,25 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    function generateOrderId() {
-        return Math.floor(100000 + Math.random() * 900000).toString();
+    function openPanierModalClient() {
+        closeHistoriqueModalClient(); // Fermer la modale de l'historique si elle est ouverte
+        document.getElementById('ical').style.display = 'block';
+        document.body.classList.add('modal-open');
+        generatePanierHTML(); // Appeler generatePanierHTML pour mettre à jour la modale
     }
 
+    function closePanierModalClient() {
+        document.getElementById('ical').style.display = 'none';
+        document.body.classList.remove('modal-open');
+    }
+
+
+    // Fonction pour generer les id des commandes aléatoirement
+    function generateOrderId() {
+        return Math.floor(1000 + Math.random() * 9000).toString();
+    }
+
+    // Fonction pour passer la commande du client
     function passerCommandeClient() {
         ensureToken(function() {
             const produitsPayload = cartItems.map(item => ({
@@ -549,9 +525,207 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Fonction pour gérer les changements de quantité d'un produit
+    window.changementProduit = function (idProduit, changement) {
+        // Vérifier si l'idProduit est null ou undefined
+        if (idProduit === null || idProduit === undefined) {
+            console.warn("Produit avec un ID null ne peut pas être ajouté");
+            return;
+        }
+
+        idProduit = parseInt(idProduit);
+
+        const existingItem = cartItems.find(item => item.idProduit === idProduit);
+
+        if (existingItem) {
+            existingItem.quantity += changement;
+            if (existingItem.quantity < 1) {
+                // Supprimer le produit du panier si la quantité est inférieure à 1
+                cartItems = cartItems.filter(item => item.idProduit !== idProduit);
+            }
+        } else if (changement > 0) {
+            cartItems.push({ idProduit, quantity: changement });
+        }
+
+        setCookieClient('cartItems', cartItems, 7);
+        updateCartCount();
+        generatePanierHTML();
+    }
+
+    //Gestionnaire pour le bouton du dashboards
     document.getElementById('passer-commande-client-button').addEventListener('click', function() {
         passerCommandeClient();
     });
+
+    // Gestionnaire pour le bouton du panier
+    document.getElementById('panier-button').addEventListener('click', function() {
+        const paniersectionClient = document.getElementById('panier-section');
+        if (paniersectionClient.classList.contains('hidden')) {
+            paniersectionClient.classList.remove('hidden');
+            paniersectionClient.classList.add('visible');
+            generatePanierHTML();
+        } else {
+            paniersectionClient.classList.remove('visible');
+            paniersectionClient.classList.add('hidden');
+        }
+    });
+
+    /*----------------------------------------------Historique------------------------------------------*/
+
+    // Fonction pour récupérer l'historique des commandes du client connecté
+    function fetchHistoriqueCommandes() {
+        const historiqueContainer = document.getElementById("historique-container");
+        historiqueContainer.innerHTML = "";
+
+        axios.get("http://localhost:8888/api/historique-commandes", {
+            headers: {
+                'Authorization': 'Bearer ' + keycloak.token
+            }
+        })
+            .then(function (response) {
+                console.log("Réponse de l'historique des commandes: ", response.data);
+
+                const commandesTerminees = [];
+                const commandesEnCours = [];
+
+                response.data.forEach(commande => {
+                    if (commande.status === 'terminee') {
+                        commandesTerminees.push(commande);
+                    } else if (commande.status === 'en cours') {
+                        commandesEnCours.push(commande);
+                    }
+                });
+
+                if (commandesEnCours.length === 0 && commandesTerminees.length === 0) {
+                    historiqueContainer.innerHTML = "<p>Aucune commande trouvée.</p>";
+                    return;
+                }
+
+                if (commandesEnCours.length > 0) {
+                    const commandesEnCoursContainer = document.createElement('div');
+                    commandesEnCoursContainer.innerHTML = '<h2 style="text-align: center; color: #ea3434;">Commandes en Cours</h2>';
+                    const enCoursGrid = document.createElement('div');
+                    enCoursGrid.classList.add('commande-grid');
+                    commandesEnCours.forEach(commande => {
+                        enCoursGrid.appendChild(createCommandeItem(commande));
+                    });
+                    commandesEnCoursContainer.appendChild(enCoursGrid);
+                    historiqueContainer.appendChild(commandesEnCoursContainer);
+                }
+
+                if (commandesTerminees.length > 0) {
+                    const commandesTermineesContainer = document.createElement('div');
+                    commandesTermineesContainer.style.display = 'none'; // Masquer par défaut
+                    commandesTermineesContainer.id = 'commandes-terminees-container';
+                    commandesTermineesContainer.innerHTML = '<h2 style="text-align: center; color: #ea3434;">Commandes Terminées</h2>';
+                    const termineesGrid = document.createElement('div');
+                    termineesGrid.classList.add('commande-grid');
+                    commandesTerminees.forEach(commande => {
+                        termineesGrid.appendChild(createCommandeItem(commande));
+                    });
+                    commandesTermineesContainer.appendChild(termineesGrid);
+                    historiqueContainer.appendChild(commandesTermineesContainer);
+
+                    // Ajouter un bouton pour afficher/masquer les commandes terminées
+                    const toggleButton = document.createElement('button');
+                    toggleButton.innerHTML = 'Afficher les commandes terminées';
+                    toggleButton.style.backgroundColor = 'rgba(234,52,52,0.82)';
+                    toggleButton.style.color = 'white';
+                    toggleButton.style.border = 'none';
+                    toggleButton.style.padding = '10px 20px';
+                    toggleButton.style.cursor = 'pointer';
+                    toggleButton.style.display = 'block';
+                    toggleButton.style.margin = '20px auto';
+                    toggleButton.onclick = function () {
+                        const container = document.getElementById('commandes-terminees-container');
+                        if (container.style.display === 'none') {
+                            container.style.display = 'block';
+                            toggleButton.innerHTML = 'Masquer les commandes terminées';
+                        } else {
+                            container.style.display = 'none';
+                            toggleButton.innerHTML = 'Afficher les commandes terminées';
+                        }
+                    };
+                    historiqueContainer.appendChild(toggleButton);
+                }
+            })
+            .catch(function (error) {
+                console.log('Erreur lors de la récupération de l\'historique des commandes: ', error);
+                historiqueContainer.innerHTML = "<p>Erreur lors de la récupération de l'historique des commandes.</p>";
+            });
+    }
+
+    function createCommandeItem(commande) {
+        const itemDiv = document.createElement('div');
+        itemDiv.classList.add('commande-item');
+        itemDiv.setAttribute('data-id', commande.idCommande);
+
+        // Calcul du montant total avec taxe
+        const TAX_RATE = 0.15;
+        const montantTotal = commande.produits.reduce((total, p) => total + (p.quantite * p.PrixProduit * (1 + TAX_RATE)), 0).toFixed(2);
+
+        // Conversion de la date
+        const dateCommande = new Date(commande.dateCommande);
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'};
+        const formattedDateTime = dateCommande.toLocaleString('fr-CA', options);
+
+        itemDiv.innerHTML = `
+        <div style="display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 15px;">
+            <div style="flex-grow: 1;">
+                <p style="margin: 0; text-align: center; width: 100%;"><strong>Date Commande :</strong> ${formattedDateTime}</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 10px;">
+                    <p style="margin: 0;"><strong>ID Commande :</strong> ${commande.idCommande}</p>
+                    <p style="margin: 0;"><strong>Status :</strong> ${commande.status}</p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px;">
+                    ${commande.produits.map(p => `
+                        <div style="border: 1px solid rgba(197,198,223,0.49); background-color: rgba(197,198,223,0.49); padding: 10px; border-radius: 15px;">
+                            <p style="margin: 0; text-align: center;"><strong>${p.nomProduit}</strong></p>
+                            <p style="margin: 0; text-align: center;">Quantité: ${p.quantite}</p>
+                            <p style="margin: 0; text-align: center;">Prix: ${p.PrixProduit} $</p>
+                        </div>`).join('')}
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 20px;">
+                    <p style="margin: 0;"><strong>Quantité Totale :</strong> ${commande.produits.reduce((total, p) => total + p.quantite, 0)}</p>
+                    <p style="margin: 0;"><strong>Montant Total :</strong> ${montantTotal} $</p>
+                </div>
+            </div>
+        </div>
+    `;
+        return itemDiv;
+    }
+
+    // Fonction pour ouvrir la modale de l'historique des commandes
+    function openHistoriqueModalClient() {
+        closePanierModalClient(); // Fermer la modale du panier si elle est ouverte
+        document.getElementById('historique-commandes-modal').style.display = 'block';
+        document.body.classList.add('modal-open');
+        fetchHistoriqueCommandes();
+    }
+
+    // Fonction pour fermer la modale de l'historique des commandes
+    function closeHistoriqueModalClient() {
+        document.getElementById('historique-commandes-modal').style.display = 'none';
+        document.body.classList.remove('modal-open');
+    }
+
+    document.getElementById('panier-button').addEventListener('click', function() {
+        openPanierModalClient();
+    });
+
+    document.getElementById('historique-button').addEventListener('click', function() {
+        openHistoriqueModalClient();
+    });
+
+    document.getElementById('close-historique-button').addEventListener('click', function() {
+        closeHistoriqueModalClient();
+    });
+
+    document.getElementById('close-modal-button').addEventListener('click', function() {
+        closePanierModalClient();
+    });
+
+    /*----------------------------------------------Fin------------------------------------------*/
 
     // Initialiser les fonctions
     initKeycloak();

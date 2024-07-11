@@ -20,17 +20,19 @@
             <header>
                 <div class="flex">
                     <div class="sf-header__mobile-left w-1/4 flex flex-1 items-center justify-start">
-                        <div class="sf-header__mobile-menu-item">
+                        <div class="sf-header__mobile-menu-item" data-cart-count="admin-dashboard">
                             <span id="admin-dashboard" class="sf-header__mobile-menu-link">
-                                <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                    <path d="M442 114H6a6 6 0 0 1-6-6V84a6 6 0 0 1 6-6h436a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6zm0 160H6a6 6 0 0 1-6-6v-24a6 6 0 0 1 6-6h436a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6zm0 160H6a6 6 0 0 1-6-6v-24a6 6 0 0 1 6-6h436a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6z"></path>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 13H11V3H3V13ZM3 21H11V15H3V21ZM13 21H21V11H13V21ZM13 3V9H21V3H13Z" fill="currentColor"/>
                                 </svg>
                             </span>
+                            <sup class="sf-icon-count font-medium !hidden" id="admin-dashboard-count">0</sup>
                         </div>
                         <div id="horloge" class="horloge"></div>
                     </div>
+
                     <div class="sf-logo sf-logo--mobile has-logo-img px-4 block py-2.5 relative justify-center">
-                        <a href="#" class="sf-header__mobile-center w-full flex items-center justify-center"></a>
+                        <a class="sf-header__mobile-center w-full flex items-center justify-center"></a>
                     </div>
                     <div class="sf-header__mobile-right w-1/4 flex flex-1 items-center justify-end">
                         <a href="#" id="user-role" class="sf__tooltip-item block sf__tooltip-bottom sf__tooltip-style-2"></a>
@@ -62,11 +64,13 @@
         </div>
     </section>
 </div>
+
 <button id="scroll-to-top-button" class="sf__btn btn-scroll-top sf__btn-primary fixed z-50 items-center justify-center opacity-0 transition-opacity">
     <svg class="w-[20px] h-[20px]" fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
         <path d="M4.465 263.536l7.07 7.071c4.686 4.686 12.284 4.686 16.971 0L207 92.113V468c0 6.627 5.373 12 12 12h10c6.627 0 12-5.373 12-12V92.113l178.494 178.493c4.686 4.686 12.284 4.686 16.971 0l7.07-7.071c4.686-4.686 4.686-12.284 0-16.97l-211.05-211.05c-4.686-4.686-12.284-4.686-16.971 0L4.465 246.566c-4.687 4.686-4.687 12.284 0 16.97z"></path>
     </svg>
 </button>
+
 <div>
     <main role="main" id="MainContent">
         <div id="zircon-section-template--17055081300194__main" class="zircon-section">
