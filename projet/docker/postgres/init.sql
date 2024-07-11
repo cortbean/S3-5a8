@@ -120,6 +120,11 @@ CREATE TABLE projet.CommandeVueAdmin (
                                          quantite INT
 );
 
+INSERT INTO projet.Programme (Programme, faculte) VALUES
+                                                      ('Programme Test 1', 'Faculte Test 1'),
+                                                      ('Programme Test 2', 'Faculte Test 2');
+
+/*
 -- Inserts
 INSERT INTO projet.Programme (Programme, faculte) VALUES
         ('Droit', 'Faculté de droit'),
@@ -134,7 +139,12 @@ INSERT INTO projet.Programme (Programme, faculte) VALUES
         ('Chimie', 'Faculté des sciences'),
         ('Physique', 'Faculté des sciences'),
         ('Informatique', 'Faculté des sciences'),
-        ('Sciences de lactivité physique', 'Faculté des sciences de lactivité physique');
+        ('Sciences de lactivité physique', 'Faculté des sciences de lactivité physique');*/
+
+-- Insertion des utilisateurs de test
+INSERT INTO projet.Utilisateur (cip, Nom, Prenom, Courriel, role, promotion, Programme) VALUES
+                                                                                            ('CIP1', 'Nom Test 1', 'Prenom Test 1', 'test1@test.com', 'client', 'promotion1', 'Programme Test 1'),
+                                                                                            ('CIP2', 'Nom Test 2', 'Prenom Test 2', 'test2@test.com', 'client', 'promotion2', 'Programme Test 2');
 
 -- Insertion des catégories initiales
 INSERT INTO projet.Categorie(id_categorie, description) VALUES
@@ -151,7 +161,7 @@ INSERT INTO projet.Categorie(id_categorie, description) VALUES
         ('Shooter', 'Shooters'),
         ('Vin', 'Vins'),
         ('Whisky', 'Whiskys');
-
+/*
 -- Insertion des produits initiaux classés selon l'ordre des catégories spécifiées
 INSERT INTO projet.Produit(id_Produit, Nom, Prix, id_categorie, image_url) VALUES
         -- Alcool fort
@@ -438,4 +448,21 @@ INSERT INTO projet.Produit(id_Produit, Nom, Prix, id_categorie, image_url) VALUE
         (2217, 'Limited Edition Whisky', 50.00, 'Whisky', 'images/limited_edition_whisky.png'),
         (2218, 'Vintage Whisky', 60.00, 'Whisky', 'images/vintage_whisky.png'),
         (2219, 'Craft Whisky', 12.00, 'Whisky', 'images/craft_whisky.png'),
-        (2220, 'Smooth Whisky', 10.00, 'Whisky', 'images/smooth_whisky.png');
+        (2220, 'Smooth Whisky', 10.00, 'Whisky', 'images/smooth_whisky.png');*/
+
+INSERT INTO projet.Produit(id_Produit, Nom, Prix, id_categorie, image_url) VALUES
+-- Alcool fort
+(1, 'Produit Test 1', 10.0, 'Alcool fort', 'images/bottle_de_vodka.png'),
+(2, 'Produit Test 2', 15.0, 'Alcool fort', 'images/bottle_de_rhum.png'),
+(3, 'Produit Test 3', 20.0, 'Alcool fort', 'images/bottle_de_whisky.png');
+
+
+-- Insertion des commandes de test
+INSERT INTO projet.commande (id_commande, cip, date_commande, status, Nom, Prenom) VALUES
+                                                                                       ('CMD1', 'CIP1', CURRENT_TIMESTAMP, 'en cours', 'Nom Test 1', 'Prenom Test 1'),
+                                                                                       ('CMD2', 'CIP2', CURRENT_TIMESTAMP, 'en cours', 'Nom Test 2', 'Prenom Test 2');
+-- Insertion des produits dans les commandes
+INSERT INTO projet.plusieurs (id_Produit, id_commande, quantite, Nom, Prix) VALUES
+                                                                                (1, 'CMD1', 2, 'Produit Test 1', 10.0),
+                                                                                (2, 'CMD1', 1, 'Produit Test 2', 15.0),
+                                                                                (3, 'CMD2', 3, 'Produit Test 3', 20.0);

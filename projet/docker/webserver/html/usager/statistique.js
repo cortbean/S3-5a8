@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch('/api/stats/produits-faculte')
             .then(response => response.json())
             .then(data => {
+                console.log("Données reçues : ", data);
                 const tableBody = document.getElementById('stats-table').getElementsByTagName('tbody')[0];
                 data.forEach(stat => {
                     const row = tableBody.insertRow();
@@ -17,8 +18,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             })
             .catch(error => console.error('Erreur lors de la récupération des statistiques :', error));
-    }
 
-    // Appeler la fonction fetchStats lors du chargement de la page
-    fetchStats();
+
+        // Appeler la fonction fetchStats lors du chargement de la page
+        fetchStats();
+    }
 });

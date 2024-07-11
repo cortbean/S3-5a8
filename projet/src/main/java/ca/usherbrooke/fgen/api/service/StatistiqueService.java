@@ -21,8 +21,17 @@ public class StatistiqueService {
     @Path("/stats/produits-faculte")
     @RolesAllowed({"admin"})
     public Response getStatistiqueParFaculte() {
+        /*try {
+            List<Map<String, Object>> stats = statistiqueMapper.getStatistiqueParFaculte();
+            return Response.ok(stats).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }*/
         try {
             List<Map<String, Object>> stats = statistiqueMapper.getStatistiqueParFaculte();
+            System.out.println("Statistiques renvoyées : " + stats);
             return Response.ok(stats).build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,4 +39,5 @@ public class StatistiqueService {
         }
     }
 }
+
 
