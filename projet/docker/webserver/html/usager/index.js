@@ -16,6 +16,13 @@ document.addEventListener('DOMContentLoaded', function () {
         keycloak.init({ onLoad: 'login-required' }).then(function (authenticated) {
             console.log(authenticated ? 'authenticated' : 'not authenticated');
             if (authenticated) {
+                const userNameElement = document.getElementById('user-name');
+                if (keycloak.tokenParsed) {
+                    const firstName = keycloak.tokenParsed.given_name || '';
+                    const lastName = keycloak.tokenParsed.family_name || '';
+                    userNameElement.textContent = `( ${firstName} ${lastName} )`;
+                }
+
                 if (keycloak.hasRealmRole('client')) {
                     requestClient();
                     document.getElementById('user-role').textContent = 'Client';
