@@ -5,6 +5,7 @@ public class Item {
     public String nom;
     public float prix;
     public String image;
+    public int quantiteStock;
 
     @Override
     public String toString() {

@@ -15,3 +15,17 @@ RETURN OLD;
 END IF;
 END;
 $$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION update_stock_on_insert()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Mettre à jour la quantité en stock du produit
+UPDATE projet.Produit
+SET Quantitte_stock = Quantitte_stock - NEW.quantite
+WHERE id_Produit = NEW.id_Produit;
+
+-- Retourner la nouvelle ligne insérée
+RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;

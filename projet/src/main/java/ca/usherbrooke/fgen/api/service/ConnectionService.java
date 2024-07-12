@@ -35,11 +35,6 @@ public class ConnectionService {
     @Inject
     PersonMapper personMapper;
 
-    @Inject
-    CategorieMapper categorieMapper;
-
-    @Inject
-    ArticleMapper articleMapper;
 
     @GET
     @Path("/client")
@@ -69,19 +64,6 @@ public class ConnectionService {
         return p;
     }
 
-    @GET
-    @Path("/getcategorie")
-    @PermitAll
-    public List<Item> getCategorie() {
-        return categorieMapper.allCategorie();
-    }
-
-    @GET
-    @Path("/selectarticle")
-    @PermitAll
-    public List<Item> selectArticle(@QueryParam("id_categorie") String id_categorie) {
-        return articleMapper.selectArticle(id_categorie);
-    }
 
     @GET
     @Path("/any")

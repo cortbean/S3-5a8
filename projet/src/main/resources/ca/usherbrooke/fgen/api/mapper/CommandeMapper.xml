@@ -6,20 +6,20 @@
 
     <!-- Insérer une commande dans la table Commande -->
     <insert id="insertCommande">
-        INSERT INTO projet.commande(id_commande, cip, date_commande, status, Nom, Prenom)
-        VALUES (#{commande.idCommande}, #{commande.cip}, #{commande.dateCommande}, #{commande.status}, #{commande.Nom}, #{commande.Prenom})
+        INSERT INTO projet.commande(id_commande, cip, date_commande, status)
+        VALUES (#{commande.idCommande}, #{commande.cip}, #{commande.dateCommande}, #{commande.status})
             ON CONFLICT (id_commande) DO NOTHING;
     </insert>
 
     <!-- Insérer un produit dans la table Plusieurs -->
     <insert id="insertProduit">
-        INSERT INTO projet.plusieurs(id_produit, id_commande, quantite, Nom, Prix)
-        VALUES (#{produitCommander.idProduit}, #{produitCommander.idCommande}, #{produitCommander.quantite}, #{produitCommander.nomProduit}, #{produitCommander.PrixProduit});
+        INSERT INTO projet.plusieurs(id_produit, id_commande, quantite)
+        VALUES (#{produitCommander.idProduit}, #{produitCommander.idCommande}, #{produitCommander.quantite});
     </insert>
 
     <!-- Sélectionner les détails d'une commande -->
     <select id="selectCommandeDetails" resultType="ca.usherbrooke.fgen.api.business.Commande">
-        SELECT id_commande AS idCommande, cip, date_commande AS dateCommande, status, Nom, Prenom
+        SELECT id_commande AS idCommande, cip, date_commande AS dateCommande, status
         FROM projet.commande
         WHERE id_commande = #{idCommande}
     </select>
@@ -81,9 +81,10 @@
 
     <!-- Sélectionner les détails d'un produit -->
     <select id="selectProductDetails" resultType="ca.usherbrooke.fgen.api.business.ProduitCommander">
-        SELECT id_produit AS idProduit, Nom AS nomProduit, Prix AS PrixProduit
+        SELECT id_produit AS idProduit, Nom AS nomProduit, Prix AS PrixProduit, Quantitte_stock AS QuantiteStock
         FROM projet.Produit
         WHERE id_produit = #{idProduit}
     </select>
+
 
 </mapper>

@@ -3,6 +3,8 @@ package ca.usherbrooke.fgen.api.service;
 import ca.usherbrooke.fgen.api.business.Commande;
 import ca.usherbrooke.fgen.api.business.Person;
 import ca.usherbrooke.fgen.api.business.ProduitCommander;
+import ca.usherbrooke.fgen.api.business.VisibleProduct;
+import ca.usherbrooke.fgen.api.mapper.ArticleMapper;
 import ca.usherbrooke.fgen.api.mapper.CommandeMapper;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
@@ -31,6 +33,9 @@ public class CommandeService {
 
     @Inject
     CommandeMapper commandeMapper;
+
+    @Inject
+    CommandeMapper ArticleMapper;
 
     @POST
     @Path("/commande")
@@ -68,24 +73,30 @@ public class CommandeService {
             commande.Nom = person.firstName;
             commande.Prenom = person.lastName;
 
-            // Insert the order into the project.Commande table
-            System.out.println("Inserting order: " + commande);
-            commandeMapper.insertCommande(commande);
-
-            // Retrieve product details and insert products into the project.Plusieurs table
+            // Check product quantities
             for (ProduitCommander produit : commande.produits) {
                 produit.idCommande = commande.idCommande;
 
-                // Retrieve product details
+                // Retrieve product details and check quantity
                 ProduitCommander productDetails = commandeMapper.selectProductDetails(produit.idProduit);
-                if (productDetails != null) {
-                    produit.nomProduit = productDetails.nomProduit;
-                    produit.PrixProduit = productDetails.PrixProduit;
-                } else {
+                if (productDetails == null) {
                     return Response.status(Response.Status.BAD_REQUEST).entity("Product details not found for product ID: " + produit.idProduit).build();
                 }
 
-                // Log the product details, including price
+                if (productDetails.QuantiteStock < produit.quantite) {
+                    return Response.status(Response.Status.BAD_REQUEST).entity("Article présent en nombre insuffisant: " + produit.nomProduit).build();
+                }
+
+                // Update the product details in the command object
+                produit.nomProduit = productDetails.nomProduit;
+                produit.PrixProduit = productDetails.PrixProduit;
+            }
+
+            // If all quantities are sufficient, insert the order and products
+            System.out.println("Inserting order: " + commande);
+            commandeMapper.insertCommande(commande);
+
+            for (ProduitCommander produit : commande.produits) {
                 System.out.println("Inserting product: " + produit);
                 commandeMapper.insertProduit(produit);
             }
@@ -96,6 +107,7 @@ public class CommandeService {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
+
 
     @GET
     @Path("/CommandePourAdmin")

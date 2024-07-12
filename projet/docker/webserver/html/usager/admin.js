@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function showArticles(id_categorie) {
         const productContainer = document.getElementById("product-container");
         productContainer.innerHTML = "";
-        axios.get("http://localhost:8888/api/selectarticle?id_categorie=" + id_categorie, {
+        axios.get("http://localhost:8888/api/selectarticleadmin?id_categorie=" + id_categorie, {
             headers: {
                 'Authorization': 'Bearer ' + keycloak.token
             }
@@ -120,11 +120,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log("Réponse: ", response.status);
                 console.log(response.data);
                 response.data.forEach(article => {
+                    // Vérifiez que l'article a un ID
+                    if (!article.id) {
+                        console.error('Article sans ID détecté:', article);
+                        return;
+                    }
                     // Stocker les détails du produit dans l'objet global
                     productDetails[article.id] = {
                         name: article.nom,
                         price: article.prix + "$",
-                        image: article.image
+                        image: article.image,
+                        quantite: article.quantiteStock
                     };
                     // Créez un objet produit correspondant à la structure attendue par generateProductHTML
                     const product = {
@@ -132,14 +138,23 @@ document.addEventListener('DOMContentLoaded', function () {
                         image: article.image,
                         name: article.nom,
                         price: article.prix + "$",
+                        quantite: article.quantiteStock,
                         color: article.color || 'rgb(214,232,206)',
                         colorText: article.colorText || '3%'
                     };
-                    // Ajoutez le HTML généré à BarreCategorie
+                    // Ajoutez le HTML généré à productContainer
                     productContainer.innerHTML += generateProductHTML(product);
                 });
-                // Mettre à jour les icônes des yeux après avoir généré les produits
-                updateEyeIcons();
+
+                // Ajoutez les gestionnaires d'événements pour les changements de quantité après avoir ajouté les articles au DOM
+                response.data.forEach(article => {
+                    const input = document.getElementById(`quantite-${article.id}`);
+                    if (input) {
+                        input.addEventListener('change', function () {
+                            updateQuantite(article.id, this.value);
+                        });
+                    }
+                });
             })
             .catch(function (error) {
                 console.log('Erreur: ', error);
@@ -151,6 +166,91 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             });
     }
+
+    // Générer le HTML pour un produit
+    function generateProductHTML(product) {
+        return `
+        <div class="sf__col-item">
+            <div class="sf__pcard sf__pcard--onsale cursor-pointer sf-prod__block sf__pcard-style-1" data-view="Panier">
+                <form method="post" action="/Panier/add" accept-charset="UTF-8" class="product-form form initialized" enctype="multipart/form-data" novalidate="novalidate" data-product-id="${product.image}" data-product-handle="">
+                    <div class="sf__pcard-image">
+                        <div class="overflow-hidden cursor-pointer relative sf__image-box">
+                            <div class="flex justify-center items-center">
+                                <a href="${product.image}" data-gtag-selector="product_image" class="select_item_image block w-full">
+                                    <div class="spc__main-img">
+                                        <div data-image-id="" class="sf-image" data-image-wrapper="" data-image-loading="" style="--aspect-ratio: 3/4;">
+                                            <img src="${product.image}" alt="Product Image">
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="sf__pcard-action hidden md:block z-10"></div>
+                        </div>
+                    </div>
+                    <div class="sf__pcard-content text-left">
+                        <div class="mt-3 lg:mt-5">
+                            <div class="flex items-start justify-between">
+                                <div class="flex flex-1 flex-wrap ProductColorShow" data-id="">
+                                    <div class="sf__pcard-color-excess">
+                                        <span class="block w-6 h-6 rounded-circle mr-4 mb-4" style="background-color: ${product.color}">${product.colorText}</span>
+                                    </div>
+                                </div>
+                                <a onclick="toggleProductSelection(${product.id}, this)" type="button" class="sf-pqv__button mb-4" data-id="${product.id}">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="eye-icon eye-open hidden">
+                                        <path d="M12 4.5C7.30558 4.5 3.14054 7.157 1.229 11.25C3.14054 15.343 7.30558 18 12 18C16.6944 18 20.8595 15.343 22.771 11.25C20.8595 7.157 16.6944 4.5 12 4.5ZM12 15.75C9.65279 15.75 7.75 13.8472 7.75 11.5C7.75 9.15279 9.65279 7.25 12 7.25C14.3472 7.25 16.25 9.15279 16.25 11.5C16.25 13.8472 14.3472 15.75 12 15.75ZM12 9.75C10.7574 9.75 9.75 10.7574 9.75 12C9.75 13.2426 10.7574 14.25 12 14.25C13.2426 14.25 14.25 13.2426 14.25 12C14.25 10.7574 13.2426 9.75 12 9.75Z" fill="currentColor"/>
+                                    </svg>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="eye-icon eye-closed">
+                                        <path d="M11.9998 4.5C16.6942 4.5 20.8593 7.157 22.7708 11.25C21.6671 13.4651 20.0496 15.2957 18.0794 16.5525L19.5245 17.9975C21.8292 16.4788 23.646 14.2027 24.7708 11.25C22.8593 7.157 18.6942 4.5 13.9998 4.5C9.30541 4.5 5.14036 7.157 3.22884 11.25C4.13608 13.4208 5.66302 15.2493 7.56238 16.4175L9.00835 14.9725C7.33034 13.9297 6.13608 12.4651 5.22984 10.5C7.24967 6.85707 10.7864 4.5 14.9998 4.5H12H11.9998ZM12.9998 13.2422L14.0586 14.3011C13.5633 14.5704 13.0185 14.75 12.4998 14.75C10.1526 14.75 8.24976 12.8472 8.24976 10.5C8.24976 9.98133 8.42935 9.43648 8.69868 8.94118L9.75757 10L12.9998 13.2422ZM19.292 3.70711L18.2929 2.70711L2.29291 18.7071L3.29291 19.7071L19.292 3.70711Z" fill="currentColor"/>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="max-w-full w-full">
+                                <h3 class="block text-base">
+                                    <a href="#" data-id="" data-gtag-selector="product_title" data-fav-id="" class="select_item_button block mb-[5px] leading-normal sf__pcard-name font-medium truncate-lines hover:text-color-secondary uppercase">
+                                        ${product.name}
+                                    </a>
+                                </h3>
+                            </div>
+                            <div class="sf__pcard-price leading-normal">
+                                <div class="product-prices inline-flex items-center flex-wrap">
+                                    <span class="prod__price text-color-regular-price">
+                                        <span class="money">
+                                            <span class="transcy-money">${product.price}</span>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="quantite-update">
+                                <label for="quantite-${product.id}">Quantité:</label>
+                                <input type="number" id="quantite-${product.id}" name="quantite" min="0" value="${product.quantite}">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    `;
+    }
+
+    function updateQuantite(productId, newQuantite) {
+        axios.post("http://localhost:8888/api/updatestock", {
+            idProduit: productId,
+            quantite: newQuantite
+        }, {
+            headers: {
+                'Authorization': 'Bearer ' + keycloak.token
+            }
+        })
+            .then(function(response) {
+                console.log('Quantité mise à jour avec succès:', response.data);
+            })
+            .catch(function(error) {
+                console.error('Erreur lors de la mise à jour de la quantité:', error);
+            });
+    }
+
+
+
 
     // Initialiser le bouton de retour en haut
     function initScrollToTopAdmin() {
@@ -176,66 +276,6 @@ document.addEventListener('DOMContentLoaded', function () {
         window.addEventListener('scroll', toggleScrollToTopButton);
     }
 
-    // Générer le HTML pour un produit
-    function generateProductHTML(product) {
-        return `
-            <div class="sf__col-item">
-                <div class="sf__pcard sf__pcard--onsale cursor-pointer sf-prod__block sf__pcard-style-1" data-view="Panier">
-                    <form method="post" action="/Panier/add" accept-charset="UTF-8" class="product-form form initialized" enctype="multipart/form-data" novalidate="novalidate" data-product-id="${product.image}" data-product-handle="">
-                        <div class="sf__pcard-image">
-                            <div class="overflow-hidden cursor-pointer relative sf__image-box">
-                                <div class="flex justify-center items-center">
-                                    <a href="${product.image}" data-gtag-selector="product_image" class="select_item_image block w-full">
-                                        <div class="spc__main-img">
-                                            <div data-image-id="" class="sf-image" data-image-wrapper="" data-image-loading="" style="--aspect-ratio: 3/4;">
-                                                <img src="${product.image}" alt="Product Image">
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="sf__pcard-action hidden md:block z-10"></div>
-                            </div>
-                        </div>
-                        <div class="sf__pcard-content text-left">
-                            <div class="mt-3 lg:mt-5">
-                                <div class="flex items-start justify-between">
-                                    <div class="flex flex-1 flex-wrap ProductColorShow" data-id="">
-                                        <div class="sf__pcard-color-excess">
-                                            <span class="block w-6 h-6 rounded-circle mr-4 mb-4" style="background-color: ${product.color}">${product.colorText}</span>
-                                        </div>
-                                    </div>
-                                    <a onclick="toggleProductSelection(${product.id}, this)" type="button" class="sf-pqv__button mb-4" data-id="${product.id}">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="eye-icon eye-open hidden">
-                                            <path d="M12 4.5C7.30558 4.5 3.14054 7.157 1.229 11.25C3.14054 15.343 7.30558 18 12 18C16.6944 18 20.8595 15.343 22.771 11.25C20.8595 7.157 16.6944 4.5 12 4.5ZM12 15.75C9.65279 15.75 7.75 13.8472 7.75 11.5C7.75 9.15279 9.65279 7.25 12 7.25C14.3472 7.25 16.25 9.15279 16.25 11.5C16.25 13.8472 14.3472 15.75 12 15.75ZM12 9.75C10.7574 9.75 9.75 10.7574 9.75 12C9.75 13.2426 10.7574 14.25 12 14.25C13.2426 14.25 14.25 13.2426 14.25 12C14.25 10.7574 13.2426 9.75 12 9.75Z" fill="currentColor"/>
-                                        </svg>
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="eye-icon eye-closed">
-                                            <path d="M11.9998 4.5C16.6942 4.5 20.8593 7.157 22.7708 11.25C21.6671 13.4651 20.0496 15.2957 18.0794 16.5525L19.5245 17.9975C21.8292 16.4788 23.646 14.2027 24.7708 11.25C22.8593 7.157 18.6942 4.5 13.9998 4.5C9.30541 4.5 5.14036 7.157 3.22884 11.25C4.13608 13.4208 5.66302 15.2493 7.56238 16.4175L9.00835 14.9725C7.33034 13.9297 6.13608 12.4651 5.22984 10.5C7.24967 6.85707 10.7864 4.5 14.9998 4.5H12H11.9998ZM12.9998 13.2422L14.0586 14.3011C13.5633 14.5704 13.0185 14.75 12.4998 14.75C10.1526 14.75 8.24976 12.8472 8.24976 10.5C8.24976 9.98133 8.42935 9.43648 8.69868 8.94118L9.75757 10L12.9998 13.2422ZM19.292 3.70711L18.2929 2.70711L2.29291 18.7071L3.29291 19.7071L19.292 3.70711Z" fill="currentColor"/>
-                                        </svg>
-                                    </a>
-                                </div>
-                                <div class="max-w-full w-full">
-                                    <h3 class="block text-base">
-                                        <a href="#" data-id="" data-gtag-selector="product_title" data-fav-id="" class="select_item_button block mb-[5px] leading-normal sf__pcard-name font-medium truncate-lines hover:text-color-secondary uppercase">
-                                            ${product.name}
-                                        </a>
-                                    </h3>
-                                </div>
-                                <div class="sf__pcard-price leading-normal">
-                                    <div class="product-prices inline-flex items-center flex-wrap">
-                                        <span class="prod__price text-color-regular-price">
-                                            <span class="money">
-                                                <span class="transcy-money">${product.price}</span>
-                                            </span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        `;
-    }
 
     window.toggleProductSelection = function (idProduit, element) {
         const eyeOpen = element.querySelector('.eye-open');
@@ -262,6 +302,9 @@ document.addEventListener('DOMContentLoaded', function () {
         updateCartCount(); // Assurez-vous de mettre à jour le compteur du panier
         generatePanierHTML(); // Mettre à jour le HTML du panier
     };
+
+
+
 
     // Fonction pour ouvrir la modale du panier
     function openPanierModal() {

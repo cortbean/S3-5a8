@@ -9,22 +9,33 @@
         select id_Produit as id,
                Nom as nom,
                Prix as prix,
-               image_url as image
+               image_url as image,
         from projet.Produit
         where
             (id_categorie) = (coalesce(#{id_categorie}, id_categorie))
     </select>
 
+    <select id="selectArticleAdmin" resultType="ca.usherbrooke.fgen.api.business.Item">
+        select
+            p.id_Produit as id,
+            p.Nom as nom,
+            p.Prix as prix,
+            p.image_url as image,
+            p.Quantitte_stock as quantiteStock
+        from projet.Produit p
+        where
+            (p.id_categorie = coalesce(#{id_categorie}, p.id_categorie))
+    </select>
+
     <!-- Sélectionner les articles visibles -->
     <select id="selectVisibleArticle" resultType="ca.usherbrooke.fgen.api.business.Item">
-        select p.id_Produit as id,
-               p.Nom as nom,
-               p.Prix as prix,
-               p.image_url as image
-        from projet.Produit p
-                 join projet.produit_visible pv on (p.id_Produit = pv.id_produit)
-        where
-            (id_categorie) = (coalesce(#{id_categorie}, id_categorie))
+        SELECT
+            id_Produit as id,
+            Nom as nom,
+            Prix as prix,
+            image_url as image
+        FROM projet.produitVue
+        WHERE id_categorie = COALESCE(#{id_categorie}, id_categorie);
     </select>
 
     <!-- Mettre à jour les produits visibles -->
@@ -36,5 +47,12 @@
             (#{produit.idProduit})
         </foreach>
     </insert>
+
+    <update id="updateVisibleStock">
+        UPDATE projet.produit
+        SET Quantitte_stock = #{quantite}
+        WHERE id_produit = #{id};
+    </update>
+
 
 </mapper>

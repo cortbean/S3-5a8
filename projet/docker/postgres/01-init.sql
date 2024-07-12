@@ -51,6 +51,7 @@ CREATE TABLE projet.Produit (
                                 id_Produit INTEGER,
                                 Nom VARCHAR(255) NOT NULL,
                                 Prix NUMERIC(10,2) NOT NULL,
+                                Quantitte_stock INTEGER DEFAULT 0,
                                 id_categorie VARCHAR(50),
                                 image_url TEXT,
                                 PRIMARY KEY(id_Produit),
@@ -62,8 +63,6 @@ CREATE TABLE projet.commande (
                                  cip VARCHAR(8) NOT NULL,
                                  date_commande TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                  status VARCHAR(50),
-                                 Nom TEXT,
-                                 Prenom TEXT,
                                  PRIMARY KEY (id_commande),
                                  FOREIGN KEY (cip) REFERENCES projet.Utilisateur (cip)
 );
@@ -72,9 +71,6 @@ CREATE TABLE projet.plusieurs (
                                   id_Produit INTEGER,
                                   id_commande VARCHAR(50),
                                   quantite INTEGER,
-                                  Nom VARCHAR(255) NOT NULL,
-                                  Prix NUMERIC(10,2) NOT NULL,
-                                  PRIMARY KEY(id_Produit, id_commande),
                                   FOREIGN KEY(id_Produit) REFERENCES projet.Produit(id_Produit),
                                   FOREIGN KEY(id_commande) REFERENCES projet.commande(id_commande)
 );
@@ -88,10 +84,19 @@ CREATE TABLE projet.logs (
 );
 
 CREATE TABLE projet.produit_visible (
-                                        id_produit INTEGER,
-                                        PRIMARY KEY (id_produit),
-                                        FOREIGN KEY (id_produit) REFERENCES projet.Produit (id_produit)
+                                        Quantitte_stock INTEGER DEFAULT 0,
+                                        Quantite_minimum VARCHAR(50),
+                                        id_Produit INTEGER,
+                                        PRIMARY KEY(id_Produit),
+                                        FOREIGN KEY(id_Produit) REFERENCES projet.Produit(id_Produit)
 );
+
+CREATE VIEW projet.produitVue AS
+SELECT id_Produit, Nom, Prix, image_url, Quantitte_stock, id_categorie
+FROM projet.Produit
+WHERE Quantitte_stock > 0;
+
+
 
 CREATE VIEW projet.commande_produits AS
 SELECT
