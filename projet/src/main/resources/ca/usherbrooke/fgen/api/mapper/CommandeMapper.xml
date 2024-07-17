@@ -67,6 +67,26 @@
                  LEFT JOIN projet.Produit p ON pl.id_produit = p.id_Produit
     </select>
 
+    <!-- Sélectionner l'historique des commandes d'un client -->
+    <select id="selectHistoriqueCommandes" resultMap="CommandeProduitResultMap">
+        SELECT
+            c.id_commande AS id_commande,
+            c.cip AS cip,
+            c.date_commande AS date_commande,
+            c.status AS status,
+            u.Nom AS Nom,
+            u.Prenom AS Prenom,
+            p.id_produit AS id_produit,
+            p.Nom AS produit_nom,
+            p.Prix AS produit_prix,
+            pl.quantite AS quantite
+        FROM projet.commande c
+                 JOIN projet.Utilisateur u ON c.cip = u.cip
+                 LEFT JOIN projet.plusieurs pl ON c.id_commande = pl.id_commande
+                 LEFT JOIN projet.Produit p ON pl.id_produit = p.id_Produit
+        WHERE c.cip = #{cip}
+    </select>
+
     <!-- Insérer une commande dans une vue spécifique pour l'admin -->
     <insert id="insertIntoCommandeVueAdmin">
         CALL InsertIntoCommandeVueAdmin(#{idCommande})

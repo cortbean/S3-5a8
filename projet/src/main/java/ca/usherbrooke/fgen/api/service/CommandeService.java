@@ -149,4 +149,28 @@ public class CommandeService {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
+
+    @GET
+    @Path("/historique-commandes")
+    @RolesAllowed({"client"})
+    public Response fetchHistoriqueCommandes() {
+        try {
+            Principal principal = securityContext.getUserPrincipal();
+            if (principal == null) {
+                return Response.status(Response.Status.UNAUTHORIZED).entity("User not authenticated").build();
+            }
+
+            String cip = principal.getName();
+            List<Commande> historiqueCommandes = commandeMapper.selectHistoriqueCommandes(cip);
+
+            // Ajoutez un log pour vérifier les commandes retournées
+            System.out.println("Historique des commandes pour " + cip + ": " + historiqueCommandes);
+
+            return Response.ok(historiqueCommandes).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
+    }
+
 }

@@ -758,6 +758,24 @@
       ]
     },
     {
+      "username": "caya2002",
+      "enabled": true,
+      "firstName": "Antoine",
+      "lastName": "Caya",
+      "email": "caya2002@usherbrooke.ca",
+      "realmRoles": [
+        "client",
+        "default-roles-master"
+      ],
+      "credentials": [
+        {
+          "temporary": true,
+          "type": "password",
+          "value": "projet"
+        }
+      ]
+    },
+    {
       "username": "nicm1501",
       "enabled": true,
       "firstName": "Mathieu",
