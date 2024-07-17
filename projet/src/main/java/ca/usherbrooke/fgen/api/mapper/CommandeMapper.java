@@ -26,6 +26,8 @@ public interface CommandeMapper {
 
     List<Commande> selectAllCommandesWithProduits();
 
+    List<Commande> selectHistoriqueCommandes(@Param("cip") String cip);
+
     Person selectPersonDetails(@Param("cip") String cip);
 
     ProduitCommander selectProductDetails(@Param("idProduit") int idProduit);
