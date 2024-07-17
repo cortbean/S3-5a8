@@ -1,4 +1,3 @@
-                                                                      (3, 'Produit Test 3', 20.0, 'Cocktails', 'url_test3');
 
 
 
