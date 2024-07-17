@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         name: article.nom,
                         price: article.prix + "$",
                         color: article.color || 'rgb(214,232,206)',
-                        colorText: article.colorText || '3%'
+                        colorText: article.colorText || ''
                     };
                     // Ajoutez le HTML généré à productContainer
                     productContainer.innerHTML += generateProductHTML(product);
@@ -363,11 +363,11 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             return total;
         }, 0);
-        const taxRate = 0.15; // 15% taxe
+        const taxRate = 0; // 15% taxe
         const totalWithTax = subtotal * (1 + taxRate);
         const subtotalElement = document.getElementById('cart-subtotal');
         if (subtotalElement) {
-            subtotalElement.textContent = `Sous-total (avec taxe de 15%) : ${totalWithTax.toFixed(2)} $`;
+            subtotalElement.textContent = `Sous-total : ${totalWithTax.toFixed(2)} $`;
         }
     }
 
