@@ -81,12 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log("Réponse: ", response.status);
                 console.log(response.data);
                 response.data.forEach(article => {
-                    // Stocker les détails du produit dans l'objet global
-                    productDetails[article.id] = {
-                        name: article.nom,
-                        price: article.prix + "$",
-                        image: article.image || "images/Biere.png"
-                    };
+
                     // Créez un objet produit correspondant à la structure attendue par generateProductHTML
                     const product = {
                         id: article.id,
@@ -94,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         name: article.nom,
                         price: article.prix + "$",
                         color: article.color || 'rgb(214,232,206)',
-                        colorText: article.colorText || ''
+                        quantiteStock: article.quantiteStock || '0'
                     };
                     // Ajoutez le HTML généré à productContainer
                     productContainer.innerHTML += generateProductHTML(product);
@@ -108,6 +103,35 @@ document.addEventListener('DOMContentLoaded', function () {
                     fetchVisibleProducts(id_categorie);
                 }).catch(function () {
                     console.log('Échec du rafraîchissement du token');
+                });
+            });
+    }
+
+    function getProductDetails(id_item) {
+        return axios.get("http://localhost:8888/api/getProductDetails?id_item=" + id_item, {
+            headers: {
+                'Authorization': 'Bearer ' + keycloak.token
+            }
+        })
+            .then(function (response) {
+                console.log("Réponse: ", response.status);
+                console.log(response.data);
+
+                return {
+                    name: response.data.nom,
+                    price: response.data.prix + "$",
+                    image: response.data.image || "images/Biere.png",
+                    quantiteStock: response.data.quantiteStock || 0
+                };
+            })
+            .catch(function (error) {
+                console.log('Erreur: ', error);
+                return keycloak.updateToken(5).then(function () {
+                    console.log('Token rafraîchi');
+                    return getProductDetails(id_item);
+                }).catch(function () {
+                    console.log('Échec du rafraîchissement du token');
+                    throw error;
                 });
             });
     }
@@ -193,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <div class="flex items-start justify-between">
                                     <div class="flex flex-1 flex-wrap ProductColorShow" data-id="">
                                         <div class="sf__pcard-color-excess">
-                                            <span class="block w-6 h-6 rounded-circle mr-4 mb-4" style="background-color: ${product.color}">${product.colorText}</span>
+                                            <span class="block w-6 h-6 rounded-circle mr-4 mb-4" style="background-color: ${product.color}">${"Nombre disponible: " +product.quantiteStock}</span>
                                         </div>
                                     </div>
                                     <a onclick="changementProduit(${product.id}, 1)" type="button" class="sf-pqv__button mb-4">
@@ -281,7 +305,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Fonction pour générer le HTML du panier
-    function generatePanierHTML(message, messageType) {
+    async function generatePanierHTML(message, messageType) {
         const icalPanierContainer = document.getElementById('ical-panier');
         icalPanierContainer.innerHTML = '';
 
@@ -317,8 +341,15 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
         `;
         } else {
-            cartItems.forEach(item => {
-                const product = productDetails[item.idProduit];
+            for (const item of cartItems) {
+                let product;
+                if (productDetails[item.idProduit] == null){
+                    productDetails[item.idProduit] = await getProductDetails(item.idProduit);
+                    product = productDetails[item.idProduit];
+                }else{
+                    product = productDetails[item.idProduit];
+                }
+
                 if (!product) {
                     console.warn(`Les détails du produit pour l'ID: ${item.idProduit} ne sont pas trouvés.`);
                     return;
@@ -333,7 +364,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <img src="${product.image}" alt="${product.name}" style="width: 100%; height: auto; margin-bottom: 10px;">
                 </div>
                 <div style="flex-grow: 1;">
-                    <p style="margin: 0;">${item.idProduit}</p>
+                    <p style="margin: 0;">${"Quandité disponible: " + product.quantiteStock}</p>
                     <p style="margin: 0;">${product.name}</p>
                     <p style="margin: 0;">${product.price}</p>
                 </div>
@@ -345,7 +376,7 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
         `;
                 icalPanierContainer.appendChild(itemDiv);
-            });
+            }
         }
         updateSubtotal();
     }
@@ -463,7 +494,6 @@ document.addEventListener('DOMContentLoaded', function () {
         closeHistoriqueModalClient(); // Fermer la modale de l'historique si elle est ouverte
         document.getElementById('ical').style.display = 'block';
         document.body.classList.add('modal-open');
-        generatePanierHTML(); // Appeler generatePanierHTML pour mettre à jour la modale
     }
 
     //
@@ -561,10 +591,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (existingItem) {
             existingItem.quantity += changement;
+            if (existingItem.quantity > productDetails[existingItem.idProduit].quantiteStock){
+                existingItem.quantity = productDetails[existingItem.idProduit].quantiteStock;
+            }
             if (existingItem.quantity < 1) {
                 // Supprimer le produit du panier si la quantité est inférieure à 1
                 cartItems = cartItems.filter(item => item.idProduit !== idProduit);
             }
+
         } else if (changement > 0) {
             cartItems.push({ idProduit, quantity: changement });
         }
@@ -585,7 +619,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (paniersectionClient.classList.contains('hidden')) {
             paniersectionClient.classList.remove('hidden');
             paniersectionClient.classList.add('visible');
-            generatePanierHTML();
         } else {
             paniersectionClient.classList.remove('visible');
             paniersectionClient.classList.add('hidden');
@@ -684,7 +717,7 @@ document.addEventListener('DOMContentLoaded', function () {
         itemDiv.setAttribute('data-id', commande.idCommande);
 
         // Calcul du montant total avec taxe
-        const TAX_RATE = 0.15;
+        const TAX_RATE = 0;
         const montantTotal = commande.produits.reduce((total, p) => total + (p.quantite * p.PrixProduit * (1 + TAX_RATE)), 0).toFixed(2);
 
         // Conversion de la date

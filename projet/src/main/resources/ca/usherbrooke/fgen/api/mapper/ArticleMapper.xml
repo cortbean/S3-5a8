@@ -9,7 +9,8 @@
         select id_Produit as id,
                Nom as nom,
                Prix as prix,
-               image_url as image
+               image_url as image,
+               Quantitte_stock as quantiteStock
         from projet.Produit
         where
             (id_categorie) = (coalesce(#{id_categorie}, id_categorie))
@@ -28,13 +29,25 @@
             (p.id_categorie = coalesce(#{id_categorie}, p.id_categorie))
     </select>
 
+    <select id="getProductDetails" resultType="ca.usherbrooke.fgen.api.business.Item">
+        select id_Produit as id,
+               Nom as nom,
+               Prix as prix,
+               image_url as image,
+               Quantitte_stock as quantiteStock
+        from projet.Produit
+        where
+            (id_Produit) = (coalesce(#{id_item}, id_Produit))
+    </select>
+
     <!-- Sélectionner les articles visibles -->
     <select id="selectVisibleArticle" resultType="ca.usherbrooke.fgen.api.business.Item">
         SELECT
             id_Produit as id,
             Nom as nom,
             Prix as prix,
-            image_url as image
+            image_url as image,
+            Quantitte_stock as quantiteStock
         FROM projet.produitVue
         WHERE id_categorie = COALESCE(#{id_categorie}, id_categorie);
     </select>

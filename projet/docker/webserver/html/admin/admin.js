@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             </div>
                             <div class="quantite-update">
                                 <label for="quantite-${product.id}">Quantité:</label>
-                                <input type="number" id="quantite-${product.id}" name="quantite" min="0" value="${product.quantite}">
+                                <input type="number" id="quantite-${product.id}" name="quantite" min="0" step="1" value="${product.quantite}">
                             </div>
                         </div>
                     </div>
@@ -241,6 +241,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     function updateQuantite(productId, newQuantite) {
+        newQuantite = parseInt(newQuantite, 10);
+        if (isNaN(newQuantite)) {
+            console.error('La quantité entrée n\'est pas valide.');
+            return;
+        }
         axios.post("http://localhost:8888/api/updatestock", {
             idProduit: productId,
             quantite: newQuantite
@@ -251,6 +256,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(function(response) {
                 console.log('Quantité mise à jour avec succès:', response.data);
+
             })
             .catch(function(error) {
                 console.error('Erreur lors de la mise à jour de la quantité:', error);
@@ -482,7 +488,7 @@ document.addEventListener('DOMContentLoaded', function () {
         itemDiv.setAttribute('data-id', commande.idCommande);
 
         // Calcul du montant total avec taxe
-        const TAX_RATE = 0.15;
+        const TAX_RATE = 0;
         const montantTotal = commande.produits.reduce((total, p) => total + (p.quantite * p.PrixProduit * (1 + TAX_RATE)), 0).toFixed(2);
 
         // Conversion de la date
@@ -579,41 +585,6 @@ document.addEventListener('DOMContentLoaded', function () {
         afficherHeure();
         setInterval(afficherHeure, 1000);
     }
-
-
-
-
-    // Fonction pour gérer les changements de quantité d'un produit
-    window.changementProduit = function (idProduit, changement) {
-        // Vérifier si l'idProduit est null ou undefined
-        if (idProduit === null || idProduit === undefined) {
-            console.warn("Produit avec un ID null ne peut pas être ajouté");
-            return;
-        }
-
-        idProduit = parseInt(idProduit);
-
-        const existingItem = cartData.cartItems.find(item => item.idProduit === idProduit);
-
-        if (existingItem) {
-            // Mettre à jour la quantité si le produit est déjà dans le panier
-            existingItem.quantity += changement;
-            if (existingItem.quantity < 1) {
-                removeFromCart(existingItem.idProduit);
-            }
-        } else {
-            // Ajouter le produit au panier avec la quantité spécifiée
-            if (changement > 0) {
-                cartData.cartItems.push({ idProduit, quantity: changement });
-            }
-        }
-
-        cleanCartItems();
-        console.log(cartData.cartItems);
-        saveCartDataToStorage(); // Assurez-vous de sauvegarder les articles après modification
-        updateCartCount();
-        generatePanierHTML();
-    };
 
 
     // Initialiser les fonctions

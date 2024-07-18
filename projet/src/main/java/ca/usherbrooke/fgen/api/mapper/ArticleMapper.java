@@ -14,6 +14,7 @@ import java.util.List;
 public interface ArticleMapper {
 
     List<Item> selectArticle(@Param("id_categorie") String id_categorie);
+    Item getProductDetails(@Param("id_item") int id_item);
     List<Item> selectArticleAdmin(@Param("id_categorie") String id_categorie);
     List<Item> selectVisibleArticle(@Param("id_categorie") String id_categorie);
     void updateVisibleProducts(@Param("id") int id, @Param("visible") boolean visible);

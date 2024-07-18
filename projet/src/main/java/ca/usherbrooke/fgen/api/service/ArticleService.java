@@ -99,5 +99,13 @@ public class ArticleService {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
+
+    @GET
+    @Path("/getProductDetails")
+    @PermitAll
+    public Item getProductDetails(@QueryParam("id_item") int id_item) {
+        return articleMapper.getProductDetails(id_item);
+    }
+
 }
 

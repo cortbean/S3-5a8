@@ -15,6 +15,7 @@ public class Item {
                 ", nom='" + nom + '\'' +
                 ", prix=" + prix +
                 ", image='" + image + '\'' +
+                ", quantiteStock='" + quantiteStock + '\'' +
                 '}';
     }
 }
