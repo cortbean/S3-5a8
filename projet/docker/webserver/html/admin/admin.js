@@ -145,12 +145,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Créez un objet produit correspondant à la structure attendue par generateProductHTML
                     const product = {
                         id: article.id,
-                        image: article.image,
+                        image: "../" + article.image,
                         name: article.nom,
                         price: article.prix + "$",
                         quantite: article.quantiteStock,
                         color: article.color || 'rgb(214,232,206)',
-                        colorText: article.colorText || '3%'
+                        colorText: article.colorText || ''
                     };
                     // Ajoutez le HTML généré à productContainer
                     productContainer.innerHTML += generateProductHTML(product);
@@ -184,17 +184,14 @@ document.addEventListener('DOMContentLoaded', function () {
         return `
         <div class="sf__col-item">
             <div class="sf__pcard sf__pcard--onsale cursor-pointer sf-prod__block sf__pcard-style-1" data-view="Panier">
-                <form method="post" action="/Panier/add" accept-charset="UTF-8" class="product-form form initialized" enctype="multipart/form-data" novalidate="novalidate" data-product-id="${product.image}" data-product-handle="">
                     <div class="sf__pcard-image">
                         <div class="overflow-hidden cursor-pointer relative sf__image-box">
                             <div class="flex justify-center items-center">
-                                <a href="${product.image}" data-gtag-selector="product_image" class="select_item_image block w-full">
-                                    <div class="spc__main-img">
+                                    <div>
                                         <div data-image-id="" class="sf-image" data-image-wrapper="" data-image-loading="" style="--aspect-ratio: 3/4;">
                                             <img src="${product.image}" alt="Product Image">
                                         </div>
                                     </div>
-                                </a>
                             </div>
                             <div class="sf__pcard-action hidden md:block z-10"></div>
                         </div>
@@ -642,11 +639,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         let iconPath = '';
         if (messageType === 'success') {
-            iconPath = 'logo/success-icon.png';
+            iconPath = '../logo/success-icon.png';
         } else if (messageType === 'error') {
-            iconPath = 'logo/error-icon.png';
+            iconPath = '../logo/error-icon.png';
         } else if (messageType === 'empty') {
-            iconPath = 'logo/aucun-produit.png';
+            iconPath = '../logo/aucun-produit.png';
         }
 
         if (message) {
@@ -668,7 +665,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <p>Votre panier est actuellement vide.</p>
             </div>
             <div style="display: flex; align-items: center;">
-                <img src="logo/panier-vide.png" alt="Empty Cart Icon" style="width: 50px; height: auto; margin-left: 5px;">
+                <img src="../logo/panier-vide.png" alt="Empty Cart Icon" style="width: 50px; height: auto; margin-left: 5px;">
             </div>
         `;
         } else {
@@ -685,7 +682,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 itemDiv.innerHTML = `
                     <div style="display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 15px;">
                         <div style="width: 150px;">
-                            <img src="${product.image}" alt="${product.name}" style="width: 100%; height: auto; margin-bottom: 10px;">
+                            <img src="${"../"+product.image}" alt="${product.name}" style="width: 100%; height: auto; margin-bottom: 10px;">
                         </div>
                         <div style="flex-grow: 1;">
                             <p style="margin: 0;">${item.idProduit}</p>
@@ -865,8 +862,4 @@ document.addEventListener('DOMContentLoaded', function () {
     initScrollToTopAdmin();
     initHorlogeAdmin();
     updateCartCount();
-    getAllCommandes().then(data => {
-        generateDashboardHTML(data);
-    });
-    showArticles("Alcool fort");
 });

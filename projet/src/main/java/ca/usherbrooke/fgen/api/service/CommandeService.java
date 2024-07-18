@@ -39,7 +39,7 @@ public class CommandeService {
 
     @POST
     @Path("/commande")
-    @RolesAllowed({"client"})
+    @RolesAllowed({"client", "admin"})
     public Response passerCommande(Commande commande) {
         try {
             Principal principal = securityContext.getUserPrincipal();
@@ -152,7 +152,7 @@ public class CommandeService {
 
     @GET
     @Path("/historique-commandes")
-    @RolesAllowed({"client"})
+    @RolesAllowed({"client", "admin"})
     public Response fetchHistoriqueCommandes() {
         try {
             Principal principal = securityContext.getUserPrincipal();

@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     requestClient();
                     document.getElementById('user-role').textContent = 'Client';
                 } else if (keycloak.hasRealmRole('admin')) {
-                    window.location.href = 'admin.html'; // Redirige vers la page admin
+                    //window.location.href = './admin/'; // Redirige vers la page admin
                 }
                 updateCategorie();
                 fetchVisibleProducts("Cocktail");
@@ -176,16 +176,13 @@ document.addEventListener('DOMContentLoaded', function () {
         return `
             <div class="sf__col-item">
                 <div class="sf__pcard sf__pcard--onsale cursor-pointer sf-prod__block sf__pcard-style-1" data-view="Panier">
-                    <form method="post" action="/Panier/add" accept-charset="UTF-8" class="product-form form initialized" enctype="multipart/form-data" novalidate="novalidate" data-product-id="${product.image}" data-product-handle="">
                         <div class="sf__pcard-image">
-                            <div class="overflow-hidden cursor-pointer relative sf__image-box">
+                            <div class="">
                                 <div class="flex justify-center items-center">
                                     <a href="${product.image}" data-gtag-selector="product_image" class="select_item_image block w-full">
-                                        <div class="spc__main-img">
                                             <div data-image-id="" class="sf-image" data-image-wrapper="" data-image-loading="" style="--aspect-ratio: 3/4;">
                                                 <img src="${product.image}" alt="Product Image">
                                             </div>
-                                        </div>
                                     </a>
                                 </div>
                                 <div class="sf__pcard-action hidden md:block z-10"></div>
