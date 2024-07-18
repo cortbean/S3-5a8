@@ -5,20 +5,36 @@
   <title>Statistiques des Produits par Faculté</title>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="http://localhost:8180/js/keycloak.js"></script>
-  <script src="./statistique.js"></script>
+  <script src="statistique.js"></script>
 </head>
-<body >
+<body onload="initKeycloak()">
 <h1>Statistiques des Produits par Faculté</h1>
-<table id="statsTable">
+
+<!-- Tableau pour le Top 5 des Programmes -->
+<h2>Top 5 des Programmes avec le plus de Commandes</h2>
+<table id="topProgrammesTable">
   <thead>
   <tr>
-    <th>Produit</th>
-    <th>Faculté</th>
+    <th>Programme</th>
     <th>Nombre de Commandes</th>
   </tr>
   </thead>
   <tbody>
   </tbody>
 </table>
-</body >
+
+<!-- Tableau pour le Produit le Plus Commandé -->
+<h2>Top 5 des Produits les Plus Commandés</h2>
+<table id="topProduitTable">
+  <thead>
+  <tr>
+    <th>Produit</th>
+    <th>Quantite</th>
+  </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+
+</body>
 </html>

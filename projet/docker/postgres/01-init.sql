@@ -62,8 +62,6 @@ CREATE TABLE projet.commande (
                                  cip VARCHAR(8) NOT NULL,
                                  date_commande TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                  status VARCHAR(50),
-                                 Nom TEXT,
-                                 Prenom TEXT,
                                  PRIMARY KEY (id_commande),
                                  FOREIGN KEY (cip) REFERENCES projet.Utilisateur (cip)
 );
@@ -72,8 +70,6 @@ CREATE TABLE projet.plusieurs (
                                   id_Produit INTEGER,
                                   id_commande VARCHAR(50),
                                   quantite INTEGER,
-                                  Nom VARCHAR(255) NOT NULL,
-                                  Prix NUMERIC(10,2) NOT NULL,
                                   PRIMARY KEY(id_Produit, id_commande),
                                   FOREIGN KEY(id_Produit) REFERENCES projet.Produit(id_Produit),
                                   FOREIGN KEY(id_commande) REFERENCES projet.commande(id_commande)
@@ -87,6 +83,25 @@ FROM projet.Produit p
          JOIN projet.Utilisateur u ON c.cip = u.cip
          JOIN projet.Programme pr ON u.Programme = pr.Programme
 GROUP BY p.nom, pr.faculte;
+
+CREATE VIEW projet.top5_produit AS
+SELECT p.nom AS produit_nom, SUM(pl.quantite) AS total_quantite
+FROM projet.Produit p
+JOIN projet.plusieurs pl ON p.id_produit = pl.id_produit
+GROUP BY p.nom
+ORDER BY total_quantite DESC
+LIMIT 5;
+
+CREATE VIEW projet.top5_programmes AS
+SELECT pr.Programme, COUNT(*) AS nombre_commandes
+FROM projet.Produit p
+         JOIN projet.plusieurs pl ON p.id_produit = pl.id_produit
+         JOIN projet.commande c ON pl.id_commande = c.id_commande
+         JOIN projet.Utilisateur u ON c.cip = u.cip
+         JOIN projet.Programme pr ON u.Programme = pr.Programme
+GROUP BY pr.Programme
+ORDER BY nombre_commandes DESC
+LIMIT 5;
 
 CREATE TABLE projet.logs (
                              log_id SERIAL PRIMARY KEY,
@@ -119,10 +134,6 @@ CREATE TABLE projet.CommandeVueAdmin (
                                          produit_prix DECIMAL(10, 2),
                                          quantite INT
 );
-/*
-INSERT INTO projet.Programme (Programme, faculte) VALUES
-                                                      ('Programme Test 1', 'Faculte Test 1'),
-                                                ('Programme Test 2', 'Faculte Test 2');*/
 
 
 -- Inserts
@@ -141,10 +152,6 @@ INSERT INTO projet.Programme (Programme, faculte) VALUES
         ('Informatique', 'Faculté des sciences'),
         ('Sciences de lactivité physique', 'Faculté des sciences de lactivité physique');
 
--- Insertion des utilisateurs de test
-INSERT INTO projet.Utilisateur (cip, Nom, Prenom, Courriel, role, promotion, Programme) VALUES
-                                                                                            ('CIP1', 'Nom Test 1', 'Prenom Test 1', 'test1@test.com', 'client', '69', 'Droit'),
-                                                                                            ('CIP2', 'Nom Test 2', 'Prenom Test 2', 'test2@test.com', 'client', '69', 'Physique');
 
 -- Insertion des catégories initiales
 INSERT INTO projet.Categorie(id_categorie, description) VALUES
@@ -451,13 +458,3 @@ INSERT INTO projet.Produit(id_Produit, Nom, Prix, id_categorie, image_url) VALUE
         (2220, 'Smooth Whisky', 10.00, 'Whisky', 'images/smooth_whisky.png');
 
 
-
--- Insertion des commandes de test
-INSERT INTO projet.commande (id_commande, cip, date_commande, status, Nom, Prenom) VALUES
-                                                                                       ('CMD1', 'CIP1', CURRENT_TIMESTAMP, 'en cours', 'Nom Test 1', 'Prenom Test 1'),
-                                                                                       ('CMD2', 'CIP2', CURRENT_TIMESTAMP, 'en cours', 'Nom Test 2', 'Prenom Test 2');
--- Insertion des produits dans les commandes
-INSERT INTO projet.plusieurs (id_Produit, id_commande, quantite, Nom, Prix) VALUES
-                                                                                (2217, 'CMD1', 2, 'Limited Edition Whisky', 10.0),
-                                                                                (2220, 'CMD1', 1, 'Smooth Whisky', 15.0),
-                                                                                (2219, 'CMD2', 3, 'Craft Whisky', 20.0);

@@ -3,7 +3,5 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ca.usherbrooke.fgen.api.mapper.StatistiqueMapper">
-    <select id="getStatistiqueParFaculte" resultType="map">
-        SELECT * FROM projet.statistique_par_faculte
-    </select>
+
 </mapper>

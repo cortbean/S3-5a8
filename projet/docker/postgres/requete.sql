@@ -18,3 +18,4 @@ SELECT * FROM projet.plusieurs;
 SELECT * FROM projet.statistique_par_faculte;
 
 
+SELECT * FROM projet.top5_produit
