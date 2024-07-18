@@ -3447,3 +3447,14 @@ input {
     padding: 10px;
     border-radius: 15px;
 }
+
+#historique-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+#historique-commandes-modal {
+    max-width: 700px;
+}
