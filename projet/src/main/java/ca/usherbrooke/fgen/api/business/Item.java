@@ -6,6 +6,7 @@ public class Item {
     public float prix;
     public String image;
     public int quantiteStock;
+    public boolean visible;
 
     @Override
     public String toString() {

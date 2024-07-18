@@ -6,7 +6,8 @@ public class VisibleProduct {
     public String nom;
     public float prix;
     public String image;
-    private int quantite;
+    public int quantite;
+    public boolean visible;
 
     // Getters and setters
     public int getIdProduit() {

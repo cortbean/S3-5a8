@@ -9,7 +9,7 @@
         select id_Produit as id,
                Nom as nom,
                Prix as prix,
-               image_url as image,
+               image_url as image
         from projet.Produit
         where
             (id_categorie) = (coalesce(#{id_categorie}, id_categorie))
@@ -21,7 +21,8 @@
             p.Nom as nom,
             p.Prix as prix,
             p.image_url as image,
-            p.Quantitte_stock as quantiteStock
+            p.Quantitte_stock as quantiteStock,
+            p.visible as visible
         from projet.Produit p
         where
             (p.id_categorie = coalesce(#{id_categorie}, p.id_categorie))
@@ -39,20 +40,16 @@
     </select>
 
     <!-- Mettre à jour les produits visibles -->
-    <insert id="updateVisibleProducts">
-        DELETE FROM projet.produit_visible;
-        INSERT INTO projet.produit_visible (id_produit)
-        VALUES
-        <foreach collection="produits" item="produit" separator=",">
-            (#{produit.idProduit})
-        </foreach>
-    </insert>
+    <update id="updateVisibleProducts">
+        UPDATE projet.produit
+        SET visible = #{visible}
+        WHERE id_Produit = #{id};
+    </update>
 
     <update id="updateVisibleStock">
         UPDATE projet.produit
         SET Quantitte_stock = #{quantite}
-        WHERE id_produit = #{id};
+        WHERE id_Produit = #{id};
     </update>
-
 
 </mapper>

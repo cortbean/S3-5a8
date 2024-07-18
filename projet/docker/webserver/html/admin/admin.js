@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const productDetails = {};
     let cartData = {
         selectedProducts: [],
-        cartItems: []
     };
 
     // Fonctions pour gérer les cookies
@@ -128,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(function (response) {
                 console.log("Réponse: ", response.status);
-                console.log(response.data);
+                console.log(response.data); // Vérifiez ici que les IDs sont corrects
                 response.data.forEach(article => {
                     // Vérifiez que l'article a un ID
                     if (!article.id) {
@@ -140,7 +139,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         name: article.nom,
                         price: article.prix + "$",
                         image: article.image,
-                        quantite: article.quantiteStock
+                        quantite: article.quantiteStock,
+                        visible: article.visible
                     };
                     // Créez un objet produit correspondant à la structure attendue par generateProductHTML
                     const product = {
@@ -149,16 +149,14 @@ document.addEventListener('DOMContentLoaded', function () {
                         name: article.nom,
                         price: article.prix + "$",
                         quantite: article.quantiteStock,
+                        visible: article.visible,
                         color: article.color || 'rgb(214,232,206)',
                         colorText: article.colorText || ''
                     };
                     // Ajoutez le HTML généré à productContainer
                     productContainer.innerHTML += generateProductHTML(product);
                 });
-                // Mettre à jour les icônes des yeux après avoir généré les produits
-                updateEyeIcons();
 
-                // Ajoutez les gestionnaires d'événements pour les changements de quantité après avoir ajouté les articles au DOM
                 response.data.forEach(article => {
                     const input = document.getElementById(`quantite-${article.id}`);
                     if (input) {
@@ -204,13 +202,16 @@ document.addEventListener('DOMContentLoaded', function () {
                                         <span class="block w-6 h-6 rounded-circle mr-4 mb-4" style="background-color: ${product.color}">${product.colorText}</span>
                                     </div>
                                 </div>
-                                <a onclick="toggleProductSelection(${product.id}, this)" type="button" class="sf-pqv__button mb-4" data-id="${product.id}">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="eye-icon eye-open hidden">
+                                <a onclick="toggleProductSelection(${product.id}, ${product.visible})" type="button" class="sf-pqv__button mb-4" data-id="${product.id}">
+                                    ${product.visible ? `
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="eye-icon eye-open">
                                         <path d="M12 4.5C7.30558 4.5 3.14054 7.157 1.229 11.25C3.14054 15.343 7.30558 18 12 18C16.6944 18 20.8595 15.343 22.771 11.25C20.8595 7.157 16.6944 4.5 12 4.5ZM12 15.75C9.65279 15.75 7.75 13.8472 7.75 11.5C7.75 9.15279 9.65279 7.25 12 7.25C14.3472 7.25 16.25 9.15279 16.25 11.5C16.25 13.8472 14.3472 15.75 12 15.75ZM12 9.75C10.7574 9.75 9.75 10.7574 9.75 12C9.75 13.2426 10.7574 14.25 12 14.25C13.2426 14.25 14.25 13.2426 14.25 12C14.25 10.7574 13.2426 9.75 12 9.75Z" fill="currentColor"/>
                                     </svg>
+                                    ` : `
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="eye-icon eye-closed">
                                         <path d="M11.9998 4.5C16.6942 4.5 20.8593 7.157 22.7708 11.25C21.6671 13.4651 20.0496 15.2957 18.0794 16.5525L19.5245 17.9975C21.8292 16.4788 23.646 14.2027 24.7708 11.25C22.8593 7.157 18.6942 4.5 13.9998 4.5C9.30541 4.5 5.14036 7.157 3.22884 11.25C4.13608 13.4208 5.66302 15.2493 7.56238 16.4175L9.00835 14.9725C7.33034 13.9297 6.13608 12.4651 5.22984 10.5C7.24967 6.85707 10.7864 4.5 14.9998 4.5H12H11.9998ZM12.9998 13.2422L14.0586 14.3011C13.5633 14.5704 13.0185 14.75 12.4998 14.75C10.1526 14.75 8.24976 12.8472 8.24976 10.5C8.24976 9.98133 8.42935 9.43648 8.69868 8.94118L9.75757 10L12.9998 13.2422ZM19.292 3.70711L18.2929 2.70711L2.29291 18.7071L3.29291 19.7071L19.292 3.70711Z" fill="currentColor"/>
                                     </svg>
+                                    `}
                                 </a>
                             </div>
                             <div class="max-w-full w-full">
@@ -241,6 +242,7 @@ document.addEventListener('DOMContentLoaded', function () {
     `;
     }
 
+
     function updateQuantite(productId, newQuantite) {
         axios.post("http://localhost:8888/api/updatestock", {
             idProduit: productId,
@@ -257,6 +259,38 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Erreur lors de la mise à jour de la quantité:', error);
             });
     }
+
+    window.toggleProductSelection = function (productId, currentVisibility) {
+        const newVisibility = !currentVisibility;
+
+        axios.post(`http://localhost:8888/api/updateVisibleProducts`, { idProduit: productId, visible: newVisibility }, {
+            headers: {
+                'Authorization': 'Bearer ' + keycloak.token,
+                'Content-Type': 'application/json'
+            }
+        }).then(function(response) {
+            console.log("Réponse du serveur après mise à jour de la visibilité :", response.data);
+
+            // Mettre à jour les détails du produit localement
+            productDetails[productId].visible = newVisibility;
+
+            // Mettre à jour le texte et l'icône du bouton
+            const button = document.querySelector(`[data-id='${productId}']`);
+            button.innerHTML = newVisibility ? `
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="eye-icon eye-open">
+                <path d="M12 4.5C7.30558 4.5 3.14054 7.157 1.229 11.25C3.14054 15.343 7.30558 18 12 18C16.6944 18 20.8595 15.343 22.771 11.25C20.8595 7.157 16.6944 4.5 12 4.5ZM12 15.75C9.65279 15.75 7.75 13.8472 7.75 11.5C7.75 9.15279 9.65279 7.25 12 7.25C14.3472 7.25 16.25 9.15279 16.25 11.5C16.25 13.8472 14.3472 15.75 12 15.75ZM12 9.75C10.7574 9.75 9.75 10.7574 9.75 12C9.75 13.2426 10.7574 14.25 12 14.25C13.2426 14.25 14.25 13.2426 14.25 12C14.25 10.7574 13.2426 9.75 12 9.75Z" fill="currentColor"/>
+            </svg>
+        ` : `
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="eye-icon eye-closed">
+                <path d="M11.9998 4.5C16.6942 4.5 20.8593 7.157 22.7708 11.25C21.6671 13.4651 20.0496 15.2957 18.0794 16.5525L19.5245 17.9975C21.8292 16.4788 23.646 14.2027 24.7708 11.25C22.8593 7.157 18.6942 4.5 13.9998 4.5C9.30541 4.5 5.14036 7.157 3.22884 11.25C4.13608 13.4208 5.66302 15.2493 7.56238 16.4175L9.00835 14.9725C7.33034 13.9297 6.13608 12.4651 5.22984 10.5C7.24967 6.85707 10.7864 4.5 14.9998 4.5H12H11.9998ZM12.9998 13.2422L14.0586 14.3011C13.5633 14.5704 13.0185 14.75 12.4998 14.75C10.1526 14.75 8.24976 12.8472 8.24976 10.5C8.24976 9.98133 8.42935 9.43648 8.69868 8.94118L9.75757 10L12.9998 13.2422ZM19.292 3.70711L18.2929 2.70711L2.29291 18.7071L3.29291 19.7071L19.292 3.70711Z" fill="currentColor"/>
+            </svg>
+        `;
+            button.setAttribute('onclick', `toggleProductSelection(${productId}, ${newVisibility})`);
+
+        }).catch(function(error) {
+            console.error("Erreur lors de la mise à jour de la visibilité du produit :", error);
+        });
+    };
 
 
 
@@ -286,31 +320,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-    window.toggleProductSelection = function (idProduit, element) {
-        const eyeOpen = element.querySelector('.eye-open');
-        const eyeClosed = element.querySelector('.eye-closed');
-        const index = cartData.selectedProducts.indexOf(idProduit);
-
-        if (eyeOpen.classList.contains('hidden')) {
-            eyeOpen.classList.remove('hidden');
-            eyeClosed.classList.add('hidden');
-            if (index === -1) {
-                cartData.selectedProducts.push(idProduit);
-                addToCart(idProduit); // Ajoutez cette ligne pour ajouter au panier
-            }
-        } else {
-            eyeOpen.classList.add('hidden');
-            eyeClosed.classList.remove('hidden');
-            if (index !== -1) {
-                cartData.selectedProducts.splice(index, 1);
-                removeFromCart(idProduit); // Ajoutez cette ligne pour retirer du panier
-            }
-        }
-
-        saveCartDataToStorage();
-        updateCartCount(); // Assurez-vous de mettre à jour le compteur du panier
-        generatePanierHTML(); // Mettre à jour le HTML du panier
-    };
 
 
 
@@ -710,30 +719,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function updateEyeIcons() {
-        const cartItems = cartData.cartItems;
-        cartItems.forEach(item => {
-            if (!productDetails[item.idProduit]) {
-                console.warn(`Produit avec ID ${item.idProduit} n'existe pas dans les détails du produit.`);
-                return;
-            }
-
-            const eyeIcon = document.querySelector(`a[data-id="${item.idProduit}"]`);
-            if (eyeIcon) {
-                const eyeOpen = eyeIcon.querySelector('.eye-open');
-                const eyeClosed = eyeIcon.querySelector('.eye-closed');
-                if (item.viewed) {
-                    eyeOpen.classList.remove('hidden');
-                    eyeClosed.classList.add('hidden');
-                } else {
-                    eyeOpen.classList.add('hidden');
-                    eyeClosed.classList.remove('hidden');
-                }
-            }
-        });
-    }
-
-    // Initialiser l'horloge
+// Initialiser l'horloge
     function initHorlogeAdmin() {
         function getTimeAdmin() {
             const now = new Date();
@@ -752,31 +738,8 @@ document.addEventListener('DOMContentLoaded', function () {
         setInterval(afficherHeure, 1000);
     }
 
-    window.toggleProductSelection = function (idProduit, element) {
-        const eyeOpen = element.querySelector('.eye-open');
-        const eyeClosed = element.querySelector('.eye-closed');
-        const index = cartData.selectedProducts.indexOf(idProduit);
 
-        if (eyeOpen.classList.contains('hidden')) {
-            eyeOpen.classList.remove('hidden');
-            eyeClosed.classList.add('hidden');
-            if (index === -1) {
-                cartData.selectedProducts.push(idProduit);
-                addToCart(idProduit); // Ajoutez cette ligne pour ajouter au panier
-            }
-        } else {
-            eyeOpen.classList.add('hidden');
-            eyeClosed.classList.remove('hidden');
-            if (index !== -1) {
-                cartData.selectedProducts.splice(index, 1);
-                removeFromCart(idProduit); // Ajoutez cette ligne pour retirer du panier
-            }
-        }
 
-        saveCartDataToStorage();
-        updateCartCount(); // Assurez-vous de mettre à jour le compteur du panier
-        generatePanierHTML(); // Mettre à jour le HTML du panier
-    };
 
     // Fonction pour gérer les changements de quantité d'un produit
     window.changementProduit = function (idProduit, changement) {
@@ -810,52 +773,6 @@ document.addEventListener('DOMContentLoaded', function () {
         generatePanierHTML();
     };
 
-    document.getElementById('update-products-button').addEventListener('click', function() {
-        console.log("Produits sélectionnés à envoyer pour mise à jour :", cartData.selectedProducts);
-
-        if (cartData.selectedProducts.length === 0) {
-            console.log("Aucun produit sélectionné pour mise à jour.");
-            generatePanierHTML("Aucun produit n'est sélectionné pour la commande.", "empty");
-            return;
-        }
-
-        const produitsPayload = cartData.selectedProducts.map(id => ({ idProduit: id }));
-        console.log("Payload envoyé au serveur :", produitsPayload);
-
-        axios.post("http://localhost:8888/api/updateVisibleProducts", produitsPayload, {
-            headers: {
-                'Authorization': 'Bearer ' + keycloak.token,
-                'Content-Type': 'application/json'
-            }
-        }).then(function(response) {
-            console.log("Réponse du serveur après mise à jour des produits :", response.data);
-
-            cartData.selectedProducts = [];
-            cartData.cartItems = [];
-
-            saveCartDataToStorage();
-            updateCartCount();
-
-            const messageContainer = document.getElementById('messageContainer');
-            messageContainer.textContent = "";
-            messageContainer.style.display = 'block';
-            generatePanierHTML("Mise à jour effectuée avec succès !","success");
-
-            // Fermer les yeux de tous les produits sélectionnés
-            document.querySelectorAll('.eye-open').forEach(eye => eye.classList.add('hidden'));
-            document.querySelectorAll('.eye-closed').forEach(eye => eye.classList.remove('hidden'));
-
-        }).catch(function(error) {
-            console.error("Erreur lors de la mise à jour des produits :", error);
-            generatePanierHTML("Erreur lors de la mise à jour. Veuillez réessayer.", "error");
-
-            keycloak.updateToken(5).then(function() {
-                console.log('Token rafraîchi et nouvelle tentative d\'envoi.');
-            }).catch(function() {
-                console.error('Échec du rafraîchissement du token et de la mise à jour des produits.');
-            });
-        });
-    });
 
     // Initialiser les fonctions
     initKeycloak();

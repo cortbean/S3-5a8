@@ -53,6 +53,7 @@ CREATE TABLE projet.Produit (
                                 Prix NUMERIC(10,2) NOT NULL,
                                 Quantitte_stock INTEGER DEFAULT 0,
                                 id_categorie VARCHAR(50),
+                                visible boolean default FALSE,
                                 image_url TEXT,
                                 PRIMARY KEY(id_Produit),
                                 FOREIGN KEY(id_categorie) REFERENCES projet.Categorie(id_categorie)
@@ -83,18 +84,11 @@ CREATE TABLE projet.logs (
                              log_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE projet.produit_visible (
-                                        Quantitte_stock INTEGER DEFAULT 0,
-                                        Quantite_minimum VARCHAR(50),
-                                        id_Produit INTEGER,
-                                        PRIMARY KEY(id_Produit),
-                                        FOREIGN KEY(id_Produit) REFERENCES projet.Produit(id_Produit)
-);
 
 CREATE VIEW projet.produitVue AS
 SELECT id_Produit, Nom, Prix, image_url, Quantitte_stock, id_categorie
 FROM projet.Produit
-WHERE Quantitte_stock > 0;
+WHERE Quantitte_stock > 0 AND visible = TRUE;
 
 
 

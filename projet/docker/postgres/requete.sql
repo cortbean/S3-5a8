@@ -8,3 +8,5 @@ SET Quantitte_stock = CASE
                           ELSE Quantitte_stock
     END
 WHERE id_Produit IN (2081, 2082, 2083, 2084);
+
+CREATE DATABASE projet;
