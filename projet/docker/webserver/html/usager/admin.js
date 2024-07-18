@@ -261,9 +261,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-
-
-
     // Initialiser le bouton de retour en haut
     function initScrollToTopAdmin() {
         const scrollToTopButtonAdmin = document.getElementById('scroll-to-top-button');
@@ -287,7 +284,6 @@ document.addEventListener('DOMContentLoaded', function () {
         toggleScrollToTopButton();
         window.addEventListener('scroll', toggleScrollToTopButton);
     }
-
 
     window.toggleProductSelection = function (idProduit, element) {
         const eyeOpen = element.querySelector('.eye-open');
@@ -314,9 +310,6 @@ document.addEventListener('DOMContentLoaded', function () {
         updateCartCount(); // Assurez-vous de mettre à jour le compteur du panier
         generatePanierHTML(); // Mettre à jour le HTML du panier
     };
-
-
-
 
     // Fonction pour ouvrir la modale du panier
     function openPanierModal() {

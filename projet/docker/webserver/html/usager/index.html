@@ -135,18 +135,26 @@
 
 <div id="panier-section" class="hidden"></div>
 
-<!-- Historique des commandes -->
-<div id="historique-commandes-modal" class="modal" style="z-index: 1003; display: none; opacity: 1; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+<!------------------------------------Historique des Commandes--------------------------------------------->
+<div id="historique-commandes-modal" class="modal open" tabindex="0" style="z-index: 1003; display: none; opacity: 1; top: 50%; left: 50%; transform: translate(-50%, -50%);">
     <div class="modal-content">
-        <div class="justify-center items-center valign-wrapper warning sticky-top" style="flex: 0 0 auto; top: 0;">
+        <div class="justify-center items-center valign-wrapper warning" style="flex: 0 0 auto; top: 0;">
             <span>Historique des Commandes</span>
         </div>
-        <div class="scd__body flex flex-col" style="flex: 1 1 auto; overflow-y: auto;">
-            <div id="historique-container" class="py-32 text-center"></div>
+        <div class="scd__body flex flex-col" style="flex: 1 1 auto; overflow-y: auto; margin-top: 25px;">
+            <!-- Message Conteneur -->
+            <div class="py-32 text-center" id="historique-container"></div>
         </div>
-        <div class="modal-footer">
-            <div class="flex flex-col right">
-                <button type="button" class="btn black waves-effect waves-light" name="" style="border-radius: 20px;" id="close-historique-button">Fermer</button>
+        <div class="scd__footer py-4 px-6 sticky-bottom" style="flex: 0 0 auto; bottom: 0;">
+            <div class="mb-4 pt-4" data-cart-summary="">
+                <div data-discounts="">
+                    <ul class="scd-cart__discounts" role="list" data-discounts-list=""></ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="flex flex-col right">
+                    <button type="button" class="btn black waves-effect waves-light" name="" style="border-radius: 20px;" id="close-historique-button">Fermer</button>
+                </div>
             </div>
         </div>
     </div>
