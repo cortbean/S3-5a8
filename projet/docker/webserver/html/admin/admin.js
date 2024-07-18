@@ -321,45 +321,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-
-
-
-    // Fonction pour ouvrir la modale du panier
-    function openPanierModal() {
-        closeDashboardModal(); // Fermer la modale du tableau de bord si ouverte
-        document.getElementById('ical').style.display = 'block';
-        document.body.classList.add('modal-open');
-        generatePanierHTML();
-    }
-
-    // Fonction pour fermer la modale du panier
-    function closePanierModal() {
-        document.getElementById('ical').style.display = 'none';
-        document.body.classList.remove('modal-open');
-    }
-
-    // Gestionnaire pour le bouton du panier
-    document.getElementById('panier-button').addEventListener('click', function() {
-        openPanierModal();
-    });
-
-    // Gestionnaire pour le bouton de fermeture de la modale du panier
-    document.getElementById('close-modal-button').addEventListener('click', function() {
-        closePanierModal();
-    });
-
-    // Fonction pour sauvegarder les données du panier dans un cookie
-    function saveCartDataToStorage() {
-        setCookieAdmin('panierData', cartData, 7); // Sauvegarder pour 7 jours
-    }
-
-    // Fonction pour récupérer les données du panier depuis un cookie
-    function getCartDataFromStorage() {
-        const data = getCookieAdmin('panierData');
-        return data ? data : { selectedProducts: [], cartItems: [] };
-    }
-
-
     /*---------------------------------------------------Tableau de Bord-------------------------------------------------------------*/
     // Fonction pour ouvrir la modale du dashboard
     function openDashboardModal(idCommande) {
@@ -367,7 +328,6 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error("ID Commande manquant.");
             return;
         }
-        closePanierModal();
         document.getElementById('ical0').style.display = 'block';
         document.body.classList.add('modal-open');
         generateDashboardHTML(idCommande);
@@ -603,121 +563,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /*---------------------------------------------------- Fin Dashboards -----------------------------------------------------------*/
 
-    // Fonction pour supprimer un article du panier
-    function removeFromCart(idProduit) {
-        cartData.cartItems = cartData.cartItems.filter(item => item.idProduit !== idProduit);
-        cleanCartItems();
-        saveCartDataToStorage();
-        updateCartCount();
-        generatePanierHTML(); // Mettre à jour le HTML après la suppression
-    }
-
-    // Fonction pour nettoyer les articles avec un identifiant null ou undefined
-    function cleanCartItems() {
-        cartData.cartItems = cartData.cartItems.filter(item => item.idProduit !== null && item.idProduit !== undefined);
-        saveCartDataToStorage();
-    }
-
-    // Initialiser les articles du panier depuis le cookie
-    cartData = getCartDataFromStorage();
-    cleanCartItems();
-
-    function addToCart(idProduit) {
-        if (!productDetails[idProduit]) {
-            console.warn(`Produit avec ID ${idProduit} n'existe pas dans les détails du produit.`);
-            return;
-        }
-
-        const cartItems = cartData.cartItems ;
-
-        // Vérifier si le produit est déjà dans le panier
-        const existingItem = cartItems.find(item => item.idProduit === idProduit);
-        if (!existingItem) {
-            // Ajouter le produit au panier avec un indicateur de vue
-            cartItems.push({ idProduit, viewed: true });
-        }
-
-        saveCartDataToStorage();
-        updateCartCount();
-        generatePanierHTML();
-    }
-
-    function generatePanierHTML(message, messageType) {
-        const icalPanierContainer = document.getElementById('ical-panier');
-        icalPanierContainer.innerHTML = '';
-
-        let iconPath = '';
-        if (messageType === 'success') {
-            iconPath = '../logo/success-icon.png';
-        } else if (messageType === 'error') {
-            iconPath = '../logo/error-icon.png';
-        } else if (messageType === 'empty') {
-            iconPath = '../logo/aucun-produit.png';
-        }
-
-        if (message) {
-            icalPanierContainer.innerHTML = `
-            <div style="display: flex; align-items: center;">
-                <p>${message}</p>
-            </div>
-            <div style="display: flex; align-items: center;">
-                <img src="${iconPath}" alt="${messageType} Icon" style="width: 50px; height: auto; margin-left: 5px;">
-            </div>
-        `;
-            return;
-        }
-
-        const cartItems = cartData.cartItems;
-        if (cartItems.length === 0) {
-            icalPanierContainer.innerHTML = `
-            <div style="display: flex; align-items: center;">
-                <p>Votre panier est actuellement vide.</p>
-            </div>
-            <div style="display: flex; align-items: center;">
-                <img src="../logo/panier-vide.png" alt="Empty Cart Icon" style="width: 50px; height: auto; margin-left: 5px;">
-            </div>
-        `;
-        } else {
-            cartItems.forEach(item => {
-                const product = productDetails[item.idProduit];
-                if (!product) {
-                    console.warn(`Les détails du produit pour l'ID: ${item.idProduit} ne sont pas trouvés.`);
-                    return;
-                }
-
-                const itemDiv = document.createElement('div');
-                itemDiv.classList.add('cart-item');
-
-                itemDiv.innerHTML = `
-                    <div style="display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 15px;">
-                        <div style="width: 150px;">
-                            <img src="${"../"+product.image}" alt="${product.name}" style="width: 100%; height: auto; margin-bottom: 10px;">
-                        </div>
-                        <div style="flex-grow: 1;">
-                            <p style="margin: 0;">${item.idProduit}</p>
-                            <p style="margin: 0;">${product.name}</p>
-                            <p style="margin: 0;">${product.price}</p>
-                        </div>
-                    </div>
-                `;
-                icalPanierContainer.appendChild(itemDiv);
-            });
-        }
-    }
-
-    // Fonction pour mettre à jour le compteur du panier
-    function updateCartCount() {
-        const cartItems = cartData.cartItems;
-        const cartCount = cartItems.length;
-        const cartCountElement = document.querySelector('sup[data-cart-count]');
-        if (cartCount > 0) {
-            cartCountElement.classList.remove('!hidden');
-            cartCountElement.textContent = cartCount;
-        } else {
-            cartCountElement.classList.add('!hidden');
-            cartCountElement.textContent = '0';
-        }
-    }
 
 // Initialiser l'horloge
     function initHorlogeAdmin() {
