@@ -9,6 +9,7 @@ public class ProduitCommander {
     public String nomProduit;
     public BigDecimal PrixProduit;
     public int QuantiteStock;
+    public boolean visible;
 
     // Ajoutez une méthode toString pour faciliter le débogage
     @Override

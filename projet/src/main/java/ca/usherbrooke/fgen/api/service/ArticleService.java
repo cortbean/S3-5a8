@@ -86,8 +86,18 @@ public class ArticleService {
     @POST
     @Path("/updateVisibleProducts")
     @PermitAll
-    public void updateVisibleProducts(List<VisibleProduct> produits) {
-        articleMapper.updateVisibleProducts(produits);
+    public Response updateVisibleProducts(ProduitCommander produit) {
+
+
+        System.out.println("ID: " + produit.idProduit);
+        System.out.println("Visible: " + produit.visible);
+        try {
+            articleMapper.updateVisibleProducts(produit.idProduit, produit.visible);
+            return Response.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }
     }
 }
 
