@@ -1,40 +1,12 @@
-CREATE TEMP TABLE temp_json (
-                                data JSONB
-);
+-- Mise à jour de la quantité pour les produits spécifiés
+UPDATE projet.Produit
+SET Quantitte_stock = CASE
+                          WHEN id_Produit = 2081 THEN 100
+                          WHEN id_Produit = 2082 THEN 200
+                          WHEN id_Produit = 2083 THEN 150
+                          WHEN id_Produit = 2084 THEN 50
+                          ELSE Quantitte_stock
+    END
+WHERE id_Produit IN (2081, 2082, 2083, 2084);
 
--- Load JSON data into the temporary table (you can adjust the path to your JSON file)
-COPY temp_json (data) FROM 'users.json';
-
--- Insert data into users table
-INSERT INTO projet.users (username, enabled, firstName, lastName, email)
-SELECT
-    user_data->>'username',
-    (user_data->>'enabled')::BOOLEAN,
-    user_data->>'firstName',
-    user_data->>'lastName',
-    user_data->>'email'
-FROM
-    temp_json,
-    jsonb_array_elements(data->'users') AS user_data;
-
--- Insert data into roles table
-INSERT INTO projet.roles (username, role)
-SELECT
-    user_data->>'username',
-    role
-FROM
-    temp_json,
-    jsonb_array_elements(data->'users') AS user_data,
-    jsonb_array_elements_text(user_data->'realmRoles') AS role;
-
--- Insert data into credentials table
-INSERT INTO projet.credentials (username, temporary, type, value)
-SELECT
-    user_data->>'username',
-    (credential->>'temporary')::BOOLEAN,
-    credential->>'type',
-    credential->>'value'
-FROM
-    temp_json,
-    jsonb_array_elements(data->'users') AS user_data,
-    jsonb_array_elements(user_data->'credentials') AS credential;
+CREATE DATABASE projet;

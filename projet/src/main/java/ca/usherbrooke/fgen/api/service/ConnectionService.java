@@ -1,6 +1,8 @@
 package ca.usherbrooke.fgen.api.service;
 
-import ca.usherbrooke.fgen.api.business.Person;
+import ca.usherbrooke.fgen.api.business.*;
+import ca.usherbrooke.fgen.api.mapper.ArticleMapper;
+import ca.usherbrooke.fgen.api.mapper.CategorieMapper;
 import ca.usherbrooke.fgen.api.mapper.PersonMapper;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
@@ -10,14 +12,20 @@ import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.MediaType;
 import java.util.List;
-import java.util.Map;
+import javax.ws.rs.Consumes;
+
+import static io.smallrye.openapi.runtime.io.IoLogging.logger;
 
 @Path("/api")
-@Produces({"application/json"})
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class ConnectionService {
+
     @Context
     SecurityContext securityContext;
 
@@ -34,19 +42,11 @@ public class ConnectionService {
     public Person client() {
         Person p = new Person();
         p.cip = this.securityContext.getUserPrincipal().getName();
-        p.last_name = (String)this.jwt.getClaim("family_name");
-        p.first_name = (String)this.jwt.getClaim("given_name");
-        p.email = (String)this.jwt.getClaim("email");
-        /*Map realmAccess = (Map)this.jwt.getClaim("realm_access");
-        if (realmAccess != null && realmAccess.containsKey("roles")) {
-            p.roles = (List)realmAccess.get("roles");
-        }*/
-        // Debug logging
-        System.out.println("Person object before insertion: " + p);
-
+        p.lastName = (String) this.jwt.getClaim("family_name");
+        p.firstName = (String) this.jwt.getClaim("given_name");
+        p.email = (String) this.jwt.getClaim("email");
+        p.role = "client";
         personMapper.insertPerson(p);
-        System.out.println("Inserted person into database");
-
         return p;
     }
 
@@ -56,18 +56,14 @@ public class ConnectionService {
     public Person admin() {
         Person p = new Person();
         p.cip = this.securityContext.getUserPrincipal().getName();
-        p.last_name = (String)this.jwt.getClaim("family_name");
-        p.first_name = (String)this.jwt.getClaim("given_name");
-        p.email = (String)this.jwt.getClaim("email");
-        /*Map realmAccess = (Map)this.jwt.getClaim("realm_access");
-        if (realmAccess != null && realmAccess.containsKey("roles")) {
-            p.roles = (List)realmAccess.get("roles");
-        }*/
+        p.lastName = (String) this.jwt.getClaim("family_name");
+        p.firstName = (String) this.jwt.getClaim("given_name");
+        p.email = (String) this.jwt.getClaim("email");
+        p.role = "admin";
         personMapper.insertPerson(p);
-        System.out.println(p);
-
         return p;
     }
+
 
     @GET
     @Path("/any")
@@ -75,20 +71,10 @@ public class ConnectionService {
     public Person me() {
         Person p = new Person();
         p.cip = this.securityContext.getUserPrincipal().getName();
-        p.last_name = (String)this.jwt.getClaim("family_name");
-        p.first_name = (String)this.jwt.getClaim("given_name");
-        p.email = (String)this.jwt.getClaim("email");
-        /*Map realmAccess = (Map)this.jwt.getClaim("realm_access");
-        if (realmAccess != null && realmAccess.containsKey("roles")) {
-            p.roles = (List)realmAccess.get("roles");
-        }*/
-
-        // Debug logging
-        System.out.println("Person object before insertion: " + p);
-
+        p.lastName = (String) this.jwt.getClaim("family_name");
+        p.firstName = (String) this.jwt.getClaim("given_name");
+        p.email = (String) this.jwt.getClaim("email");
         personMapper.insertPerson(p);
-        System.out.println("Inserted person into database");
-
         return p;
     }
 

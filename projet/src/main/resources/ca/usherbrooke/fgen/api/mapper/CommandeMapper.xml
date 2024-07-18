@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ca.usherbrooke.fgen.api.mapper.CommandeMapper">
+
+    <!-- Insérer une commande dans la table Commande -->
+    <insert id="insertCommande">
+        INSERT INTO projet.commande(id_commande, cip, date_commande, status)
+        VALUES (#{commande.idCommande}, #{commande.cip}, #{commande.dateCommande}, #{commande.status})
+            ON CONFLICT (id_commande) DO NOTHING;
+    </insert>
+
+    <!-- Insérer un produit dans la table Plusieurs -->
+    <insert id="insertProduit">
+        INSERT INTO projet.plusieurs(id_produit, id_commande, quantite)
+        VALUES (#{produitCommander.idProduit}, #{produitCommander.idCommande}, #{produitCommander.quantite});
+    </insert>
+
+    <!-- Sélectionner les détails d'une commande -->
+    <select id="selectCommandeDetails" resultType="ca.usherbrooke.fgen.api.business.Commande">
+        SELECT id_commande AS idCommande, cip, date_commande AS dateCommande, status
+        FROM projet.commande
+        WHERE id_commande = #{idCommande}
+    </select>
+
+    <!-- Sélectionner les détails d'un utilisateur -->
+    <select id="selectPersonDetails" resultType="ca.usherbrooke.fgen.api.business.Person">
+        SELECT cip, Nom AS lastName, Prenom AS firstName, Courriel AS email, role
+        FROM projet.Utilisateur
+        WHERE cip = #{cip}
+    </select>
+
+    <!-- Mapping des résultats de la commande avec les produits associés -->
+    <resultMap id="CommandeProduitResultMap" type="ca.usherbrooke.fgen.api.business.Commande">
+        <id property="idCommande" column="id_commande"/>
+        <result property="cip" column="cip"/>
+        <result property="dateCommande" column="date_commande"/>
+        <result property="status" column="status"/>
+        <result property="Nom" column="Nom"/>
+        <result property="Prenom" column="Prenom"/>
+        <collection property="produits" ofType="ca.usherbrooke.fgen.api.business.ProduitCommander">
+            <id property="idProduit" column="id_produit"/>
+            <result property="idCommande" column="id_commande"/>
+            <result property="quantite" column="quantite"/>
+            <result property="nomProduit" column="produit_nom"/>
+            <result property="PrixProduit" column="produit_prix"/>
+        </collection>
+    </resultMap>
+
+    <!-- Sélectionner toutes les commandes avec les produits associés -->
+    <select id="selectAllCommandesWithProduits" resultMap="CommandeProduitResultMap">
+        SELECT
+            c.id_commande AS id_commande,
+            c.cip AS cip,
+            c.date_commande AS date_commande,
+            c.status AS status,
+            u.Nom AS Nom,
+            u.Prenom AS Prenom,
+            p.id_produit AS id_produit,
+            p.Nom AS produit_nom,
+            p.Prix AS produit_prix,
+            pl.quantite AS quantite
+        FROM projet.commande c
+                 JOIN projet.Utilisateur u ON c.cip = u.cip
+                 LEFT JOIN projet.plusieurs pl ON c.id_commande = pl.id_commande
+                 LEFT JOIN projet.Produit p ON pl.id_produit = p.id_Produit
+    </select>
+
+    <!-- Sélectionner l'historique des commandes d'un client -->
+    <select id="selectHistoriqueCommandes" resultMap="CommandeProduitResultMap">
+        SELECT
+            c.id_commande AS id_commande,
+            c.cip AS cip,
+            c.date_commande AS date_commande,
+            c.status AS status,
+            u.Nom AS Nom,
+            u.Prenom AS Prenom,
+            p.id_produit AS id_produit,
+            p.Nom AS produit_nom,
+            p.Prix AS produit_prix,
+            pl.quantite AS quantite
+        FROM projet.commande c
+                 JOIN projet.Utilisateur u ON c.cip = u.cip
+                 LEFT JOIN projet.plusieurs pl ON c.id_commande = pl.id_commande
+                 LEFT JOIN projet.Produit p ON pl.id_produit = p.id_Produit
+        WHERE c.cip = #{cip}
+    </select>
+
+    <!-- Insérer une commande dans une vue spécifique pour l'admin -->
+    <insert id="insertIntoCommandeVueAdmin">
+        CALL InsertIntoCommandeVueAdmin(#{idCommande})
+    </insert>
+
+    <!-- Mettre à jour le statut d'une commande -->
+    <update id="markAsCompleted">
+        UPDATE projet.commande
+        SET status = 'terminee'
+        WHERE id_commande = #{idCommande}
+    </update>
+
+    <!-- Sélectionner les détails d'un produit -->
+    <select id="selectProductDetails" resultType="ca.usherbrooke.fgen.api.business.ProduitCommander">
+        SELECT id_produit AS idProduit, Nom AS nomProduit, Prix AS PrixProduit, Quantitte_stock AS QuantiteStock
+        FROM projet.Produit
+        WHERE id_produit = #{idProduit}
+    </select>
+
+
+</mapper>
