@@ -76,6 +76,34 @@ CREATE TABLE projet.plusieurs (
                                   FOREIGN KEY(id_commande) REFERENCES projet.commande(id_commande)
 );
 
+CREATE VIEW projet.statistique_par_faculte AS
+SELECT p.nom AS produit_nom, pr.faculte, COUNT(*) AS nombre_commandes
+FROM projet.Produit p
+         JOIN projet.plusieurs pl ON p.id_produit = pl.id_produit
+         JOIN projet.commande c ON pl.id_commande = c.id_commande
+         JOIN projet.Utilisateur u ON c.cip = u.cip
+         JOIN projet.Programme pr ON u.Programme = pr.Programme
+GROUP BY p.nom, pr.faculte;
+
+CREATE VIEW projet.top5_produit AS
+SELECT p.nom AS produit_nom, SUM(pl.quantite) AS total_quantite
+FROM projet.Produit p
+JOIN projet.plusieurs pl ON p.id_produit = pl.id_produit
+GROUP BY p.nom
+ORDER BY total_quantite DESC
+LIMIT 5;
+
+CREATE VIEW projet.top5_programmes AS
+SELECT pr.Programme, COUNT(*) AS nombre_commandes
+FROM projet.Produit p
+         JOIN projet.plusieurs pl ON p.id_produit = pl.id_produit
+         JOIN projet.commande c ON pl.id_commande = c.id_commande
+         JOIN projet.Utilisateur u ON c.cip = u.cip
+         JOIN projet.Programme pr ON u.Programme = pr.Programme
+GROUP BY pr.Programme
+ORDER BY nombre_commandes DESC
+LIMIT 5;
+
 CREATE TABLE projet.logs (
                              log_id SERIAL PRIMARY KEY,
                              table_name TEXT,

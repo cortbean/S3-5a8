@@ -1,9 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     let keycloak;
     const productDetails = {};
-    let cartData = {
-        selectedProducts: [],
-    };
 
     // Fonctions pour gérer les cookies
     function getCookieAdmin(name) {
@@ -37,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
         keycloak.init({ onLoad: 'login-required' }).then(function (authenticated) {
             console.log(authenticated ? 'authenticated' : 'not authenticated');
             if (authenticated) {
-                const userNameElement = document.getElementById('user-name');
+                const userNameElement  = document.getElementById('user-name');
                 if (keycloak.tokenParsed) {
                     const firstName = keycloak.tokenParsed.given_name || '';
                     const lastName = keycloak.tokenParsed.family_name || '';
@@ -48,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     requestadmin();
                     document.getElementById('user-role').textContent = 'Admin';
                 } else if (keycloak.hasRealmRole('client')) {
-                    window.location.href = 'index.html'; // Redirige vers la page client
+                    window.location.href = '../'; // Redirige vers la page client
                 }
                 updateCategorie();
                 getAllCommandes().then(data => {
@@ -623,5 +620,4 @@ document.addEventListener('DOMContentLoaded', function () {
     initKeycloak();
     initScrollToTopAdmin();
     initHorlogeAdmin();
-    updateCartCount();
 });
