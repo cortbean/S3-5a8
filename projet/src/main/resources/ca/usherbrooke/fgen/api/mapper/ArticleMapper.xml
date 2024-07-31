@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ca.usherbrooke.fgen.api.mapper.ArticleMapper">
+
+    <!-- Sélectionner un article -->
+    <select id="selectArticle" resultType="ca.usherbrooke.fgen.api.business.Item">
+        select id_Produit as id,
+               Nom as nom,
+               Prix as prix,
+               image_url as image,
+               Quantitte_stock as quantiteStock
+        from projet.Produit
+        where
+            (id_categorie) = (coalesce(#{id_categorie}, id_categorie))
+    </select>
+
+    <select id="selectArticleAdmin" resultType="ca.usherbrooke.fgen.api.business.Item">
+        select
+            p.id_Produit as id,
+            p.Nom as nom,
+            p.Prix as prix,
+            p.image_url as image,
+            p.Quantitte_stock as quantiteStock,
+            p.visible as visible
+        from projet.Produit p
+        where
+            (p.id_categorie = coalesce(#{id_categorie}, p.id_categorie))
+    </select>
+
+    <select id="getProductDetails" resultType="ca.usherbrooke.fgen.api.business.Item">
+        select id_Produit as id,
+               Nom as nom,
+               Prix as prix,
+               image_url as image,
+               Quantitte_stock as quantiteStock
+        from projet.Produit
+        where
+            (id_Produit) = (coalesce(#{id_item}, id_Produit))
+    </select>
+
+    <!-- Sélectionner les articles visibles -->
+    <select id="selectVisibleArticle" resultType="ca.usherbrooke.fgen.api.business.Item">
+        SELECT
+            id_Produit as id,
+            Nom as nom,
+            Prix as prix,
+            image_url as image,
+            Quantitte_stock as quantiteStock
+        FROM projet.produitVue
+        WHERE id_categorie = COALESCE(#{id_categorie}, id_categorie);
+    </select>
+
+    <!-- Mettre à jour les produits visibles -->
+    <update id="updateVisibleProducts">
+        UPDATE projet.produit
+        SET visible = #{visible}
+        WHERE id_Produit = #{id};
+    </update>
+
+    <update id="updateVisibleStock">
+        UPDATE projet.produit
+        SET Quantitte_stock = #{quantite}
+        WHERE id_Produit = #{id};
+    </update>
+
+</mapper>
