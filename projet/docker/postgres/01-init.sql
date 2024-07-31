@@ -76,6 +76,16 @@ CREATE TABLE projet.plusieurs (
                                   FOREIGN KEY(id_commande) REFERENCES projet.commande(id_commande)
 );
 
+CREATE TABLE projet.logs (
+                             log_id SERIAL PRIMARY KEY,
+                             table_name TEXT,
+                             operation TEXT,
+                             changed_data JSONB,
+                             log_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
 CREATE VIEW projet.statistique_par_faculte AS
 SELECT p.nom AS produit_nom, pr.faculte, COUNT(*) AS nombre_commandes
 FROM projet.Produit p
@@ -85,6 +95,8 @@ FROM projet.Produit p
          JOIN projet.Programme pr ON u.Programme = pr.Programme
 GROUP BY p.nom, pr.faculte;
 
+
+
 CREATE VIEW projet.top5_produit AS
 SELECT p.nom AS produit_nom, SUM(pl.quantite) AS total_quantite
 FROM projet.Produit p
@@ -92,6 +104,8 @@ JOIN projet.plusieurs pl ON p.id_produit = pl.id_produit
 GROUP BY p.nom
 ORDER BY total_quantite DESC
 LIMIT 5;
+
+
 
 CREATE VIEW projet.top5_programmes AS
 SELECT pr.Programme, COUNT(*) AS nombre_commandes
@@ -104,13 +118,6 @@ GROUP BY pr.Programme
 ORDER BY nombre_commandes DESC
 LIMIT 5;
 
-CREATE TABLE projet.logs (
-                             log_id SERIAL PRIMARY KEY,
-                             table_name TEXT,
-                             operation TEXT,
-                             changed_data JSONB,
-                             log_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
 
 
 CREATE VIEW projet.produitVue AS
@@ -131,12 +138,7 @@ FROM
         JOIN projet.commande c ON pl.id_commande = c.id_commande
         JOIN projet.Produit p ON pl.id_Produit = p.id_Produit;
 
-CREATE TABLE projet.CommandeVueAdmin (
-                                         id_commande VARCHAR(50),
-                                         produit_nom VARCHAR(100),
-                                         produit_prix DECIMAL(10, 2),
-                                         quantite INT
-);
+
 
 -- Inserts
 INSERT INTO projet.Programme (Programme, faculte) VALUES
