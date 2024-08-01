@@ -61,6 +61,7 @@ CREATE TABLE projet.Produit (
 
 CREATE TABLE projet.commande (
                                  id_commande VARCHAR(50),
+                                numero_appel
                                  cip VARCHAR(8) NOT NULL,
                                  date_commande TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                  status VARCHAR(50),

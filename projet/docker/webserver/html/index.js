@@ -517,27 +517,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 PrixProduit: item.PrixProduit
             }));
 
-            const pad = (num) => (num < 10 ? '0' : '') + num;
-            const date = new Date();
-            const dateCommande = date.getUTCFullYear() +
-                '-' + pad(date.getUTCMonth() + 1) +
-                '-' + pad(date.getUTCDate()) +
-                'T' + pad(date.getUTCHours()) +
-                ':' + pad(date.getUTCMinutes()) +
-                ':' + pad(date.getUTCSeconds()) +
-                '.' + (date.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) + 'Z';
-
             const username = keycloak.tokenParsed.preferred_username;
-            const firstName = keycloak.tokenParsed.given_name;
-            const lastName = keycloak.tokenParsed.family_name;
 
             const orderData = {
                 idCommande: generateOrderId(),
                 cip: username,
-                dateCommande: dateCommande,
                 status: 'en cours',
-                Nom: firstName,
-                Prenom: lastName,
                 produits: produitsPayload
             };
 
@@ -562,11 +547,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     setCookieClient('cartItems', cartItems, 7);
                     updateCartCount();
 
-                    generatePanierHTML(`Commande effectuée avec succès Merci! <br> Le Numero de la commande est : ${orderData.idCommande}`, "success");
+                    generatePanierHTML(`Commande effectuée avec succès Merci! <br> 
+                    Le Numero de la commande est : ${orderData.idCommande}`, "success");
+
 
                 }).catch(function(error) {
                     console.error("Erreur lors du passage de la commande :", error);
-                    generatePanierHTML("Erreur lors du passage de la commande. Veuillez réessayer.", "error");
+                    generatePanierHTML("Erreur lors du passage de la commande. " +
+                        "Veuillez réessayer.", "error");
 
                     if (error.response && error.response.status === 401) {
                         ensureToken(envoyerCommande);

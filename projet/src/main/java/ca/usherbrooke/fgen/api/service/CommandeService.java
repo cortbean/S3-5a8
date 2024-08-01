@@ -70,8 +70,6 @@ public class CommandeService {
                 return Response.status(Response.Status.BAD_REQUEST).entity("User details not found").build();
             }
 
-            commande.Nom = person.firstName;
-            commande.Prenom = person.lastName;
 
             // Check product quantities
             for (ProduitCommander produit : commande.produits) {
@@ -80,16 +78,14 @@ public class CommandeService {
                 // Retrieve product details and check quantity
                 ProduitCommander productDetails = commandeMapper.selectProductDetails(produit.idProduit);
                 if (productDetails == null) {
-                    return Response.status(Response.Status.BAD_REQUEST).entity("Product details not found for product ID: " + produit.idProduit).build();
+                    return Response.status(Response.Status.BAD_REQUEST).entity("Product details not found " +
+                            "for product ID: " + produit.idProduit).build();
                 }
 
                 if (productDetails.QuantiteStock < produit.quantite) {
-                    return Response.status(Response.Status.BAD_REQUEST).entity("Article présent en nombre insuffisant: " + produit.nomProduit).build();
+                    return Response.status(Response.Status.BAD_REQUEST).entity("Article présent en nombre " +
+                            "insuffisant: " + produit.nomProduit).build();
                 }
-
-                // Update the product details in the command object
-                produit.nomProduit = productDetails.nomProduit;
-                produit.PrixProduit = productDetails.PrixProduit;
             }
 
             // If all quantities are sufficient, insert the order and products
